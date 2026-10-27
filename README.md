@@ -9,7 +9,7 @@
 | **General** | Document Name | **LOAN_API — Technical & Functional Documentation** |
 | | Package Name | `GAIA.LOAN_API` |
 | | Created Date | 27 October 2026 |
-| | Created By | GNI Software — Development Team |
+| | Created By | GNI Software — Loan Team |
 | | Document Version | 1.0 — Draft |
 | | Documentation Status | Under Technical & Business Review |
 | | Technology | Oracle PL/SQL · Oracle Database |
