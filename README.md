@@ -4,10 +4,6 @@
 
 ## Documentation Overview
 
-# GAIA.LOAN_API — Technical & Functional Documentation
-
-## 1. Documentation Overview
-
 | Section | Item | Details / Reference |
 |:--|:--|:--|
 | **General** | Document Name | **LOAN_API — Technical & Functional Documentation** |
