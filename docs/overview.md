@@ -44,7 +44,3 @@ flowchart TD
 ```
 
 **Diagram status:** conceptual; invocation relationships vary by method and are not implied for every call.
-
-## Documentation scope and uncertainty
-
-This guide is generated from the supplied specification and body. It does not replace validated business requirements, transaction semantics, deployment instructions, or test evidence. API descriptions not proven from body analysis are explicitly identified for review.
