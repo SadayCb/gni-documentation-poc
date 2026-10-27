@@ -4,25 +4,17 @@
 
 ## Documentation Overview
 
-| Section | Item | Details / Reference |
+| Section | Item | Details / Link |
 |:--|:--|:--|
 | **General** | Document Name | **LOAN_API — Technical & Functional Documentation** |
-| | Package Name | `GAIA.LOAN_API` |
 | | Created Date | 27 October 2026 |
 | | Created By | GNI Software — Loan Team |
-| | Document Version | 1.0 — Draft |
-| | Documentation Status | Under Technical & Business Review |
-| | Technology | Oracle PL/SQL · Oracle Database |
-| **Introduction** | Purpose of the Document | [Purpose & Overview](docs/overview.md) — Package objectives, responsibilities and scope. |
-| | Scope of the Document | Public interfaces and verified implementation behavior. [Getting Started](docs/guides/getting-started.md) |
-| | System Architecture | [Architecture](docs/architecture.md) — Components, dependencies and execution flow. |
-| **API Specifications** | Procedures & Functions | [Complete API Reference](docs/api/loan-api.md) — Public procedures, functions and overloads. |
-| | Business Workflows | [Business Workflows](docs/workflows.md) — Loan operations, schedules, payments and EOD/SOD processes. |
-| | Technical Dependencies | [Dependencies](docs/reference/dependencies.md) — Related packages, procedures and functions. |
-| **Data Model** | Tables & Views | [Data Model](docs/data-model.md) — Related database objects and data operations. |
-| | Data Relationships | [Data Model & Relationships](docs/data-model.md) — Read/write interactions and dependencies. |
-| **Error Handling** | Errors & Exceptions | [Error Handling Reference](docs/error-handling.md) — Application errors, validation rules and exception handling. |
-| | Review Findings | [Technical Review Findings](docs/reference/review-findings.md) — Potential issues and unverified behavior. |
+| | Version | 0.1 — Draft |
+| **Introduction** | Purpose of this Document | [Purpose & Overview](docs/overview.md) — explain the shared loan operations package for onboarding, implementation and maintenance. |
+| | Scope of this Document | Covers `LOAN_API` public interfaces and selected verified implementation behavior. [Getting Started](docs/guides/getting-started.md) · [Workflows](docs/workflows.md) |
+| **API Specifications** | Procedures & Functions / API Reference | [Public Procedures & Functions](docs/api/loan-api.md) · [Dependencies / Related Tables](docs/reference/dependencies.md) |
+| **Data Model** | Tables | [Data Model & Main Tables](docs/data-model.md) |
+| **Error Handling** | Error Messages & Descriptions | [Error Handling Reference](docs/error-handling.md) · [Review Findings](docs/reference/review-findings.md) |
 
 ## Documentation Navigation
 
