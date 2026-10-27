@@ -1,0 +1,11 @@
+site_name: GNI Product Documentation
+site_description: Internal and customer documentation starter template
+theme:
+  name: mkdocs
+nav:
+  - Home: index.md
+  - Developer onboarding: getting-started/index.md
+  - Architecture: architecture/index.md
+  - Credit module: modules/credit/index.md
+  - Package API template: api-reference/PACKAGE_TEMPLATE.md
+  - Customer guide: customer-guide/index.md
