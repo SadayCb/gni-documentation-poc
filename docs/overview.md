@@ -36,7 +36,7 @@ flowchart TD
     API --> PAY[Payments and allocation]
     API --> GL[Accounting and vouchers]
     API --> HIST[Operation history]
-    SCHED --> DB[(Oracle loan tables)]
+    SCHED --> DB[(GNI loan tables)]
     ACC --> DB
     PAY --> DB
     GL --> DB
