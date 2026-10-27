@@ -1,45 +1,27 @@
-# GNI Software — Technical Documentation
+# GNI Loan API — Technical Documentation
 
-Welcome to the **GNI Software Documentation Portal**.
+> **Status:** Draft / Proof of Concept · **Audience:** Internal developers and integration teams · **Language:** English
 
-This repository contains technical documentation for GNI Software's banking solutions, including Oracle PL/SQL packages, database structures, business workflows, and system architecture.
+`LOAN_API` is a shared Oracle PL/SQL package for core loan processes. Unlike an APEX page-specific package, it exposes operations used across multiple workflows.
 
-## Documentation
+## Start here
 
-The documentation is organized into modules to help developers, new team members, and technical partners understand the system.
-
-### Getting Started
-
-**[📚 Open GNI Documentation](./gni-docs-template/README.md)**
-
-### Credit Module — Page 2201
-
-| Section | Description |
+| Document | Purpose |
 |---|---|
-| [Documentation Home](./gni-docs-template/README.md) | Main documentation page |
-| [Module Overview](./gni-docs-template/docs/overview.md) | Credit registration overview |
-| [Architecture](./gni-docs-template/docs/architecture.md) | System architecture and dependencies |
-| [Workflows](./gni-docs-template/docs/workflows.md) | Transaction processing workflows |
-| [Troubleshooting](./gni-docs-template/docs/troubleshooting.md) | Common errors and solutions |
-| [KRD2201_0_API](./gni-docs-template/docs/api/krd2201-0-api.md) | Main transaction package |
-| [KRD2201_1_API](./gni-docs-template/docs/api/krd2201-1-api.md) | Credit detail processing package |
+| [Overview](docs/overview.md) | Scope, architecture and functional domains |
+| [Getting started](docs/guides/getting-started.md) | Guided onboarding path |
+| [Public API catalogue](docs/api/loan-api.md) | All active public procedures/functions with signatures |
+| [Workflows](docs/workflows.md) | Cross-cutting process diagrams |
+| [Dependencies](docs/reference/dependencies.md) | Major tables and integration packages |
+| [Review & security](docs/reference/review-findings.md) | Source-based issues and gaps to validate |
 
-## Technologies
+## Documentation principles
 
-- Oracle Database
-- PL/SQL
-- Oracle APEX
-- Markdown
-- MkDocs
+- Package **specification** is the source of truth for callable signatures.
+- Package **body** supports behavioral interpretation and dependency mapping.
+- Unconfirmed behavior is marked **Review required**, not invented.
+- Public/customer-facing documentation must be reviewed and sanitized before release.
 
-## Documentation Status
+## Scope
 
-**Version:** 0.1 (Proof of Concept)
-
-**Language:** English
-
-**Status:** Under Development
-
----
-
-© 2026 GNI Software — Internal Technical Documentation
+This proof of concept intentionally excludes the earlier Page 2201 documentation and covers only `LOAN_API`.
