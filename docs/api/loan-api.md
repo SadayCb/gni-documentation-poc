@@ -147,7 +147,6 @@ This catalogue contains **88 active public declarations** (including overloads).
 
 ---
 
-<a id="get-loan-amount"></a>
 ### `get_interest_calc_dates` — FUNCTION
 
 **Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
