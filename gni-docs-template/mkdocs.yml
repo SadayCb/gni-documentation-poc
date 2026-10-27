@@ -1,11 +1,15 @@
-site_name: GNI Product Documentation
-site_description: Internal and customer documentation starter template
-theme:
-  name: mkdocs
+site_name: GNI Credit Registration Documentation (PoC)
+site_description: Engineering documentation pilot for Oracle APEX page 2201
 nav:
   - Home: index.md
-  - Developer onboarding: getting-started/index.md
-  - Architecture: architecture/index.md
-  - Credit module: modules/credit/index.md
-  - Package API template: api-reference/PACKAGE_TEMPLATE.md
-  - Customer guide: customer-guide/index.md
+  - Module Overview: overview.md
+  - Architecture: architecture.md
+  - Workflows: workflows.md
+  - API Reference:
+      - KRD2201_0_API: api/krd2201-0-api.md
+      - KRD2201_1_API: api/krd2201-1-api.md
+  - Engineering Review: review-findings.md
+  - Documentation Standard: documentation-standard.md
+markdown_extensions:
+  - tables
+  - fenced_code
