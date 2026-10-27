@@ -1,15769 +1,4960 @@
-# LOAN_API — Public API Reference
+# LOAN_API — Complete Public API Reference
 
-This catalogue contains **88 active public declarations** (including overloads). Signatures are reproduced from the supplied specification, with line references.
+> **Status:** Draft / Requires technical and business approval.  **Scope:** All 88 active public declarations in the supplied package specification, including 4 pairs of overloads.
 
-> **Important:** This is not a list of internal/private routines. Some descriptions are preliminary and require developer review.
+> **Source of truth:** Supplied `LOAN_API` specification and body. No production SQL has been executed. Statements marked **Verify** require a developer to confirm usage semantics and implementation details.
 
-## Index
+## Navigation
+
+Each entry links to one exact declaration below. Overloads have distinct stable anchors.
 
 ### Accounts & Balances
 
-- [`get_loan_amount`](#get-loan-amount) — function (spec line 130)
-- [`get_overdue_min_amount`](#get-overdue-min-amount) — function (spec line 136)
-- [`get_gl_value`](#get-gl-value) — function (spec line 161)
-- [`get_gl_acc_active_passive`](#get-gl-acc-active-passive) — function (spec line 189)
-- [`get_gl_acc_from_matrix`](#get-gl-acc-from-matrix) — function (spec line 191)
-- [`get_offer_id`](#get-offer-id) — function (spec line 219)
-- [`get_account_feature`](#get-account-feature) — function (spec line 273)
-- [`is_acc_exists`](#is-acc-exists) — function (spec line 278)
-- [`is_online_offer`](#is-online-offer) — function (spec line 287)
-- [`create_account`](#create-account) — procedure (spec line 304)
-- [`get_new_acc`](#get-new-acc) — function (spec line 318)
-- [`do_loan_status_control`](#do-loan-status-control) — procedure (spec line 338)
-- [`get_acc_type_by_status`](#get-acc-type-by-status) — function (spec line 353)
-- [`change_account_status`](#change-account-status) — procedure (spec line 451)
-
-### EOD/SOD & Operations
-
-- [`do_loan_collateral_out`](#do-loan-collateral-out) — procedure (spec line 350)
-- [`do_int_calculation`](#do-int-calculation) — procedure (spec line 382)
-- [`do_int_calculation_ex`](#do-int-calculation-ex) — procedure (spec line 396)
-- [`do_overdue_transit_operation`](#do-overdue-transit-operation) — procedure (spec line 402)
-- [`do_guarantee_out`](#do-guarantee-out) — procedure (spec line 418)
-- [`do_Loan_Close_With_Collateral_Out`](#do-loan-close-with-collateral-out) — procedure (spec line 422)
-- [`do_non_cash_loan_close`](#do-non-cash-loan-close) — procedure (spec line 424)
-- [`stop_eod_task`](#stop-eod-task) — procedure (spec line 455)
-- [`stop_loan_task`](#stop-loan-task) — procedure (spec line 457)
-- [`run_loan_task`](#run-loan-task) — procedure (spec line 460)
-- [`do_loan_control`](#do-loan-control) — procedure (spec line 604)
-- [`do_loan_control`](#do-loan-control) — procedure (spec line 607)
-
-### History & Changes
-
-- [`clear_addtional_data`](#clear-addtional-data) — procedure (spec line 109)
-- [`add_additional_group`](#add-additional-group) — procedure (spec line 111)
-- [`end_additional_group`](#end-additional-group) — procedure (spec line 113)
-- [`end_additional_main_group`](#end-additional-main-group) — procedure (spec line 114)
-- [`add_additional_info`](#add-additional-info) — procedure (spec line 115)
-- [`add_additional_info`](#add-additional-info) — procedure (spec line 117)
-- [`add_column_update`](#add-column-update) — procedure (spec line 118)
-- [`add_column_update`](#add-column-update) — procedure (spec line 122)
-- [`finalize_addtional_process`](#finalize-addtional-process) — procedure (spec line 125)
-- [`reverse_update`](#reverse-update) — procedure (spec line 128)
-- [`table_log_operation`](#table-log-operation) — procedure (spec line 289)
-- [`create_loan_history`](#create-loan-history) — procedure (spec line 343)
-- [`do_delete_operation`](#do-delete-operation) — procedure (spec line 368)
+- [`get_loan_amount`](#get_loan_amount) — function · specification line 130
+- [`get_overdue_min_amount`](#get_overdue_min_amount) — function · specification line 136
+- [`get_gl_value`](#get_gl_value) — function · specification line 161
+- [`get_gl_acc_active_passive`](#get_gl_acc_active_passive) — function · specification line 189
+- [`get_gl_acc_from_matrix`](#get_gl_acc_from_matrix) — function · specification line 191
+- [`get_offer_id`](#get_offer_id) — function · specification line 219
+- [`get_account_feature`](#get_account_feature) — function · specification line 273
+- [`is_acc_exists`](#is_acc_exists) — function · specification line 278
+- [`is_online_offer`](#is_online_offer) — function · specification line 287
+- [`create_account`](#create_account) — procedure · specification line 304
+- [`get_new_acc`](#get_new_acc) — function · specification line 320
+- [`do_loan_status_control`](#do_loan_status_control) — procedure · specification line 340
+- [`get_acc_type_by_status`](#get_acc_type_by_status) — function · specification line 353
+- [`change_account_status`](#change_account_status) — procedure · specification line 453
 
 ### Interest & Penalties
 
-- [`get_pen_info_for_calc`](#get-pen-info-for-calc) — procedure (spec line 71)
-- [`get_interest_calc_dates`](#get-interest-calc-dates) — function (spec line 80)
-- [`get_interest_calc_dates_ex`](#get-interest-calc-dates-ex) — function (spec line 85)
-- [`get_interest_calc_info`](#get-interest-calc-info) — procedure (spec line 90)
-- [`get_interest_calc_info_ex`](#get-interest-calc-info-ex) — procedure (spec line 101)
-- [`get_pen_info_for_calc`](#get-pen-info-for-calc) — procedure (spec line 137)
-- [`get_basis_year_days_cnt`](#get-basis-year-days-cnt) — function (spec line 158)
-- [`loan_int_diff_operation`](#loan-int-diff-operation) — procedure (spec line 163)
-- [`loan_int_diff_operation_ex`](#loan-int-diff-operation-ex) — procedure (spec line 177)
-- [`Get_Delay_Int_Rate`](#get-delay-int-rate) — function (spec line 200)
-- [`get_amount_for_pen_calc`](#get-amount-for-pen-calc) — function (spec line 233)
-- [`do_Loan_Delay_Int_Rate_Upd`](#do-loan-delay-int-rate-upd) — procedure (spec line 448)
-
-### Journal & Vouchers
-
-- [`get_trn_caller_id`](#get-trn-caller-id) — function (spec line 144)
-- [`get_voucher_data_from_query`](#get-voucher-data-from-query) — function (spec line 146)
-- [`do_journal_entry`](#do-journal-entry) — procedure (spec line 294)
-- [`create_journal_entries`](#create-journal-entries) — procedure (spec line 300)
-- [`do_commission_recognition`](#do-commission-recognition) — procedure (spec line 416)
-- [`do_journal_control`](#do-journal-control) — procedure (spec line 427)
-
-### Payments & Allocation
-
-- [`get_Pym_Startdate`](#get-pym-startdate) — function (spec line 263)
-- [`recalculate_int_payment_plan`](#recalculate-int-payment-plan) — procedure (spec line 311)
-- [`generate_allocated_payment_list`](#generate-allocated-payment-list) — procedure (spec line 358)
-- [`add_payment_details`](#add-payment-details) — procedure (spec line 364)
-- [`do_Auto_Payment`](#do-auto-payment) — procedure (spec line 370)
+- [`get_pen_info_for_calc`](#get_pen_info_for_calc--overload-1) — procedure (overload 1) · specification line 73
+- [`get_interest_calc_dates`](#get_interest_calc_dates) — function · specification line 80
+- [`get_interest_calc_dates_ex`](#get_interest_calc_dates_ex) — function · specification line 85
+- [`get_interest_calc_info`](#get_interest_calc_info) — procedure · specification line 90
+- [`get_interest_calc_info_ex`](#get_interest_calc_info_ex) — procedure · specification line 101
+- [`get_pen_info_for_calc`](#get_pen_info_for_calc--overload-2) — procedure (overload 2) · specification line 137
+- [`get_basis_year_days_cnt`](#get_basis_year_days_cnt) — function · specification line 158
+- [`loan_int_diff_operation`](#loan_int_diff_operation) — procedure · specification line 163
+- [`loan_int_diff_operation_ex`](#loan_int_diff_operation_ex) — procedure · specification line 177
+- [`Get_Delay_Int_Rate`](#get_delay_int_rate) — function · specification line 201
+- [`get_amount_for_pen_calc`](#get_amount_for_pen_calc) — function · specification line 233
+- [`do_Loan_Delay_Int_Rate_Upd`](#do_loan_delay_int_rate_upd) — procedure · specification line 450
 
 ### Schedules & Rates
 
-- [`get_formatted_grace_from_list`](#get-formatted-grace-from-list) — function (spec line 150)
-- [`get_grace_info`](#get-grace-info) — function (spec line 153)
-- [`get_commission_schedule`](#get-commission-schedule) — function (spec line 203)
-- [`add_months_for_loan`](#add-months-for-loan) — function (spec line 211)
-- [`get_next_Plan_Pym`](#get-next-plan-pym) — function (spec line 215)
-- [`get_plan_payment_amount`](#get-plan-payment-amount) — function (spec line 223)
-- [`get_Plan_Month_Count`](#get-plan-month-count) — function (spec line 239)
-- [`get_plan_paid_month_count`](#get-plan-paid-month-count) — function (spec line 251)
-- [`get_plan_error`](#get-plan-error) — function (spec line 255)
-- [`get_Annuity_Amount`](#get-annuity-amount) — function (spec line 258)
-- [`is_Payment_Date`](#is-payment-date) — function (spec line 283)
-- [`do_plan_control`](#do-plan-control) — procedure (spec line 336)
-- [`do_schedule_allignment`](#do-schedule-allignment) — procedure (spec line 431)
-- [`do_com_schedule_allignment`](#do-com-schedule-allignment) — procedure (spec line 441)
-- [`calculate_xirr`](#calculate-xirr) — function (spec line 467)
-- [`get_min_flow_ratio`](#get-min-flow-ratio) — function (spec line 475)
-- [`get_flow_ratio_info`](#get-flow-ratio-info) — function (spec line 499)
-- [`get_stop_ratio_info`](#get-stop-ratio-info) — function (spec line 504)
-- [`get_incorrect_days`](#get-incorrect-days) — function (spec line 510)
-- [`get_incorrect_days_count`](#get-incorrect-days-count) — function (spec line 513)
-- [`get_schedule_from_memo`](#get-schedule-from-memo) — function (spec line 515)
-- [`get_standart_schedule`](#get-standart-schedule) — function (spec line 521)
-- [`get_annuity_schedule`](#get-annuity-schedule) — function (spec line 542)
-- [`get_created_schedule`](#get-created-schedule) — procedure (spec line 570)
-- [`create_schedule`](#create-schedule) — procedure (spec line 572)
+- [`get_formatted_grace_from_list`](#get_formatted_grace_from_list) — function · specification line 150
+- [`get_grace_info`](#get_grace_info) — function · specification line 153
+- [`get_commission_schedule`](#get_commission_schedule) — function · specification line 205
+- [`add_months_for_loan`](#add_months_for_loan) — function · specification line 211
+- [`get_plan_payment_amount`](#get_plan_payment_amount) — function · specification line 225
+- [`get_ovd_date`](#get_ovd_date) — function · specification line 229
+- [`get_Plan_Month_Count`](#get_plan_month_count) — function · specification line 241
+- [`get_plan_paid_month_count`](#get_plan_paid_month_count) — function · specification line 252
+- [`get_plan_error`](#get_plan_error) — function · specification line 257
+- [`get_Annuity_Amount`](#get_annuity_amount) — function · specification line 260
+- [`get_Pym_Startdate`](#get_pym_startdate) — function · specification line 265
+- [`is_Payment_Date`](#is_payment_date) — function · specification line 285
+- [`do_plan_control`](#do_plan_control) — procedure · specification line 337
+- [`do_schedule_allignment`](#do_schedule_allignment) — procedure · specification line 438
+- [`do_com_schedule_allignment`](#do_com_schedule_allignment) — procedure · specification line 443
+- [`calculate_xirr`](#calculate_xirr) — function · specification line 467
+- [`get_min_flow_ratio`](#get_min_flow_ratio) — function · specification line 475
+- [`get_flow_ratio_info`](#get_flow_ratio_info) — function · specification line 499
+- [`get_stop_ratio_info`](#get_stop_ratio_info) — function · specification line 504
+- [`get_incorrect_days`](#get_incorrect_days) — function · specification line 510
+- [`get_incorrect_days_count`](#get_incorrect_days_count) — function · specification line 513
+- [`get_schedule_from_memo`](#get_schedule_from_memo) — function · specification line 515
+- [`get_standart_schedule`](#get_standart_schedule) — function · specification line 521
+- [`get_annuity_schedule`](#get_annuity_schedule) — function · specification line 542
+- [`get_created_schedule`](#get_created_schedule) — procedure · specification line 570
+- [`create_schedule`](#create_schedule) — procedure · specification line 574
+
+### Payments & Allocation
+
+- [`recalculate_int_payment_plan`](#recalculate_int_payment_plan) — procedure · specification line 311
+- [`generate_allocated_payment_list`](#generate_allocated_payment_list) — procedure · specification line 358
+- [`add_payment_details`](#add_payment_details) — procedure · specification line 364
+- [`do_Auto_Payment`](#do_auto_payment) — procedure · specification line 370
+
+### Journal & Vouchers
+
+- [`get_trn_caller_id`](#get_trn_caller_id) — function · specification line 144
+- [`get_voucher_data_from_query`](#get_voucher_data_from_query) — function · specification line 146
+- [`do_journal_entry`](#do_journal_entry) — procedure · specification line 294
+- [`create_journal_entries`](#create_journal_entries) — procedure · specification line 300
+- [`do_commission_recognition`](#do_commission_recognition) — procedure · specification line 416
+- [`do_journal_control`](#do_journal_control) — procedure · specification line 428
+
+### History & Changes
+
+- [`clear_addtional_data`](#clear_addtional_data) — procedure · specification line 109
+- [`add_additional_group`](#add_additional_group) — procedure · specification line 111
+- [`end_additional_group`](#end_additional_group) — procedure · specification line 113
+- [`end_additional_main_group`](#end_additional_main_group) — procedure · specification line 114
+- [`add_additional_info`](#add_additional_info--overload-1) — procedure (overload 1) · specification line 115
+- [`add_additional_info`](#add_additional_info--overload-2) — procedure (overload 2) · specification line 117
+- [`add_column_update`](#add_column_update--overload-1) — procedure (overload 1) · specification line 118
+- [`add_column_update`](#add_column_update--overload-2) — procedure (overload 2) · specification line 122
+- [`finalize_addtional_process`](#finalize_addtional_process) — procedure · specification line 125
+- [`reverse_update`](#reverse_update) — procedure · specification line 128
+- [`table_log_operation`](#table_log_operation) — procedure · specification line 289
+- [`create_loan_history`](#create_loan_history) — procedure · specification line 343
+- [`do_delete_operation`](#do_delete_operation) — procedure · specification line 368
+
+### EOD/SOD & Operations
+
+- [`do_loan_collateral_out`](#do_loan_collateral_out) — procedure · specification line 352
+- [`do_int_calculation`](#do_int_calculation) — procedure · specification line 382
+- [`do_int_calculation_ex`](#do_int_calculation_ex) — procedure · specification line 396
+- [`do_overdue_transit_operation`](#do_overdue_transit_operation) — procedure · specification line 402
+- [`do_guarantee_out`](#do_guarantee_out) — procedure · specification line 418
+- [`do_Loan_Close_With_Collateral_Out`](#do_loan_close_with_collateral_out) — procedure · specification line 422
+- [`do_non_cash_loan_close`](#do_non_cash_loan_close) — procedure · specification line 424
+- [`stop_eod_task`](#stop_eod_task) — procedure · specification line 455
+- [`stop_loan_task`](#stop_loan_task) — procedure · specification line 457
+- [`run_loan_task`](#run_loan_task) — procedure · specification line 460
+- [`do_loan_control`](#do_loan_control--overload-1) — procedure (overload 1) · specification line 604
+- [`do_loan_control`](#do_loan_control--overload-2) — procedure (overload 2) · specification line 607
 
 ### Utilities & Configuration
 
-- [`get_ovd_date`](#get-ovd-date) — function (spec line 229)
+- [`get_next_Plan_Pym`](#get_next_plan_pym) — function · specification line 215
 
 ---
 
-## Accounts & Balances
+## Method Documentation
 
-### `get_pen_info_for_calc` — PROCEDURE
+Each entry includes the original signature, parameter semantics, evidence from the implementation, business considerations, related database objects, exceptions and operational cautions.
 
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
 
-**Description confidence:** Body-reviewed summary.
+<a id="get_pen_info_for_calc--overload-1"></a>
 
-**Source:** specification line 71; body declaration candidate line(s): 70, 736
+### `get_pen_info_for_calc` — PROCEDURE (overload 1)
 
-**Signature**
+**Purpose:** Computes overdue amount and days for the requested account-type group, applying penalty grace days.
+
+**Business Logic**
+
+Computes overdue amount and days for the requested account-type group, applying penalty grace days.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+
+**Business Rules / Preconditions**
+
+- Grace days influence when scheduled unpaid amounts qualify as overdue.
+- The implementation rejects negative overdue amounts or negative day counts.
+
+**Public Signature**
 
 ```sql
--- *
-
-  procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
-                                  p_doc_no                 in varchar2,
-                                  p_acc_type               in varchar2,
-                                  p_pen_calc_grace_days    in number,
-                                  p_ovd_amount             out number,
-                                  p_calculated_pen_day_cnt out number);
+procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
+p_doc_no                 in varchar2,
+p_acc_type               in varchar2,
+p_pen_calc_grace_days    in number,
+p_ovd_amount             out number,
+p_calculated_pen_day_cnt out number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+| `p_pen_calc_grace_days` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_ovd_amount` | OUT | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_calculated_pen_day_cnt` | OUT | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** `p_ovd_amount`, `p_calculated_pen_day_cnt`
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Observed message or error code: `Overdue Main amount for penalty calculation or overdue days count is negative!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 73; body declaration approximately line 70.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_interest_calc_dates"></a>
 
 ### `get_interest_calc_dates` — FUNCTION
 
-**Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
+**Purpose:** Returns the dates eligible for interest calculation across the current EOD/SOD processing window.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 80; body declaration candidate line(s): 259
+Returns the dates eligible for interest calculation across the current EOD/SOD processing window.
+Observed delegated calls include `LOAN_API.G_DATE_TAB_TYPE`, `GLBL_TARIH.AYBASI`, `GLBL_TARIH.SONRAKI_ISGUNU`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- `p_int_calc_at` must be `EOD` or `SOD`.
+- `p_eod_sod` must be `E` or `S`.
+- The returned dates depend on working-day and month-boundary logic.
+
+**Public Signature**
 
 ```sql
 function get_interest_calc_dates(p_last_calc_access_date in date,
-                                   p_eod_sod               in varchar2,
-                                   p_int_calc_at           in varchar2)
-    return loan_api.g_date_tab_type;
+p_eod_sod               in varchar2,
+p_int_calc_at           in varchar2)
+return loan_api.g_date_tab_type;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_last_calc_access_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_eod_sod` | IN | `varchar2` | End-of-day (`E`) or start-of-day (`S`) indicator (where supported) |
+| `p_int_calc_at` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `loan_api.g_date_tab_type`. Business interpretation: Returns the dates eligible for interest calculation across the current EOD/SOD processing window.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Observed message or error code: `p_int_calc_at param should be EOD or SOD!!`
+- Observed message or error code: `P_EOD_SOD param should be E - EOD or S - SOD!!`
+- Observed message or error code: `Interest calculation should be done at EOD or SOD!!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 80; body declaration approximately line 259.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_interest_calc_dates_ex"></a>
 
 ### `get_interest_calc_dates_ex` — FUNCTION
 
-**Purpose:** Public function related to get interest calc dates ex. Verify precise behavior against implementation before external publication.
+**Purpose:** Returns interest-calculation dates for an explicitly supplied processing date.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 85; body declaration candidate line(s): 323
+Returns interest-calculation dates for an explicitly supplied processing date.
+Observed delegated calls include `GLBL_TARIH.AYBASI`, `GLBL_TARIH.SONRAKI_ISGUNU`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- `p_int_calc_at` must be `EOD` or `SOD`; `p_eod_sod` must be `E` or `S`.
+
+**Public Signature**
 
 ```sql
 function get_interest_calc_dates_ex(p_date        in date,
-                                      p_eod_sod     in varchar2,
-                                      p_int_calc_at in varchar2)
-    return g_date_tab_type;
+p_eod_sod     in varchar2,
+p_int_calc_at in varchar2)
+return g_date_tab_type;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_date` | IN | `date` | Relevant calculation or operation date |
+| `p_eod_sod` | IN | `varchar2` | End-of-day (`E`) or start-of-day (`S`) indicator (where supported) |
+| `p_int_calc_at` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `g_date_tab_type`. Business interpretation: Returns interest-calculation dates for an explicitly supplied processing date.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Observed message or error code: `p_int_calc_at param should be EOD or SOD!!`
+- Observed message or error code: `P_EOD_SOD param should be E - EOD or S - SOD!!`
+- Observed message or error code: `Interest calculation should be done at EOD or SOD!!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 85; body declaration approximately line 324.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_interest_calc_info"></a>
 
 ### `get_interest_calc_info` — PROCEDURE
 
-**Purpose:** Determines interest calculation day count and year-day basis from interest-calculation configuration.
+**Purpose:** Computes interest-accrual day count and year basis using configured rate and day-count conventions.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 90; body declaration candidate line(s): 104
+Computes interest-accrual day count and year basis using configured rate and day-count conventions.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- Payment day is required.
+- Transaction date earlier than last calculation date is rejected.
+- Day-count convention is read from `LOAN_INT_CALC_TYPES_PR`.
+
+**Public Signature**
 
 ```sql
 procedure get_interest_calc_info(p_last_calc_date       in date,
-                                   p_pymt_day             in number,
-                                   p_trn_date             in date,
-                                   p_int_calc_type        in varchar2,
-                                   p_rate_type            in varchar2,
-                                   p_int_rate_periodicity in varchar2,
-                                   p_calc_day_count       out number,
-                                   p_year_day_count       out number);
+p_pymt_day             in number,
+p_trn_date             in date,
+p_int_calc_type        in varchar2,
+p_rate_type            in varchar2,
+p_int_rate_periodicity in varchar2,
+p_calc_day_count       out number,
+p_year_day_count       out number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_last_calc_date` | IN | `date` | Last interest calculation date |
+| `p_pymt_day` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_trn_date` | IN | `date` | Transaction date |
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+| `p_rate_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_rate_periodicity` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_calc_day_count` | OUT | `number` | Computed accrual day count |
+| `p_year_day_count` | OUT | `number` | Computed annual day-count basis |
+
+**Outputs:** `p_calc_day_count`, `p_year_day_count`
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_INT_CALC_TYPES_PR`.
+
+**Error Handling**
+
+- Observed message or error code: `Payment day cant be null, please check!`
+- Observed message or error code: `error encountered in search of interest calculation type: `
+- Observed message or error code: `Transaction date cant be less than last calculation date!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 90; body declaration approximately line 104.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_interest_calc_info_ex"></a>
 
 ### `get_interest_calc_info_ex` — PROCEDURE
 
-**Purpose:** Public procedure related to get interest calc info ex. Verify precise behavior against implementation before external publication.
+**Purpose:** Computes accrual day count and year basis from an interest calculation type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 101; body declaration candidate line(s): 183
+Computes accrual day count and year basis from an interest calculation type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure get_interest_calc_info_ex(p_last_calc_date in date,
-                                   p_pymt_day       in number,
-                                   p_trn_date       in date,
-                                   p_int_calc_type  in varchar2,
-                                   p_calc_day_count out number,
-                                   p_year_day_count out number);
+p_pymt_day       in number,
+p_trn_date       in date,
+p_int_calc_type  in varchar2,
+p_calc_day_count out number,
+p_year_day_count out number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_last_calc_date` | IN | `date` | Last interest calculation date |
+| `p_pymt_day` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_trn_date` | IN | `date` | Transaction date |
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+| `p_calc_day_count` | OUT | `number` | Computed accrual day count |
+| `p_year_day_count` | OUT | `number` | Computed annual day-count basis |
+
+**Outputs:** `p_calc_day_count`, `p_year_day_count`
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_INT_CALC_TYPES_PR`.
+
+**Error Handling**
+
+- Observed message or error code: `error encountered in search of interest calculation type: `
+- Observed message or error code: `Payment day cant be null, please check!`
+- Observed message or error code: `Transaction date cant be less than last calculation date!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 101; body declaration approximately line 183.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="clear_addtional_data"></a>
+
 ### `clear_addtional_data` — PROCEDURE
 
-**Purpose:** Public procedure related to clear addtional data. Verify precise behavior against implementation before external publication.
+**Purpose:** Initializes the additional-information JSON and resets pending loan change-tracking buffers.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 109; body declaration candidate line(s): 378
+Initializes the additional-information JSON and resets pending loan change-tracking buffers.
+Observed delegated calls include `RUHA3H.LOG`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 procedure clear_addtional_data(p_state varchar2 default 'CLEAR');
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_state` | IN | `varchar2 default 'CLEAR'` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 109; body declaration approximately line 379.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="add_additional_group"></a>
+
 ### `add_additional_group` — PROCEDURE
 
-**Purpose:** Public procedure related to add additional group. Verify precise behavior against implementation before external publication.
+**Purpose:** Opens a named JSON object to group additional loan operation details.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 111; body declaration candidate line(s): 404
+Opens a named JSON object to group additional loan operation details.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 procedure add_additional_group(p_tag_name varchar2 default null);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_tag_name` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 111; body declaration approximately line 404.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="end_additional_group"></a>
+
 ### `end_additional_group` — PROCEDURE
 
-**Purpose:** Public procedure related to end additional group. Verify precise behavior against implementation before external publication.
+**Purpose:** Closes the current JSON object in the additional-information structure.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 113; body declaration candidate line(s): 410
+Closes the current JSON object in the additional-information structure.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 procedure end_additional_group;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+No parameters.
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 113; body declaration approximately line 410.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="end_additional_main_group"></a>
+
 ### `end_additional_main_group` — PROCEDURE
 
-**Purpose:** Public procedure related to end additional main group. Verify precise behavior against implementation before external publication.
+**Purpose:** Closes the current JSON array in the additional-information structure.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 114; body declaration candidate line(s): 398
+Closes the current JSON array in the additional-information structure.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 procedure end_additional_main_group;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+No parameters.
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 114; body declaration approximately line 398.
+
+[↑ Back to index](#navigation)
 
 ---
 
-### `add_additional_info` — PROCEDURE
+<a id="add_additional_info--overload-1"></a>
 
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
+### `add_additional_info` — PROCEDURE (overload 1)
 
-**Description confidence:** Name-based description — review required.
+**Purpose:** Writes a text-valued tag into the loan operation's additional-information JSON.
 
-**Source:** specification line 115; body declaration candidate line(s): 416, 428
+**Business Logic**
 
-**Signature**
+Writes a text-valued tag into the loan operation's additional-information JSON.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure add_additional_info(p_tag_name varchar2, p_value varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_tag_name` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_value` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed writes: `OPERATIONS.`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 115; body declaration approximately line 416.
+
+[↑ Back to index](#navigation)
 
 ---
 
-### `add_additional_info` — PROCEDURE
+<a id="add_additional_info--overload-2"></a>
 
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
+### `add_additional_info` — PROCEDURE (overload 2)
 
-**Description confidence:** Name-based description — review required.
+**Purpose:** Writes a date-valued tag in the additional-information JSON after date formatting.
 
-**Source:** specification line 117; body declaration candidate line(s): 416, 428
+**Business Logic**
 
-**Signature**
+Writes a date-valued tag in the additional-information JSON after date formatting.
+
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 procedure add_additional_info(p_tag_name varchar2, p_value date);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_tag_name` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_value` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 117; body declaration approximately line 428.
+
+[↑ Back to index](#navigation)
 
 ---
 
-### `add_column_update` — PROCEDURE
+<a id="add_column_update--overload-1"></a>
 
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
+### `add_column_update` — PROCEDURE (overload 1)
 
-**Description confidence:** Body-reviewed summary.
+**Purpose:** Stages a text-valued, mapped old/new column change for loan operation history and update handling.
 
-**Source:** specification line 118; body declaration candidate line(s): 434, 471
+**Business Logic**
 
-**Signature**
+Stages a text-valued, mapped old/new column change for loan operation history and update handling.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+
+**Business Rules / Preconditions**
+
+- The tag must be declared in `LOAN_HISTORY_MAPPING`.
+- Change collection must be initialized before adding updates.
+
+**Public Signature**
 
 ```sql
 procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value varchar2,
-                              p_new_value varchar2);
+p_old_value varchar2,
+p_new_value varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_tag_name` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_old_value` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_new_value` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_HISTORY_MAPPING`.
+- Observed writes: `OPERATIONS.`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 118; body declaration approximately line 434.
+
+[↑ Back to index](#navigation)
 
 ---
 
-### `add_column_update` — PROCEDURE
+<a id="add_column_update--overload-2"></a>
 
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
+### `add_column_update` — PROCEDURE (overload 2)
 
-**Description confidence:** Body-reviewed summary.
+**Purpose:** Stages a date-valued, mapped old/new column change for loan operation history and update handling.
 
-**Source:** specification line 122; body declaration candidate line(s): 434, 471
+**Business Logic**
 
-**Signature**
+Stages a date-valued, mapped old/new column change for loan operation history and update handling.
+
+**Business Rules / Preconditions**
+
+- The tag must be declared in `LOAN_HISTORY_MAPPING`.
+- Change collection must be initialized before adding updates.
+
+**Public Signature**
 
 ```sql
 procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value date,
-                              p_new_value date);
+p_old_value date,
+p_new_value date);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_tag_name` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_old_value` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_new_value` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 122; body declaration approximately line 471.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="finalize_addtional_process"></a>
 
 ### `finalize_addtional_process` — PROCEDURE
 
-**Purpose:** Finalizes accumulated additional information and executes mapped updates for the supplied identifiers.
+**Purpose:** Finalizes tracked loan changes, records old/new values in JSON and executes mapped table updates.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 125; body declaration candidate line(s): 480
+Finalizes tracked loan changes, records old/new values in JSON and executes mapped table updates.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- Only mapped tables and supported data types are expected.
+- The implementation builds dynamic SQL; escaping, validation, and transaction ownership require a security review.
+
+**Public Signature**
 
 ```sql
 procedure finalize_addtional_process(p_doc_no   varchar2,
-                                       p_offer_id varchar2);
+p_offer_id varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_offer_id` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Security review:** Dynamic SQL is involved. Restrict query text or mapped values to trusted, validated inputs.
+
+**Source Evidence:** Specification line 125; body declaration approximately line 480.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="reverse_update"></a>
+
 ### `reverse_update` — PROCEDURE
 
-**Purpose:** Reads prior history additional information and attempts to restore recorded old values.
+**Purpose:** Reverses mapped loan changes using previous operation-history data.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 128; body declaration candidate line(s): 591
+Reverses mapped loan changes using previous operation-history data.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `L_OBJ.GET`, `L_OLD.GET_STRING`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- Reads the old/new change data from `LOAN_OPERATION_HISTORY` for the given transaction.
+
+**Public Signature**
 
 ```sql
 procedure reverse_update(p_tx_fid number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_tx_fid` | IN | `number` | Transaction identifier |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_TEKLIF_DETAY`, `LOAN_OPERATION_HISTORY`.
+
+**Error Handling**
+
+- Observed message or error code: `Can not get additional info in [loan_operation_history] with tx fid [`
+- Observed message or error code: `Can not get find loan[`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 128; body declaration approximately line 591.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_loan_amount"></a>
 
 ### `get_loan_amount` — FUNCTION
 
-**Purpose:** Returns a loan amount using the TOTAL, DEBT, or DUE calculation mode and related account and schedule data.
+**Purpose:** Returns a loan's TOTAL balance, payable DEBT, or currently DUE amount based on configuration.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 130; body declaration candidate line(s): 643
+Returns a loan's TOTAL balance, payable DEBT, or currently DUE amount based on configuration.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `LOAN_API.GET_PLAN_PAYMENT_AMOUNT`, `P.ACC_TYPE`, `O.PARAM_ID`, `O.TYPE_ID`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- `p_amount_type` accepts `TOTAL`, `DEBT`, or `DUE`.
+- For `DUE`, configured allocation type determines whether current balance or scheduled payment is used.
+- Missing account-type or payment-order configuration can raise an application error.
+
+**Public Signature**
 
 ```sql
 function get_loan_amount(p_doc_no      in varchar2,
-                           p_amount_type in varchar2,
-                           p_date        in date default glbl.getsysdate,
-                           p_oper_type   in varchar2 default null)
-    return number;
+p_amount_type in varchar2,
+p_date        in date default glbl.getsysdate,
+p_oper_type   in varchar2 default null)
+return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_amount_type` | IN | `varchar2` | Amount mode |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+| `p_oper_type` | IN | `varchar2 default null` | Operation code used for routing or validation |
+
+**Return Value:** `number`. Business interpretation: Returns a loan's TOTAL balance, payable DEBT, or currently DUE amount based on configuration.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `IN_LIST`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 130; body declaration approximately line 643.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="get_overdue_min_amount"></a>
+
 ### `get_overdue_min_amount` — FUNCTION
 
-**Purpose:** Public function related to get overdue min amount. Verify precise behavior against implementation before external publication.
+**Purpose:** Reads the product-specific minimum overdue amount from product configuration.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 136; body declaration candidate line(s): 719
+Reads the product-specific minimum overdue amount from product configuration.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- Product code must exist in `PKRD_TURKOD_PR`; missing products raise a message-driven error.
+
+**Public Signature**
 
 ```sql
 function get_overdue_min_amount(p_product_code in number) return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_product_code` | IN | `number` | Loan product code |
+
+**Return Value:** `number`. Business interpretation: Reads the product-specific minimum overdue amount from product configuration.
+
+**Related Database Objects**
+
+- Observed reads: `PKRD_TURKOD_PR`.
+
+**Error Handling**
+
+- Observed message or error code: `Product code `
+- Observed message or error code: `Error encountered in search of Product code `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 136; body declaration approximately line 719.
+
+[↑ Back to index](#navigation)
 
 ---
 
-### `get_pen_info_for_calc` — PROCEDURE
+<a id="get_pen_info_for_calc--overload-2"></a>
 
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
+### `get_pen_info_for_calc` — PROCEDURE (overload 2)
 
-**Description confidence:** Body-reviewed summary.
+**Purpose:** Calculates a penalty base using overdue principal and a configured percentage, and returns overdue day count.
 
-**Source:** specification line 137; body declaration candidate line(s): 70, 736
+**Business Logic**
 
-**Signature**
+Calculates a penalty base using overdue principal and a configured percentage, and returns overdue day count.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+
+**Business Rules / Preconditions**
+
+- Grace days influence when scheduled unpaid amounts qualify as overdue.
+- The implementation rejects negative overdue amounts or negative day counts.
+
+**Public Signature**
 
 ```sql
 procedure get_pen_info_for_calc(p_date                in date default glbl.getsysdate,
-                                  p_doc_no              in varchar2,
-                                  p_pen_calc_grace_days in number,
-                                  p_PEN_INT_RATIO       in number,
-                                  p_ovd_amount_for_pen  out number,
-                                  p_pen_calc_days_count out number);
+p_doc_no              in varchar2,
+p_pen_calc_grace_days in number,
+p_PEN_INT_RATIO       in number,
+p_ovd_amount_for_pen  out number,
+p_pen_calc_days_count out number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_pen_calc_grace_days` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_PEN_INT_RATIO` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_ovd_amount_for_pen` | OUT | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_pen_calc_days_count` | OUT | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** `p_ovd_amount_for_pen`, `p_pen_calc_days_count`
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Observed message or error code: `Overdue Main amount for penalty calculation or overdue days count is negative!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 137; body declaration approximately line 736.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="get_trn_caller_id"></a>
+
 ### `get_trn_caller_id` — FUNCTION
 
-**Purpose:** Public function related to get trn caller id. Verify precise behavior against implementation before external publication.
+**Purpose:** Resolves the transaction caller identifier for a configured loan operation type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 144; body declaration candidate line(s): 772
+Resolves the transaction caller identifier for a configured loan operation type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_trn_caller_id(p_oper_type in varchar2) return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_oper_type` | IN | `varchar2` | Operation code used for routing or validation |
+
+**Return Value:** `number`. Business interpretation: Resolves the transaction caller identifier for a configured loan operation type.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_OPERATION_DESC`.
+
+**Error Handling**
+
+- Observed message or error code: `Operation type `
+- Observed message or error code: `Error encountered in search of Operation type `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 144; body declaration approximately line 772.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_voucher_data_from_query"></a>
 
 ### `get_voucher_data_from_query` — FUNCTION
 
-**Purpose:** Executes a supplied SQL query with DBMS_SQL and maps returned column values for vouchers.
+**Purpose:** Executes a voucher-related SQL query and maps resulting columns to grouped voucher values.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 146; body declaration candidate line(s): 789
+Executes a voucher-related SQL query and maps resulting columns to grouped voucher values.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- `p_result_type` is `SINGLE_ROW` or `MULTI_ROW`.
+- The supplied SQL is dynamically parsed with `DBMS_SQL`; queries must be strictly controlled and reviewed.
+
+**Public Signature**
 
 ```sql
 function get_voucher_data_from_query(p_query       in varchar2,
-                                       p_result_type in varchar2)
-    return g_col_value_tab_map;
+p_result_type in varchar2)
+return g_col_value_tab_map;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_query` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_result_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `g_col_value_tab_map`. Business interpretation: Executes a voucher-related SQL query and maps resulting columns to grouped voucher values.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Observed message or error code: `-20001`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+- **Security review:** Dynamic SQL is involved. Restrict query text or mapped values to trusted, validated inputs.
+
+**Source Evidence:** Specification line 146; body declaration approximately line 789.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_formatted_grace_from_list"></a>
 
 ### `get_formatted_grace_from_list` — FUNCTION
 
-**Purpose:** Public function related to get formatted grace from list. Verify precise behavior against implementation before external publication.
+**Purpose:** Formats a grace-period specification from a stored period list.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 150; body declaration candidate line(s): 912
+Formats a grace-period specification from a stored period list.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 function get_formatted_grace_from_list(p_period_list in varchar2)
-    return varchar2;
+return varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_period_list` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `varchar2`. Business interpretation: Formats a grace-period specification from a stored period list.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 150; body declaration approximately line 912.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_grace_info"></a>
 
 ### `get_grace_info` — FUNCTION
 
-**Purpose:** Public function related to get grace info. Verify precise behavior against implementation before external publication.
+**Purpose:** Retrieves grace-period information for a loan, date and account category.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 153; body declaration candidate line(s): 952
+Retrieves grace-period information for a loan, date and account category.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `LOAN_API.GET_FORMATTED_GRACE_FROM_LIST`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 function get_grace_info(p_Doc_No          In Varchar2,
-                          p_period_end_date in date,
-                          p_acc_type        In Varchar2 default 'A',
-                          p_info_type       in varchar2) Return varchar2;
+p_period_end_date in date,
+p_acc_type        In Varchar2 default 'A',
+p_info_type       in varchar2) Return varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_Doc_No` | IN | `Varchar2` | Loan document reference |
+| `p_period_end_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_acc_type` | IN | `Varchar2 default 'A'` | Loan account type or account-type group |
+| `p_info_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `varchar2`. Business interpretation: Retrieves grace-period information for a loan, date and account category.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 153; body declaration approximately line 952.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_basis_year_days_cnt"></a>
 
 ### `get_basis_year_days_cnt` — FUNCTION
 
-**Purpose:** Public function related to get basis year days cnt. Verify precise behavior against implementation before external publication.
+**Purpose:** Determines the configured interest calculation year-day basis.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 158; body declaration candidate line(s): 998
+Determines the configured interest calculation year-day basis.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_basis_year_days_cnt(p_int_calc_type in varchar2,
-                                   p_date          in date) return number;
+p_date          in date) return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+| `p_date` | IN | `date` | Relevant calculation or operation date |
+
+**Return Value:** `number`. Business interpretation: Determines the configured interest calculation year-day basis.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_INT_CALC_TYPES_PR`.
+
+**Error Handling**
+
+- Observed message or error code: `Error encountered in search of int calc type `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 158; body declaration approximately line 998.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="get_gl_value"></a>
+
 ### `get_gl_value` — FUNCTION
 
-**Purpose:** Public function related to get gl value. Verify precise behavior against implementation before external publication.
+**Purpose:** Returns an accounting configuration value by its parameter name.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 161; body declaration candidate line(s): 1026
+Returns an accounting configuration value by its parameter name.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_gl_value(p_parameter_name in varchar2) return varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_parameter_name` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `varchar2`. Business interpretation: Returns an accounting configuration value by its parameter name.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_GLOBAL_PARAMETERS_PR`.
+
+**Error Handling**
+
+- Observed message or error code: `Parameter not found in loan_global_parameters_pr table!`
+- Observed message or error code: `Too many rows in search of parameter in loan_global_parameters_pr table!`
+- Observed message or error code: `Encountered error in search of parameter in loan_global_parameters_pr table!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 161; body declaration approximately line 1026.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="loan_int_diff_operation"></a>
 
 ### `loan_int_diff_operation` — PROCEDURE
 
-**Purpose:** Public procedure related to loan int diff operation. Verify precise behavior against implementation before external publication.
+**Purpose:** Processes the difference between scheduled and calculated loan interest in transaction context.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 163; body declaration candidate line(s): 1043
+Processes the difference between scheduled and calculated loan interest in transaction context.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure loan_int_diff_operation(p_trn_date        in date,
-                                    p_oper_type       in varchar2,
-                                    p_trn_type        in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
+p_oper_type       in varchar2,
+p_trn_type        in varchar2,
+p_doc_no          in varchar2,
+p_acc_type        in varchar2,
+p_source_acc_type in varchar2,
+p_tx_fid          number,
+p_original_amount in number,
+p_eod_sod         in varchar2,
+p_payment_date    in date,
+p_plan_int_amount in number,
+p_int_amount      in number,
+p_calc_amount     out number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_trn_date` | IN | `date` | Transaction date |
+| `p_oper_type` | IN | `varchar2` | Operation code used for routing or validation |
+| `p_trn_type` | IN | `varchar2` | Transaction action/type |
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+| `p_source_acc_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_tx_fid` | IN | `number` | Transaction identifier |
+| `p_original_amount` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_eod_sod` | IN | `varchar2` | End-of-day (`E`) or start-of-day (`S`) indicator (where supported) |
+| `p_payment_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_plan_int_amount` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_amount` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_calc_amount` | OUT | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** `p_calc_amount`
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_INT_CALCULATION_DIFF_HISTORY`.
+- Observed writes: `LOAN_INT_CALCULATION_DIFF_HISTORY`.
+
+**Error Handling**
+
+- Observed message or error code: `p_tx_fid or p_doc_no or p_acc_type or p_eod_sod cant be null!`
+- Observed message or error code: `Operation type must be INS, OPEN, CLOSE!`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 163; body declaration approximately line 1043.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="loan_int_diff_operation_ex"></a>
 
 ### `loan_int_diff_operation_ex` — PROCEDURE
 
-**Purpose:** Public procedure related to loan int diff operation ex. Verify precise behavior against implementation before external publication.
+**Purpose:** Processes a variant of loan interest differences with a reduced parameter set.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 177; body declaration candidate line(s): 1197
+Processes a variant of loan interest differences with a reduced parameter set.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure loan_int_diff_operation_ex(p_oper_type       in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
+p_doc_no          in varchar2,
+p_acc_type        in varchar2,
+p_source_acc_type in varchar2,
+p_tx_fid          number,
+p_original_amount in number,
+p_eod_sod         in varchar2,
+p_payment_date    in date,
+p_plan_int_amount in number,
+p_int_amount      in number,
+p_calc_amount     out number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_oper_type` | IN | `varchar2` | Operation code used for routing or validation |
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+| `p_source_acc_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_tx_fid` | IN | `number` | Transaction identifier |
+| `p_original_amount` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_eod_sod` | IN | `varchar2` | End-of-day (`E`) or start-of-day (`S`) indicator (where supported) |
+| `p_payment_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_plan_int_amount` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_amount` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_calc_amount` | OUT | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** `p_calc_amount`
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_INT_CALCULATION_DIFF_HISTORY`.
+- Observed writes: `LOAN_INT_CALCULATION_DIFF_HISTORY`.
+
+**Error Handling**
+
+- Observed message or error code: `p_tx_fid or p_doc_no or p_acc_type or p_eod_sod cant be null!`
+- Observed message or error code: `Operation type must be INS, OPEN, CLOSE!`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 177; body declaration approximately line 1197.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="get_gl_acc_active_passive"></a>
+
 ### `get_gl_acc_active_passive` — FUNCTION
 
-**Purpose:** Public function related to get gl acc active passive. Verify precise behavior against implementation before external publication.
+**Purpose:** Determines whether a general-ledger account is active or passive.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 189; body declaration candidate line(s): 1345
+Determines whether a general-ledger account is active or passive.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_gl_acc_active_passive(p_acc_no in varchar2) return varchar2 result_cache;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_acc_no` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `varchar2`. Business interpretation: Determines whether a general-ledger account is active or passive.
+
+**Related Database Objects**
+
+- Observed reads: `GL_ACCOUNT_DEFINE`.
+
+**Error Handling**
+
+- Observed message or error code: `Account_no: `
+- Observed message or error code: `Encountered more than one row in gl_account_define 
+                              table in search of account_no: `
+- Observed message or error code: `Encountered error in gl_account_define 
+                              table in search of account_no: `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 189; body declaration approximately line 1345.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_gl_acc_from_matrix"></a>
 
 ### `get_gl_acc_from_matrix` — FUNCTION
 
-**Purpose:** Public function related to get gl acc from matrix. Verify precise behavior against implementation before external publication.
+**Purpose:** Resolves a general-ledger account using product, customer, currency, period and account-type criteria.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 191; body declaration candidate line(s): 1367
+Resolves a general-ledger account using product, customer, currency, period and account-type criteria.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_NAME.GET_CUSTOMER_MUS_TIP`, `GLBL_HESAP.GET_ACCOUNT_PR`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 function get_gl_acc_from_matrix(p_product_code in number default null,
-                                  p_cust_type    in number default null,
-                                  p_period_id    in number default null,
-                                  p_currency_id  in number default null,
-                                  p_base_type    in varchar2,
-                                  p_loan_doc_no  in varchar2 default null,
-                                  p_customer_no  in varchar2 default null,
-                                  p_acc_type     in varchar2) return varchar2 result_cache;
+p_cust_type    in number default null,
+p_period_id    in number default null,
+p_currency_id  in number default null,
+p_base_type    in varchar2,
+p_loan_doc_no  in varchar2 default null,
+p_customer_no  in varchar2 default null,
+p_acc_type     in varchar2) return varchar2 result_cache;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_product_code` | IN | `number default null` | Loan product code |
+| `p_cust_type` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_period_id` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_currency_id` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_base_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_loan_doc_no` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_customer_no` | IN | `varchar2 default null` | Customer identifier |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+
+**Return Value:** `varchar2`. Business interpretation: Resolves a general-ledger account using product, customer, currency, period and account-type criteria.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `GAIA.KRD_CARI_URUN_KP_PR`, `GL_URUN_HESAP_PR`, `KRD_TEKLIF_DETAY`, `SP_URUN_PR`.
+
+**Error Handling**
+
+- Observed message or error code: `p_gl_base_type should be MAIN - for main account, OVD_MAIN - for overdue account!`
+- Observed message or error code: `Error encountered in search of loan_doc_no: `
+- Observed message or error code: `Error encountered in search krd_teklif_detay table of loan_doc_no: `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 191; body declaration approximately line 1367.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_delay_int_rate"></a>
 
 ### `Get_Delay_Int_Rate` — FUNCTION
 
-**Purpose:** Public function related to get delay int rate. Verify precise behavior against implementation before external publication.
+**Purpose:** Obtains a loan's delayed-interest rate for a selected delay category.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 200; body declaration candidate line(s): 1602
+Obtains a loan's delayed-interest rate for a selected delay category.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
--- krd_eod.Get_Delay_Int_Rate
-  Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
-                              p_Delay_Type In Varchar2) Return Number;
+Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
+p_Delay_Type In Varchar2) Return Number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_Loan_Id` | IN | `Varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_Delay_Type` | IN | `Varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `Number`. Business interpretation: Obtains a loan's delayed-interest rate for a selected delay category.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_TEKLIF_DETAY`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 201; body declaration approximately line 1602.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_commission_schedule"></a>
 
 ### `get_commission_schedule` — FUNCTION
 
-**Purpose:** Public function related to get commission schedule. Verify precise behavior against implementation before external publication.
+**Purpose:** Generates the commission payment schedule for an amount and period.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 203; body declaration candidate line(s): 1628
+Generates the commission payment schedule for an amount and period.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_FAIZ.DAYS_BETWEEN2`, `GNI_MESSAGE.GET_MESSAGE`, `GLBL_TARIH.ONCEKI_ISGUNU`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- kredi_api.Get_Krd_Kom_Plan
-  Function get_commission_schedule(p_begin_date    In Date,
-                                   p_end_date      In Date,
-                                   p_amount        In Number,
-                                   p_int_calc_type in varchar2)
-    Return Krd_Kom_Plan_Tt
-    Pipelined;
+Function get_commission_schedule(p_begin_date    In Date,
+p_end_date      In Date,
+p_amount        In Number,
+p_int_calc_type in varchar2)
+Return Krd_Kom_Plan_Tt
+Pipelined;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_begin_date` | IN | `Date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_end_date` | IN | `Date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_amount` | IN | `Number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+
+**Return Value:** `Krd_Kom_Plan_Tt`. Business interpretation: Generates the commission payment schedule for an amount and period.
+
+**Related Database Objects**
+
+- Observed reads: `L_BITME_TAR`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 205; body declaration approximately line 1628.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="add_months_for_loan"></a>
 
 ### `add_months_for_loan` — FUNCTION
 
-**Purpose:** Public function related to add months for loan. Verify precise behavior against implementation before external publication.
+**Purpose:** Adjusts a loan date by a number of months with optional target payment day handling.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 211; body declaration candidate line(s): 1744
+Adjusts a loan date by a number of months with optional target payment day handling.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 function add_months_for_loan(p_date   date,
-                               p_months number,
-                               p_day    number default null) return date;
+p_months number,
+p_day    number default null) return date;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_date` | IN | `date` | Relevant calculation or operation date |
+| `p_months` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_day` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `date`. Business interpretation: Adjusts a loan date by a number of months with optional target payment day handling.
+
+**Related Database Objects**
+
+- Observed reads: `L_DATE`, `L_LAST_DATE`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 211; body declaration approximately line 1744.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_next_plan_pym"></a>
 
 ### `get_next_Plan_Pym` — FUNCTION
 
-**Purpose:** Public function related to get next plan pym. Verify precise behavior against implementation before external publication.
+**Purpose:** Determines the next planned payment amount for a loan account type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 215; body declaration candidate line(s): 1776
+Determines the next planned payment amount for a loan account type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 Function get_next_Plan_Pym(p_doc_no   In Varchar2,
-                             P_date     In Date,
-                             p_acc_type in varchar2) Return Number;
+P_date     In Date,
+p_acc_type in varchar2) Return Number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `Varchar2` | Loan document reference |
+| `P_date` | IN | `Date` | Relevant calculation or operation date |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+
+**Return Value:** `Number`. Business interpretation: Determines the next planned payment amount for a loan account type.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 215; body declaration approximately line 1776.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_offer_id"></a>
 
 ### `get_offer_id` — FUNCTION
 
-**Purpose:** Public function related to get offer id. Verify precise behavior against implementation before external publication.
+**Purpose:** Generates or retrieves a loan offer identifier for a branch and date.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 219; body declaration candidate line(s): 1809
+Generates or retrieves a loan offer identifier for a branch and date.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 Function get_offer_id(p_branch_id In Number Default Glbl.Getsube,
-                        P_date      In Date Default Glbl.Getsysdate)
-    Return Varchar2;
+P_date      In Date Default Glbl.Getsysdate)
+Return Varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_branch_id` | IN | `Number Default Glbl.Getsube` | Branch identifier |
+| `P_date` | IN | `Date Default Glbl.Getsysdate` | Relevant calculation or operation date |
+
+**Return Value:** `Varchar2`. Business interpretation: Generates or retrieves a loan offer identifier for a branch and date.
+
+**Related Database Objects**
+
+- Observed writes: `KRD_TEKLIF_NO`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 219; body declaration approximately line 1807.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_plan_payment_amount"></a>
 
 ### `get_plan_payment_amount` — FUNCTION
 
-**Purpose:** Public function related to get plan payment amount. Verify precise behavior against implementation before external publication.
+**Purpose:** Returns the planned payment amount for a date and optional account type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 223; body declaration candidate line(s): 1832
+Returns the planned payment amount for a date and optional account type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
--- krd_eod.get_Plan_Pym +
-  function get_plan_payment_amount(p_doc_no   in varchar2,
-                                   p_date     in date default glbl.getsysdate,
-                                   p_acc_type in varchar2 default null)
-    return number;
+function get_plan_payment_amount(p_doc_no   in varchar2,
+p_date     in date default glbl.getsysdate,
+p_acc_type in varchar2 default null)
+return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+| `p_acc_type` | IN | `varchar2 default null` | Loan account type or account-type group |
+
+**Return Value:** `number`. Business interpretation: Returns the planned payment amount for a date and optional account type.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 225; body declaration approximately line 1832.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_ovd_date"></a>
 
 ### `get_ovd_date` — FUNCTION
 
-**Purpose:** Public function related to get ovd date. Verify precise behavior against implementation before external publication.
+**Purpose:** Finds the overdue date associated with a loan's account type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 229; body declaration candidate line(s): 2734
+Finds the overdue date associated with a loan's account type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `LOAN_TRANCHE_API.GET_OVD_DATE`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 Function get_ovd_date(p_doc_no   varchar2,
-                        p_acc_type varchar2,
-                        p_date     date default glbl.getsysdate) return date;
+p_acc_type varchar2,
+p_date     date default glbl.getsysdate) return date;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+
+**Return Value:** `date`. Business interpretation: Finds the overdue date associated with a loan's account type.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_TESIS`, `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 229; body declaration approximately line 2734.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_amount_for_pen_calc"></a>
 
 ### `get_amount_for_pen_calc` — FUNCTION
 
-**Purpose:** Public function related to get amount for pen calc. Verify precise behavior against implementation before external publication.
+**Purpose:** Determines the amount used as the base for penalty calculation.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 233; body declaration candidate line(s): 1850
+Determines the amount used as the base for penalty calculation.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_FAIZ.DAY_COUNT_BASIS_NEW`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 Function get_amount_for_pen_calc(p_doc_no        In Varchar2,
-                                   P_date          In Date,
-                                   p_for_spec_days in varchar2 default 'N',
-                                   p_int_calc_type in varchar2 default null)
-    Return Number;
+P_date          In Date,
+p_for_spec_days in varchar2 default 'N',
+p_int_calc_type in varchar2 default null)
+Return Number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `Varchar2` | Loan document reference |
+| `P_date` | IN | `Date` | Relevant calculation or operation date |
+| `p_for_spec_days` | IN | `varchar2 default 'N'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_calc_type` | IN | `varchar2 default null` | Interest day-count/calculation convention |
+
+**Return Value:** `Number`. Business interpretation: Determines the amount used as the base for penalty calculation.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`, `LOAN_SPECIAL_DAYS_PR`.
+
+**Error Handling**
+
+- Observed message or error code: `Too many rows in loan_special_days_pr for date: `
+- Observed message or error code: `p_for_spec_days must be Y or N!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 233; body declaration approximately line 1850.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_plan_month_count"></a>
 
 ### `get_Plan_Month_Count` — FUNCTION
 
-**Purpose:** Public function related to get plan month count. Verify precise behavior against implementation before external publication.
+**Purpose:** Calculates the number of payment-plan months between two dates.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 239; body declaration candidate line(s): 1944
+Calculates the number of payment-plan months between two dates.
+Observed delegated calls include `GLBL_FAIZ.DAYS_BETWEEN2`, `LOAN_API.ADD_MONTHS_FOR_LOAN`, `GLBL_TARIH.SONRAKI_ISGUNU`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- kredi_api.get_Plan_Month_Count +
-  /*Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ')
-    Return Number;*/
-  Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ',
-                                p_work_days     varchar2 default 'Y',
-                                p_pymt_day      number default null)
-    Return Number;
+Function get_Plan_Month_Count(p_Start_Date    In Date,
+p_End_Date      In Date,
+p_int_calc_type varchar2 default '30/360 AZ',
+p_work_days     varchar2 default 'Y',
+p_pymt_day      number default null)
+Return Number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_Start_Date` | IN | `Date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_End_Date` | IN | `Date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_calc_type` | IN | `varchar2 default '30/360 AZ'` | Interest day-count/calculation convention |
+| `p_work_days` | IN | `varchar2 default 'Y'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_pymt_day` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `Number`. Business interpretation: Calculates the number of payment-plan months between two dates.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 241; body declaration approximately line 1944.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_plan_paid_month_count"></a>
 
 ### `get_plan_paid_month_count` — FUNCTION
 
-**Purpose:** Public function related to get plan paid month count. Verify precise behavior against implementation before external publication.
+**Purpose:** Determines how many plan months have been paid for the specified loan.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 251; body declaration candidate line(s): 1987
+Determines how many plan months have been paid for the specified loan.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- new
-  function get_plan_paid_month_count(p_doc_no in varchar2,
-                                     p_term   in number,
-                                     p_date   in date) return number;
+function get_plan_paid_month_count(p_doc_no in varchar2,
+p_term   in number,
+p_date   in date) return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_term` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_date` | IN | `date` | Relevant calculation or operation date |
+
+**Return Value:** `number`. Business interpretation: Determines how many plan months have been paid for the specified loan.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Observed message or error code: `Salaaaam`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 252; body declaration approximately line 1987.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_plan_error"></a>
 
 ### `get_plan_error` — FUNCTION
 
-**Purpose:** Public function related to get plan error. Verify precise behavior against implementation before external publication.
+**Purpose:** Checks the loan payment plan for configured validation errors.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 255; body declaration candidate line(s): 2047
+Checks the loan payment plan for configured validation errors.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
--- kredi_api.get_plan_error +
-  Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
+Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+
+**Return Value:** `varchar2`. Business interpretation: Checks the loan payment plan for configured validation errors.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 257; body declaration approximately line 2047.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_annuity_amount"></a>
 
 ### `get_Annuity_Amount` — FUNCTION
 
-**Purpose:** Public function related to get annuity amount. Verify precise behavior against implementation before external publication.
+**Purpose:** Obtains a loan's annuity payment amount with configurable handling of zero values.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 258; body declaration candidate line(s): 2604
+Obtains a loan's annuity payment amount with configurable handling of zero values.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
--- kredi_api.Get_Annuitet_Amount +
-  Function get_Annuity_Amount(p_Doc_No      In Varchar2,
-                              p_return_type In varchar2 default 'NO_ZERO')
-    Return Number;
+Function get_Annuity_Amount(p_Doc_No      In Varchar2,
+p_return_type In varchar2 default 'NO_ZERO')
+Return Number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_Doc_No` | IN | `Varchar2` | Loan document reference |
+| `p_return_type` | IN | `varchar2 default 'NO_ZERO'` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `Number`. Business interpretation: Obtains a loan's annuity payment amount with configurable handling of zero values.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 260; body declaration approximately line 2604.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_pym_startdate"></a>
 
 ### `get_Pym_Startdate` — FUNCTION
 
-**Purpose:** Public function related to get pym startdate. Verify precise behavior against implementation before external publication.
+**Purpose:** Computes the applicable start date for scheduled payments.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 263; body declaration candidate line(s): 2633
+Computes the applicable start date for scheduled payments.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GNI_MESSAGE.GET_MESSAGE`, `GLBL_FAIZ.DAYS_BETWEEN2`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- kredi_api.Get_Pym_Startdate +
-  Function get_Pym_Startdate(p_Doc_No          In Varchar2,
-                             p_pymt_date       In Date,
-                             p_pymt_day        In Number,
-                             p_pymt_period     In Number,
-                             p_acc_type        In varchar2,
-                             p_loan_end_Date   in date,
-                             p_check_is_closed in varchar2 default 'Y')
-    Return Date;
+Function get_Pym_Startdate(p_Doc_No          In Varchar2,
+p_pymt_date       In Date,
+p_pymt_day        In Number,
+p_pymt_period     In Number,
+p_acc_type        In varchar2,
+p_loan_end_Date   in date,
+p_check_is_closed in varchar2 default 'Y')
+Return Date;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_Doc_No` | IN | `Varchar2` | Loan document reference |
+| `p_pymt_date` | IN | `Date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_pymt_day` | IN | `Number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_pymt_period` | IN | `Number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+| `p_loan_end_Date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_check_is_closed` | IN | `varchar2 default 'Y'` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `Date`. Business interpretation: Computes the applicable start date for scheduled payments.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 265; body declaration approximately line 2633.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_account_feature"></a>
 
 ### `get_account_feature` — FUNCTION
 
-**Purpose:** Public function related to get account feature. Verify precise behavior against implementation before external publication.
+**Purpose:** Returns an account-feature value for a branch, account and subaccount.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 273; body declaration candidate line(s): 2799
+Returns an account-feature value for a branch, account and subaccount.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_account_feature(p_branch_no   number,
-                               p_account_no  number,
-                               p_account_sub number)
-    return cs_account.account_feature%type;
+p_account_no  number,
+p_account_sub number)
+return cs_account.account_feature%type;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_branch_no` | IN | `number` | Branch identifier |
+| `p_account_no` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_account_sub` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `cs_account.account_feature`. Business interpretation: Returns an account-feature value for a branch, account and subaccount.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 273; body declaration approximately line 2799.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="is_acc_exists"></a>
 
 ### `is_acc_exists` — FUNCTION
 
-**Purpose:** Public function related to is acc exists. Verify precise behavior against implementation before external publication.
+**Purpose:** Checks whether a related account exists for the supplied customer and loan context.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 278; body declaration candidate line(s): 2818
+Checks whether a related account exists for the supplied customer and loan context.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 function is_acc_exists(p_customer_no   number,
-                         p_memorandum_id varchar2 default null,
-                         p_doc_no        varchar2,
-                         p_acc_type      varchar2) return varchar2;
+p_memorandum_id varchar2 default null,
+p_doc_no        varchar2,
+p_acc_type      varchar2) return varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_customer_no` | IN | `number` | Customer identifier |
+| `p_memorandum_id` | IN | `varchar2 default null` | Memorandum identifier |
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+
+**Return Value:** `varchar2`. Business interpretation: Checks whether a related account exists for the supplied customer and loan context.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`.
+
+**Error Handling**
+
+- Observed message or error code: `in [is_acc_exists] , [acc_type] or [p_customer_no] , can not be null!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 278; body declaration approximately line 2818.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="is_payment_date"></a>
 
 ### `is_Payment_Date` — FUNCTION
 
-**Purpose:** Public function related to is payment date. Verify precise behavior against implementation before external publication.
+**Purpose:** Checks whether a specified date qualifies as a loan payment date.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 283; body declaration candidate line(s): 2845
+Checks whether a specified date qualifies as a loan payment date.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_TARIH.ONCEKI_ISGUNU`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
--- kredi_api.Is_Payment_Date +
-  Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
-    Return Varchar2;
+Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
+Return Varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_Document_No` | IN | `Varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_Date` | IN | `Date` | Relevant calculation or operation date |
+
+**Return Value:** `Varchar2`. Business interpretation: Checks whether a specified date qualifies as a loan payment date.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 285; body declaration approximately line 2845.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="is_online_offer"></a>
+
 ### `is_online_offer` — FUNCTION
 
-**Purpose:** Public function related to is online offer. Verify precise behavior against implementation before external publication.
+**Purpose:** Determines whether a memorandum is associated with an online loan offer.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 287; body declaration candidate line(s): 2858
+Determines whether a memorandum is associated with an online loan offer.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 function is_online_offer(p_memorandum_id varchar2) return varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_memorandum_id` | IN | `varchar2` | Memorandum identifier |
+
+**Return Value:** `varchar2`. Business interpretation: Determines whether a memorandum is associated with an online loan offer.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_SCOR_MAIN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 287; body declaration approximately line 2858.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="table_log_operation"></a>
 
 ### `table_log_operation` — PROCEDURE
 
-**Purpose:** Public procedure related to table log operation. Verify precise behavior against implementation before external publication.
+**Purpose:** Logs a loan table operation for a transaction and operation type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 289; body declaration candidate line(s): 3344
+Logs a loan table operation for a transaction and operation type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure table_log_operation(p_doc_no     in varchar2,
-                                p_table_name in varchar2,
-                                p_tx_fid     in number,
-                                p_oper_type  in varchar2);
+p_table_name in varchar2,
+p_tx_fid     in number,
+p_oper_type  in varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_table_name` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_tx_fid` | IN | `number` | Transaction identifier |
+| `p_oper_type` | IN | `varchar2` | Operation code used for routing or validation |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_FLOW_RATIO_INFO`, `LOAN_FLOW_RATIO_INFO_LOG`, `LOAN_PAYMENT_PLAN`, `LOAN_PAYMENT_PLAN_LOG`, `LOAN_STOP_RATIO_INFO`, `LOAN_STOP_RATIO_INFO_LOG`.
+- Observed writes: `LOAN_FLOW_RATIO_INFO`, `LOAN_FLOW_RATIO_INFO_LOG`, `LOAN_PAYMENT_PLAN`, `LOAN_PAYMENT_PLAN_LOG`, `LOAN_STOP_RATIO_INFO`, `LOAN_STOP_RATIO_INFO_LOG`.
+
+**Error Handling**
+
+- Observed message or error code: `p_tx_fid or p_document_no parameters cant be null!`
+- Observed message or error code: `Oper type should be LOGGING-for logging or RESTORING-for restoring`
+- Observed message or error code: `Table name should be [LOAN_PAYMENT_PLAN]`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 289; body declaration approximately line 3344.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_journal_entry"></a>
 
 ### `do_journal_entry` — PROCEDURE
 
-**Purpose:** Public procedure related to do journal entry. Verify precise behavior against implementation before external publication.
+**Purpose:** Creates a general-ledger journal entry from supplied debit/credit lines.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 294; body declaration candidate line(s): 2876
+Creates a general-ledger journal entry from supplied debit/credit lines.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `TRN_BROKER.REGISTER_EOD`, `TRN_BROKER.SETTXDETAILS`, `PA_API#.CREATE_J_WSQL`, `MM_ACCOUNTING#.POST_JOURNAL`, `TRN_BROKER.SETTXSTATE`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 Procedure do_journal_entry(p_entries_list  g_entries_list_tab,
-                             p_trn_caller_id in number,
-                             p_tx_fid        in out number,
-                             p_trn_type      in varchar2,
-                             p_is_eod        in varchar2 default 'Y');
+p_trn_caller_id in number,
+p_tx_fid        in out number,
+p_trn_type      in varchar2,
+p_is_eod        in varchar2 default 'Y');
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_entries_list` | IN | `g_entries_list_tab` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_trn_caller_id` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_tx_fid` | IN OUT | `number` | Transaction identifier |
+| `p_trn_type` | IN | `varchar2` | Transaction action/type |
+| `p_is_eod` | IN | `varchar2 default 'Y'` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** `p_tx_fid`
+
+**Related Database Objects**
+
+- Observed reads: `PA_VOUCHER`.
+- Observed writes: `ENTRIES_LIST_TAB`.
+
+**Error Handling**
+
+- Observed message or error code: `p_trn_type must be CREATE or POST!`
+- Observed message or error code: `Sql text for LOAN journal operations not found in [pa_voucher] by voucer id [LOAN]!`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 294; body declaration approximately line 2876.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="create_journal_entries"></a>
 
 ### `create_journal_entries` — PROCEDURE
 
-**Purpose:** Public procedure related to create journal entries. Verify precise behavior against implementation before external publication.
+**Purpose:** Builds journal entries for a configured loan operation.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 300; body declaration candidate line(s): 2954
+Builds journal entries for a configured loan operation.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `LOAN_API.DO_JOURNAL_ENTRY`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure create_journal_entries(p_oper_type in varchar2,
-                                   p_tx_fid    in number,
-                                   p_trn_type  in varchar2);
+p_tx_fid    in number,
+p_trn_type  in varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_oper_type` | IN | `varchar2` | Operation code used for routing or validation |
+| `p_tx_fid` | IN | `number` | Transaction identifier |
+| `p_trn_type` | IN | `varchar2` | Transaction action/type |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_OPERATION_DESC`, `LOAN_OPERATION_VOUCHER`.
+
+**Error Handling**
+
+- Observed message or error code: `-20001`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 300; body declaration approximately line 2954.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="create_account"></a>
 
 ### `create_account` — PROCEDURE
 
-**Purpose:** Creates/assigns loan-related accounts based on the requested operation and returns the created account list.
+**Purpose:** Creates or associates loan accounts according to loan document, account type and operation.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 304; body declaration candidate line(s): 3129
+Creates or associates loan accounts according to loan document, account type and operation.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `GLBL_TARIH.DAYSBETWEEN`, `GLBL_NAME.GET_CUSTOMER_NOVU_CODE`, `GNI_MESSAGE.GET_MESSAGE`, `LOAN_API.GET_GL_ACC_FROM_MATRIX`, `LOAN_API.GET_NEW_ACC`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure create_account(p_doc_no        in varchar2,
-                           p_memorandum_id in varchar2 default null,
-                           p_oper_type     in varchar2,
-                           p_acc_type      in varchar2 default null,
-                           p_tx_fid        in number,
-                           p_created_acc   out g_loan_accounts_tab);
+p_memorandum_id in varchar2 default null,
+p_oper_type     in varchar2,
+p_acc_type      in varchar2 default null,
+p_tx_fid        in number,
+p_created_acc   out g_loan_accounts_tab);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_memorandum_id` | IN | `varchar2 default null` | Memorandum identifier |
+| `p_oper_type` | IN | `varchar2` | Operation code used for routing or validation |
+| `p_acc_type` | IN | `varchar2 default null` | Loan account type or account-type group |
+| `p_tx_fid` | IN | `number` | Transaction identifier |
+| `p_created_acc` | OUT | `g_loan_accounts_tab` | Output collection of resulting account records |
+
+**Outputs:** `p_created_acc`
+
+**Related Database Objects**
+
+- Observed reads: `IN_LIST`, `KRD_TEKLIF_DETAY`, `KRD_TESIS`, `LOAN_ACCOUNTS`, `LOAN_ACC_TYPES_PR`, `LOAN_API.GET_GL_ACC_FROM_MATRIX`, `SP_FAIZ_GUN_TANIM_PR`.
+- Observed writes: `KRD_TEKLIF_DETAY`, `KRD_TESIS`.
+
+**Error Handling**
+
+- Observed message or error code: `-20001`
+- Observed message or error code: `Creation scope for acc type [`
+- Observed message or error code: `Balance account for `
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 304; body declaration approximately line 3129.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="recalculate_int_payment_plan"></a>
 
 ### `recalculate_int_payment_plan` — PROCEDURE
 
-**Purpose:** Public procedure related to recalculate int payment plan. Verify precise behavior against implementation before external publication.
+**Purpose:** Recalculates the interest component of a loan's payment plan.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 311; body declaration candidate line(s): 3445
+Recalculates the interest component of a loan's payment plan.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `GLBL_FAIZ.DAY_COUNT_BASIS_NEW`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure recalculate_int_payment_plan(p_doc_no               in varchar2,
-                                         p_acc_type             in varchar2,
-                                         p_main_amount          in number,
-                                         p_INT_RATIO            in number,
-                                         p_int_calc_type        in varchar2,
-                                         p_schedule_update_type in number);
+p_acc_type             in varchar2,
+p_main_amount          in number,
+p_INT_RATIO            in number,
+p_int_calc_type        in varchar2,
+p_schedule_update_type in number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+| `p_main_amount` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_INT_RATIO` | IN | `number` | Interest rate input |
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+| `p_schedule_update_type` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PAYMENT_PLAN`.
+- Observed writes: `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Observed message or error code: `p_schedule_update_type should be 3 or 4!`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 311; body declaration approximately line 3445.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_new_acc"></a>
 
 ### `get_new_acc` — FUNCTION
 
-**Purpose:** Public function related to get new acc. Verify precise behavior against implementation before external publication.
+**Purpose:** Opens or resolves an account for a particular loan/account classification.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 318; body declaration candidate line(s): 2520
+Opens or resolves an account for a particular loan/account classification.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GNI_MESSAGE.GET_MESSAGE`, `GLBL_HESAP.YENI_M2_HESAPNO`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
---kredi_api.open_new_acc +
-  function get_new_acc(p_branch_no       in number,
-                       p_customer_no     in number,
-                       p_balance_acc     in varchar2,
-                       p_detail_code     in varchar2,
-                       p_ccy_id          in number,
-                       p_main_acc        in number default null,
-                       p_cr_int_rate     in number default null,
-                       p_dr_int_rate     in number default null,
-                       p_com_int_rate    in number default null,
-                       p_product_code    in number default null,
-                       p_period_id       in number default null,
-                       p_acc_description in varchar2,
-                       p_memorandum_id   in varchar2 default null,
-                       p_loan_doc_no     in varchar2,
-                       p_loan_acc_type   in varchar2,
-                       p_tx_fid          in number) return number;
+function get_new_acc(p_branch_no       in number,
+p_customer_no     in number,
+p_balance_acc     in varchar2,
+p_detail_code     in varchar2,
+p_ccy_id          in number,
+p_main_acc        in number default null,
+p_cr_int_rate     in number default null,
+p_dr_int_rate     in number default null,
+p_com_int_rate    in number default null,
+p_product_code    in number default null,
+p_period_id       in number default null,
+p_acc_description in varchar2,
+p_memorandum_id   in varchar2 default null,
+p_loan_doc_no     in varchar2,
+p_loan_acc_type   in varchar2,
+p_tx_fid          in number) return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_branch_no` | IN | `number` | Branch identifier |
+| `p_customer_no` | IN | `number` | Customer identifier |
+| `p_balance_acc` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_detail_code` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_ccy_id` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_main_acc` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_cr_int_rate` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_dr_int_rate` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_com_int_rate` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_product_code` | IN | `number default null` | Loan product code |
+| `p_period_id` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_acc_description` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_memorandum_id` | IN | `varchar2 default null` | Memorandum identifier |
+| `p_loan_doc_no` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_loan_acc_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_tx_fid` | IN | `number` | Transaction identifier |
+
+**Return Value:** `number`. Business interpretation: Opens or resolves an account for a particular loan/account classification.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `LOAN_ACC_TYPES_PR`.
+
+**Error Handling**
+
+- Observed message or error code: `Creation scope for acc type [`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 320; body declaration approximately line 2520.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_plan_control"></a>
 
 ### `do_plan_control` — PROCEDURE
 
-**Purpose:** Public procedure related to do plan control. Verify precise behavior against implementation before external publication.
+**Purpose:** Runs configured checks against a loan payment plan.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 336; body declaration candidate line(s): 3506
+Runs configured checks against a loan payment plan.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- kredi_api.plan_control +
-  procedure do_plan_control(p_document_no in varchar2);
+procedure do_plan_control(p_document_no in varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_document_no` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 337; body declaration approximately line 3506.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_loan_status_control"></a>
 
 ### `do_loan_status_control` — PROCEDURE
 
-**Purpose:** Public procedure related to do loan status control. Verify precise behavior against implementation before external publication.
+**Purpose:** Checks loan account state and validity for a specified account.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 338; body declaration candidate line(s): 3515
+Checks loan account state and validity for a specified account.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GNI_MESSAGE.GET_MESSAGE`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- kredi_api.loan_status_control +
-  procedure do_loan_status_control(p_branch_no   in number,
-                                   p_customer_no in number,
-                                   p_loan_acc    in number);
+procedure do_loan_status_control(p_branch_no   in number,
+p_customer_no in number,
+p_loan_acc    in number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_branch_no` | IN | `number` | Branch identifier |
+| `p_customer_no` | IN | `number` | Customer identifier |
+| `p_loan_acc` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_PORTFOLIO_LITE`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 340; body declaration approximately line 3515.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="create_loan_history"></a>
 
 ### `create_loan_history` — PROCEDURE
 
-**Purpose:** Writes a loan-operation history record for a transaction.
+**Purpose:** Records a loan operation and its accompanying information in loan history.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 343; body declaration candidate line(s): 3587
+Records a loan operation and its accompanying information in loan history.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `TRN_BROKER.REGISTER_EOD`, `RUHA3H.CLOB_OUT`, `LOAN_API.GET_GL_ACC_ACTIVE_PASSIVE`, `LOAN_API.LOAN_INT_DIFF_OPERATION`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure create_loan_history(p_oper_type VARCHAR2 default null,
-                                p_doc_no    VARCHAR2 default null,
-                                p_trn_date  DATE default glbl.getsysdate,
-                                p_tx_fid    NUMBER,
-                                p_trn_type  varchar2,
-                                p_add_info  add_info_tab default null);
+p_doc_no    VARCHAR2 default null,
+p_trn_date  DATE default glbl.getsysdate,
+p_tx_fid    NUMBER,
+p_trn_type  varchar2,
+p_add_info  add_info_tab default null);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_oper_type` | IN | `VARCHAR2 default null` | Operation code used for routing or validation |
+| `p_doc_no` | IN | `VARCHAR2 default null` | Loan document reference |
+| `p_trn_date` | IN | `DATE default glbl.getsysdate` | Transaction date |
+| `p_tx_fid` | IN | `NUMBER` | Transaction identifier |
+| `p_trn_type` | IN | `varchar2` | Transaction action/type |
+| `p_add_info` | IN | `add_info_tab default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `GLBL_TRANSACTION`, `GL_JOURNAL_LINES`, `LOAN_ACCOUNTS_VS_OPERATION_HISTORY_FOR_CTRL_V`, `LOAN_LINES_FOR_CTRL_V`, `LOAN_OPERATION_DESC`, `LOAN_OPERATION_HISTORY`, `LOAN_OPERATION_HISTORY_FOR_CTRL_V`.
+- Observed writes: `ACTIONS.`, `LOAN_OPERATION_HISTORY`.
+
+**Error Handling**
+
+- Observed message or error code: `p_app_oper_code not found in loan_operation_desc table!`
+- Observed message or error code: `error encountered in search of oper_type`
+- Observed message or error code: `Transaction with tx_fid: `
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 343; body declaration approximately line 3587.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_loan_collateral_out"></a>
 
 ### `do_loan_collateral_out` — PROCEDURE
 
-**Purpose:** Public procedure related to do loan collateral out. Verify precise behavior against implementation before external publication.
+**Purpose:** Processes release of collateral in a loan context.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 350; body declaration candidate line(s): 3942
+Processes release of collateral in a loan context.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `GLBL_EOD.GETCALLERID`, `TRN_BROKER.REGISTER_EOD`, `TRN_BROKER.SETTXDETAILS`, `GLBL_CCY.TO_CCY_MB`, `GLBL_CCY.GET_CUR_RATE`, `PA_API#.CREATE_J_WSQL`, `MM_ACCOUNTING#.POST_JOURNAL`, `TRN_BROKER.SETTXSTATE`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
---krd_eod.loan_collateral_out +
-  procedure do_loan_collateral_out(p_doc_no in varchar2);
+procedure do_loan_collateral_out(p_doc_no in varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `KRD_SCOR_AUTO_C`, `KRD_SCOR_EMANET_C`, `KRD_SCOR_ESYA_C`, `KRD_SCOR_QARANT_C`, `KRD_SCOR_REAL_ESTATE_C`, `KRD_SCOR_SEHMLER_C`, `KRD_SCOR_TEMINAT_ALAKA_C`, `KRD_SCOR_ZAMIN_C`, `KRD_SKOR_GIROV_OTHER_C`, `KRD_TEMINAT_TIP_PR`.
+- Observed writes: `KRD_SCOR_TEMINAT_ALAKA_C`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 352; body declaration approximately line 3942.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_acc_type_by_status"></a>
 
 ### `get_acc_type_by_status` — FUNCTION
 
-**Purpose:** Public function related to get acc type by status. Verify precise behavior against implementation before external publication.
+**Purpose:** Maps an account type when transitioning between loan statuses.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 353; body declaration candidate line(s): 4211
+Maps an account type when transitioning between loan statuses.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_acc_type_by_status(p_acc_type         varchar2,
-                                  p_to_loan_status   varchar2,
-                                  p_from_loan_status varchar2 default 'NORM')
-    return varchar2;
+p_to_loan_status   varchar2,
+p_from_loan_status varchar2 default 'NORM')
+return varchar2;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_acc_type` | IN | `varchar2` | Loan account type or account-type group |
+| `p_to_loan_status` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_from_loan_status` | IN | `varchar2 default 'NORM'` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `varchar2`. Business interpretation: Maps an account type when transitioning between loan statuses.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN`, `LOAN_ACC_TYPE_MAPPING`.
+
+**Error Handling**
+
+- Observed message or error code: `Can not find acc type [`
+- Observed message or error code: `Something went wrong in [loan_acc_type_mapping], Acc Type [`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 353; body declaration approximately line 4211.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="generate_allocated_payment_list"></a>
 
 ### `generate_allocated_payment_list` — PROCEDURE
 
-**Purpose:** Computes a payment allocation list for a loan operation.
+**Purpose:** Allocates an incoming payment across loan account categories based on applicable rules.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 358; body declaration candidate line(s): 4239
+Allocates an incoming payment across loan account categories based on applicable rules.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `LOAN_API.G_LOAN_ACCOUNTS_TAB`, `P.ACC_TYPE`, `O.PARAM_ID`, `O.TYPE_ID`, `LOAN_API.G_LOAN_ACCOUNTS_REC_TYPE`, `LOAN_API.GET_PLAN_PAYMENT_AMOUNT`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure generate_allocated_payment_list(p_doc_no                in varchar2,
-                                            p_oper_type             in varchar2,
-                                            p_pym_amount            in number,
-                                            p_has_schedule_upd_type out varchar2,
-                                            p_payment_list          out loan_api.g_loan_accounts_tab);
+p_oper_type             in varchar2,
+p_pym_amount            in number,
+p_has_schedule_upd_type out varchar2,
+p_payment_list          out loan_api.g_loan_accounts_tab);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_oper_type` | IN | `varchar2` | Operation code used for routing or validation |
+| `p_pym_amount` | IN | `number` | Payment amount to allocate |
+| `p_has_schedule_upd_type` | OUT | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_payment_list` | OUT | `loan_api.g_loan_accounts_tab` | Collection containing allocated payment records |
+
+**Outputs:** `p_has_schedule_upd_type`, `p_payment_list`
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `IN_LIST`.
+
+**Error Handling**
+
+- Observed message or error code: `acc_type[`
+- Observed message or error code: `Payment branch or customer or account is null Pymt_branch_no: `
+- Observed message or error code: `Payment amount cant be more than balance amount! 
+                            Please check amount of acc_type: `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 358; body declaration approximately line 4239.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="add_payment_details"></a>
 
 ### `add_payment_details` — PROCEDURE
 
-**Purpose:** Public procedure related to add payment details. Verify precise behavior against implementation before external publication.
+**Purpose:** Enriches or adjusts allocation details for loan payment processing.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 364; body declaration candidate line(s): 4389
+Enriches or adjusts allocation details for loan payment processing.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `LOAN_API.G_LOAN_ACCOUNTS_TAB`, `LOAN_API.GET_PLAN_PAYMENT_AMOUNT`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure add_payment_details(p_doc_no                in varchar2,
-                                p_has_schedule_upd_type out varchar2,
-                                p_payment_list          in out loan_api.g_loan_accounts_tab);
+p_has_schedule_upd_type out varchar2,
+p_payment_list          in out loan_api.g_loan_accounts_tab);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_has_schedule_upd_type` | OUT | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_payment_list` | IN OUT | `loan_api.g_loan_accounts_tab` | Collection containing allocated payment records |
+
+**Outputs:** `p_has_schedule_upd_type`, `p_payment_list`
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`.
+
+**Error Handling**
+
+- Observed message or error code: `Acc_type: `
+- Observed message or error code: `Payment branch or customer or account is null Pymt_branch_no: `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 364; body declaration approximately line 4389.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="do_delete_operation"></a>
+
 ### `do_delete_operation` — PROCEDURE
 
-**Purpose:** Public procedure related to do delete operation. Verify precise behavior against implementation before external publication.
+**Purpose:** Reverses or removes a loan operation identified by its transaction ID.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 368; body declaration candidate line(s): 4483
+Reverses or removes a loan operation identified by its transaction ID.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `LOAN_TRANCHE_API.DO_DELETE_OPERATION`, `LOAN_API.REVERSE_UPDATE`, `MM_ACCOUNTING#.FIS_SIL`, `KRD_EOD.TERS_FIS_KES`, `LOAN_API.CREATE_LOAN_HISTORY`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure do_delete_operation(p_tx_fid number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_tx_fid` | IN | `number` | Transaction identifier |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `GL_JOURNAL_LINES`, `LOAN_OPERATION_HISTORY`.
+- Observed writes: `GLBL_TRANSACTION`.
+
+**Error Handling**
+
+- Observed message or error code: `Can not get additional info in [loan_operation_history] with tx fid [`
+- Observed message or error code: `Not declared delete operation [`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 368; body declaration approximately line 4483.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_auto_payment"></a>
 
 ### `do_Auto_Payment` — PROCEDURE
 
-**Purpose:** Executes automatic loan payment processing in EOD/SOD context.
+**Purpose:** Processes automatic loan payments in EOD/SOD batch context.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 370; body declaration candidate line(s): 4540
+Processes automatic loan payments in EOD/SOD batch context.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `LOAN_API.G_LOAN_ACCOUNTS_TAB`, `GNI_UTILITY.DELETE_BATCH_ERROR`, `LOAN_API.GET_OVD_DATE`, `LOAN_API.GET_LOAN_AMOUNT`, `GLBL_BAKIYE.REAL_BALANCE`, `GLBL_CCY.GET_CUR_RATE`, `LOAN_TRANCHE_API.DO_TRANCHE_OPERATION`, `LOAN_API.GENERATE_ALLOCATED_PAYMENT_LIST`; additional calls omitted.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
-/** Makes automatic loan payments at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S                           
-  */
-  Procedure do_Auto_Payment(p_min_id     number default null,
-                            p_max_id     number default null,
-                            p_doc_no     in varchar2 default null,
-                            p_eod_sod    in varchar2 default 'E',
-                            p_test_param in number default null);
+Procedure do_Auto_Payment(p_min_id     number default null,
+p_max_id     number default null,
+p_doc_no     in varchar2 default null,
+p_eod_sod    in varchar2 default 'E',
+p_test_param in number default null);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_min_id` | IN | `number default null` | Lower bound of batch selection |
+| `p_max_id` | IN | `number default null` | Upper bound of batch selection |
+| `p_doc_no` | IN | `varchar2 default null` | Loan document reference |
+| `p_eod_sod` | IN | `varchar2 default 'E'` | End-of-day (`E`) or start-of-day (`S`) indicator (where supported) |
+| `p_test_param` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `EOD_PROGRAMS_EXCEPTION`, `IN_LIST`, `KRD_TEKLIF_DETAY`, `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Observed message or error code: `Auto payment type should be 1-Plan payment or 2-Off plan payment!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 370; body declaration approximately line 4540.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_int_calculation"></a>
 
 ### `do_int_calculation` — PROCEDURE
 
-**Purpose:** Performs batch interest calculation with optional branch range, loan document and EOD/SOD arguments.
+**Purpose:** Calculates loan interest in a batch or selected-loan EOD/SOD context.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 382; body declaration candidate line(s): 5135
+Calculates loan interest in a batch or selected-loan EOD/SOD context.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_TARIH.SONRAKI_ISGUNU`, `LOAN_API.G_DATE_TAB_TYPE`, `LOAN_API.GET_GL_VALUE`, `GLBL_TARIH.ONCEKI_ISGUNU`, `LOAN_API.G_ENTRIES_LIST_TAB`, `LOAN_API.GET_TRN_CALLER_ID`, `O.SENED_NO`, `PR.URUN_KOD`; additional calls omitted.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- `p_min_id` and `p_max_id` limit batch scope; `p_doc_no` can select a loan.
+- `p_eod_sod` identifies the requested processing phase.
+
+**Public Signature**
 
 ```sql
-/** Makes automatic loan int calculation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S 
-      p_date - operation date                            
-  */
-  
-  procedure do_int_calculation(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
+procedure do_int_calculation(p_min_id  number default 0,
+p_max_id  number default 999999999,
+p_doc_no  in varchar2 default null,
+p_eod_sod in varchar2 default 'E',
+p_date    in date default glbl.getsysdate);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_min_id` | IN | `number default 0` | Lower bound of batch selection |
+| `p_max_id` | IN | `number default 999999999` | Upper bound of batch selection |
+| `p_doc_no` | IN | `varchar2 default null` | Loan document reference |
+| `p_eod_sod` | IN | `varchar2 default 'E'` | End-of-day (`E`) or start-of-day (`S`) indicator (where supported) |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `EOD_PROGRAMS_EXCEPTION`, `KRD_TEKLIF_DETAY`, `LOAN_FLOW_RATIO_INFO`, `LOAN_INT_CALC_STOP_FOR_GRACE`, `LOAN_PAYMENT_PLAN`, `LOAN_STOP_RATIO_INFO`.
+
+**Error Handling**
+
+- Observed message or error code: `is_int_calc or is_pen_calc columns in krd_teklif_detay table is null! Please check...`
+- Observed message or error code: `Product code not found in pkrd_turkod_pr table, 
+                   pls check 22401 app for this loan product!`
+- Observed message or error code: `Not working day may be 1 or 2, please check 22401 app, 
+                                       for product code:`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 382; body declaration approximately line 5136.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_int_calculation_ex"></a>
 
 ### `do_int_calculation_ex` — PROCEDURE
 
-**Purpose:** Public procedure related to do int calculation ex. Verify precise behavior against implementation before external publication.
+**Purpose:** Calculates loan interest using the alternative calculation implementation.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 396; body declaration candidate line(s): 5768
+Calculates loan interest using the alternative calculation implementation.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `GLBL_TARIH.SONRAKI_ISGUNU`, `LOAN_API.G_DATE_TAB_TYPE`, `LOAN_API.GET_GL_VALUE`, `LOAN_API.G_ENTRIES_LIST_TAB`, `LOAN_API.GET_TRN_CALLER_ID`, `LOAN_API.GET_INTEREST_CALC_DATES_EX`, `V.DOC_NO`, `O.SENED_NO`; additional calls omitted.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure do_int_calculation_ex(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
+p_max_id  number default 999999999,
+p_doc_no  in varchar2 default null,
+p_eod_sod in varchar2 default 'E',
+p_date    in date default glbl.getsysdate);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_min_id` | IN | `number default 0` | Lower bound of batch selection |
+| `p_max_id` | IN | `number default 999999999` | Upper bound of batch selection |
+| `p_doc_no` | IN | `varchar2 default null` | Loan document reference |
+| `p_eod_sod` | IN | `varchar2 default 'E'` | End-of-day (`E`) or start-of-day (`S`) indicator (where supported) |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `KRD_TEKLIF_DETAY`, `LOAN_ACC_TYPES_PR`, `LOAN_FLOW_RATIO_INFO`, `LOAN_PAYMENT_DATES_LIST`, `LOAN_PAYMENT_PLAN`, `LOAN_STOP_RATIO_INFO`.
+- Observed writes: `LOAN_PAYMENT_DATES_LIST`.
+
+**Error Handling**
+
+- Observed message or error code: `is_int_calc or is_pen_calc columns in krd_teklif_detay table is null! Please check...`
+- Observed message or error code: `Product code not found in pkrd_turkod_pr table, 
+                   pls check 22401 app for this loan product!`
+- Observed message or error code: `Not working day may be 1 or 2, please check 22401 app, 
+                                       for product code:`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 396; body declaration approximately line 5768.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_overdue_transit_operation"></a>
 
 ### `do_overdue_transit_operation` — PROCEDURE
 
-**Purpose:** Public procedure related to do overdue transit operation. Verify precise behavior against implementation before external publication.
+**Purpose:** Processes overdue account transitions for eligible loans.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 402; body declaration candidate line(s): 4832
+Processes overdue account transitions for eligible loans.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `LOAN_API.G_LOAN_ACCOUNTS_TAB`, `LOAN_API.G_ENTRIES_LIST_TAB`, `PP.URUN_KOD`, `LOAN_API.CREATE_ACCOUNT`, `LOAN_API.GET_ACC_TYPE_BY_STATUS`, `CL.LOAN_DOC_NO`, `CL.ACC_TYPE`, `CR.LOAN_DOC_NO`; additional calls omitted.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
-/** Makes automatic loan overdue operation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_branch_id - loan branch id  
-      p_customer_no - unique customer number 
-      p_loan_acc - loan account sub 
-      p_date - operation date                            
-  */
-
-  Procedure do_overdue_transit_operation(p_min_id number default null,
-                                         p_max_id number default null,
-                                         p_doc_no in varchar2 default null,
-                                         p_date   in date default glbl.getsysdate);
+Procedure do_overdue_transit_operation(p_min_id number default null,
+p_max_id number default null,
+p_doc_no in varchar2 default null,
+p_date   in date default glbl.getsysdate);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_min_id` | IN | `number default null` | Lower bound of batch selection |
+| `p_max_id` | IN | `number default null` | Upper bound of batch selection |
+| `p_doc_no` | IN | `varchar2 default null` | Loan document reference |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `LOAN_OVERDUE_MAPPING`, `LOAN_OVERDUE_TRANSIT_QUEUE`, `LOAN_PAYMENT_PLAN`.
+- Observed writes: `KRD_TEKLIF_DETAY`, `LOAN_OVERDUE_TRANSIT_QUEUE`, `LOAN_PAYMENT_PLAN`.
+
+**Error Handling**
+
+- Observed message or error code: `Loan product code not found in pkrd_turkod_pr table!`
+- Observed message or error code: `Error encountered in overdue-transit operation for loan, doc_no: `
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 402; body declaration approximately line 4832.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="do_commission_recognition"></a>
+
 ### `do_commission_recognition` — PROCEDURE
 
-**Purpose:** Public procedure related to do commission recognition. Verify precise behavior against implementation before external publication.
+**Purpose:** Recognizes loan-related commissions as of the supplied accounting date.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 416; body declaration candidate line(s): 6338
+Recognizes loan-related commissions as of the supplied accounting date.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `GLBL_EOD.GETCALLERID`, `GLBL_TARIH.AYSONU`, `KRD_EOD.GET_GL_URUN_HESAP`, `KRD_EOD.M_FIS_KES`, `LOAN_API.DO_COM_SCHEDULE_ALLIGNMENT`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 Procedure do_commission_recognition(Pdate In Date Default Glbl.Getsysdate);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `Pdate` | IN | `Date Default Glbl.Getsysdate` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_KOM_EOD`, `KRD_KOM_PLAN_DETAY`, `KRD_TESIS`.
+- Observed writes: `HISSESI`, `KRD_KOM_EOD`, `KRD_TESIS`.
+
+**Error Handling**
+
+- Observed message or error code: `This Program can run only last day of month!`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 416; body declaration approximately line 6338.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_guarantee_out"></a>
 
 ### `do_guarantee_out` — PROCEDURE
 
-**Purpose:** Public procedure related to do guarantee out. Verify precise behavior against implementation before external publication.
+**Purpose:** Processes guarantee-related release or settlement for selected account identifiers.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 418; body declaration candidate line(s): 6236
+Processes guarantee-related release or settlement for selected account identifiers.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_BAKIYE.REAL_BALANCE`, `APEX_KRD2220_0_API_P.INS_KRD2220_0`, `TRN_BROKER.STARTTX`, `KRD2220_0_API.JUSTDOIT`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 Procedure do_guarantee_out(p_branch_id   In Number Default Null,
-                             p_customer_no In Number Default Null,
-                             p_loan_acc    In Number Default Null);
+p_customer_no In Number Default Null,
+p_loan_acc    In Number Default Null);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_branch_id` | IN | `Number Default Null` | Branch identifier |
+| `p_customer_no` | IN | `Number Default Null` | Customer identifier |
+| `p_loan_acc` | IN | `Number Default Null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_TESIS`.
+
+**Error Handling**
+
+- Observed message or error code: `Loan acc: `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 418; body declaration approximately line 6236.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="do_loan_close_with_collateral_out"></a>
+
 ### `do_Loan_Close_With_Collateral_Out` — PROCEDURE
 
-**Purpose:** Public procedure related to do loan close with collateral out. Verify precise behavior against implementation before external publication.
+**Purpose:** Closes a loan and coordinates collateral release.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 422; body declaration candidate line(s): 6594
+Closes a loan and coordinates collateral release.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `GLBL_EOD.GETCALLERID`, `GLBL_HESAP.GET_ACCOUNT_PR`, `LOAN_API.G_ENTRIES_LIST_TAB`, `LOAN_API.DO_JOURNAL_ENTRY`, `LOAN_API.CREATE_LOAN_HISTORY`, `LOAN_API.CHANGE_ACCOUNT_STATUS`, `TRN_BROKER.REGISTER_EOD`, `TRN_BROKER.SETTXSTATE`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure do_Loan_Close_With_Collateral_Out(p_doc_no in varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_EOD_AUTO_CLOSE`, `LOAN_PORTFOLIO_LITE`, `LOAN_TRANCHE_LIMIT_CHANGES_HISTORY`.
+- Observed writes: `KRD_TEKLIF_DETAY`, `LOAN_EOD_AUTO_CLOSE`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 422; body declaration approximately line 6594.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_non_cash_loan_close"></a>
 
 ### `do_non_cash_loan_close` — PROCEDURE
 
-**Purpose:** Public procedure related to do non cash loan close. Verify precise behavior against implementation before external publication.
+**Purpose:** Closes a non-cash loan in the supplied loan/date context.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 424; body declaration candidate line(s): 6756
+Closes a non-cash loan in the supplied loan/date context.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_BAKIYE.REAL_BALANCE`, `APEX_KRD2220_0_API_P.INS_KRD2220_0`, `TRN_BROKER.STARTTX`, `KRD2220_0_API.JUSTDOIT`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 Procedure do_non_cash_loan_close(p_doc_no in varchar2,
-                                   p_Date   In Date Default Glbl.Getsysdate);
+p_Date   In Date Default Glbl.Getsysdate);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_Date` | IN | `Date Default Glbl.Getsysdate` | Relevant calculation or operation date |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_TESIS`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 424; body declaration approximately line 6756.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_journal_control"></a>
 
 ### `do_journal_control` — PROCEDURE
 
-**Purpose:** Public procedure related to do journal control. Verify precise behavior against implementation before external publication.
+**Purpose:** Runs journal controls for the specified branch, customer and subaccount.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 427; body declaration candidate line(s): 6861
+Runs journal controls for the specified branch, customer and subaccount.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- new
-  procedure do_journal_control(p_branch_id   IN Number,
-                               p_customer_no IN Number,
-                               p_account_sub IN Number);
+procedure do_journal_control(p_branch_id   IN Number,
+p_customer_no IN Number,
+p_account_sub IN Number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_branch_id` | IN | `Number` | Branch identifier |
+| `p_customer_no` | IN | `Number` | Customer identifier |
+| `p_account_sub` | IN | `Number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`.
+
+**Error Handling**
+
+- Observed message or error code: `???????? ?? ????. ?????? ????? ???? ?????? ?? ?????????? ?????? !!!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 428; body declaration approximately line 6861.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_schedule_allignment"></a>
 
 ### `do_schedule_allignment` — PROCEDURE
 
-**Purpose:** Public procedure related to do schedule allignment. Verify precise behavior against implementation before external publication.
+**Purpose:** Aligns a payment schedule after a payment amount is applied.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 431; body declaration candidate line(s): 7118
+Aligns a payment schedule after a payment amount is applied.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `GLOG.ASSERT#`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- new
-  /*procedure over_to_norm(p_min_id  number default null,
-                              p_max_id  number default null,
-                              p_doc_no  in varchar2 default null);
-  */
-  --kredi_api.Odeme_Plani_Duzenle
-  Procedure do_schedule_allignment(p_doc_no         In Varchar2,
-                                   p_payment_amount In Number,
-                                   p_acc_type       In Varchar2);
+Procedure do_schedule_allignment(p_doc_no         In Varchar2,
+p_payment_amount In Number,
+p_acc_type       In Varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `Varchar2` | Loan document reference |
+| `p_payment_amount` | IN | `Number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_acc_type` | IN | `Varchar2` | Loan account type or account-type group |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_TEKLIF_DETAY`, `LOAN_PAYMENT_PLAN`.
+- Observed writes: `LOAN_PAYMENT_PLAN`, `UPDATE`.
+
+**Error Handling**
+
+- Observed message or error code: `at [do_schedule_allignment] parametr [p_payment_amount] less than [0]`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 438; body declaration approximately line 7116.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_com_schedule_allignment"></a>
 
 ### `do_com_schedule_allignment` — PROCEDURE
 
-**Purpose:** Public procedure related to do com schedule allignment. Verify precise behavior against implementation before external publication.
+**Purpose:** Aligns a commission payment schedule using option, amount and plan type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 441; body declaration candidate line(s): 7190
+Aligns a commission payment schedule using option, amount and plan type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `GLOG.ASSERT#`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- kredi_api.Kom_Odeme_Plani_Duzenle
-  Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
-                                       p_option_code In Varchar2,
-                                       p_amount      In Number,
-                                       p_plan_type   In Varchar2,
-                                       p_mig_status  In Number Default 0);
+Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
+p_option_code In Varchar2,
+p_amount      In Number,
+p_plan_type   In Varchar2,
+p_mig_status  In Number Default 0);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `Varchar2` | Loan document reference |
+| `p_option_code` | IN | `Varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_amount` | IN | `Number` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_plan_type` | IN | `Varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_mig_status` | IN | `Number Default 0` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_KOM_PLAN_DETAY`, `KRD_TESIS`.
+- Observed writes: `KRD_KOM_PLAN_DETAY`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 443; body declaration approximately line 7190.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="do_loan_delay_int_rate_upd"></a>
 
 ### `do_Loan_Delay_Int_Rate_Upd` — PROCEDURE
 
-**Purpose:** Public procedure related to do loan delay int rate upd. Verify precise behavior against implementation before external publication.
+**Purpose:** Updates loan delayed-interest rate information.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 448; body declaration candidate line(s): 7310
+Updates loan delayed-interest rate information.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `LOAN_API.GET_DELAY_INT_RATE`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
--- krd_eod.Loan_Delay_Int_Rate_Upd
-  Procedure do_Loan_Delay_Int_Rate_Upd;
+Procedure do_Loan_Delay_Int_Rate_Upd;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+No parameters.
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_TESIS`.
+- Observed writes: `CS_ACCOUNT`, `OLUNUR`.
+
+**Error Handling**
+
+- Observed message or error code: `Gecikme Faizi 0-dan ferqli oldugu halda son gecikme faizi 0-dir!`
+- Observed message or error code: `Kreditde sehv: `
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 450; body declaration approximately line 7310.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="change_account_status"></a>
 
 ### `change_account_status` — PROCEDURE
 
-**Purpose:** Public procedure related to change account status. Verify precise behavior against implementation before external publication.
+**Purpose:** Changes the operational status of a loan's associated accounts.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 451; body declaration candidate line(s): 7351
+Changes the operational status of a loan's associated accounts.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_HESAP.HESAPNO_AC`, `GLBL_HESAP.HESAPNO_KAPA`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
--- kredi_api.Kredi_Hesap_Kapat , kredi_api.Kredi_Hesap_Ac
-  procedure change_account_status(p_doc_no in varchar2,
-                                  p_status in varchar2);
+procedure change_account_status(p_doc_no in varchar2,
+p_status in varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_status` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `CS_ACCOUNT`, `KRD_TESIS`.
+
+**Error Handling**
+
+- Observed message or error code: `Loan with doc_no: `
+- Observed message or error code: `Error encountered in search of loan: `
+- Observed message or error code: `Only followings p_status are accepted O-open, C-close!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 453; body declaration approximately line 7351.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="stop_eod_task"></a>
+
 ### `stop_eod_task` — PROCEDURE
 
-**Purpose:** Public procedure related to stop eod task. Verify precise behavior against implementation before external publication.
+**Purpose:** Stops the EOD loan-task processing context.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 455; body declaration candidate line(s): 7389
+Stops the EOD loan-task processing context.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 procedure stop_eod_task;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+No parameters.
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `EOD_TRANSACTION_ACTIVE`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 455; body declaration approximately line 7389.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="stop_loan_task"></a>
 
 ### `stop_loan_task` — PROCEDURE
 
-**Purpose:** Public procedure related to stop loan task. Verify precise behavior against implementation before external publication.
+**Purpose:** Stops the loan task(s) filtered by task code and/or type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 457; body declaration candidate line(s): 7405
+Stops the loan task(s) filtered by task code and/or type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `DBMS_PARALLEL_EXECUTE.STOP_TASK`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure stop_loan_task(p_task_code in varchar2 default null,
-                           p_task_type in varchar2 default null);
+p_task_type in varchar2 default null);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_task_code` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_task_type` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_TASKS_LIST`, `V$SESSION`.
+
+**Error Handling**
+
+- Observed message or error code: `E-task for EOD program, S-task for SOD program, X-any other program!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 457; body declaration approximately line 7405.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="run_loan_task"></a>
 
 ### `run_loan_task` — PROCEDURE
 
-**Purpose:** Runs a task identified by its task code and task type.
+**Purpose:** Runs a configured loan task, including parallelized task execution where implemented.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 460; body declaration candidate line(s): 7442
+Runs a configured loan task, including parallelized task execution where implemented.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `DBMS_PARALLEL_EXECUTE.TASK_STATUS`, `DBMS_PARALLEL_EXECUTE.DROP_TASK`, `DBMS_PARALLEL_EXECUTE.CREATE_TASK`, `DBMS_PARALLEL_EXECUTE.CREATE_CHUNKS_BY_NUMBER_COL`, `DBMS_PARALLEL_EXECUTE.CREATE_CHUNKS_BY_ROWID`, `DBMS_PARALLEL_EXECUTE.CREATE_CHUNKS_BY_SQL`, `DBMS_PARALLEL_EXECUTE.RUN_TASK`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- Task code/type select the configured background loan task.
+- Task parallelization and scheduler state must be verified against deployment settings.
+
+**Public Signature**
 
 ```sql
-/** Parallel execution for loan processes
-      @params
-      p_task_code  - task_code in loan_tasks_list table                  
-  */
-
-  procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
+procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_task_code` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_task_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `DBA_PARALLEL_EXECUTE_CHUNKS`, `LOAN_TASKS_LIST`.
+
+**Error Handling**
+
+- Observed message or error code: `E-task for EOD program, S-task for SOD program, X-any other program!`
+- Observed message or error code: `Error encountered in search of status of the task: `
+- Observed message or error code: `CHUNKS BY COLUMN MUST BE COLUMN, ROWID, SQL TYPES!`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 460; body declaration approximately line 7442.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="calculate_xirr"></a>
 
 ### `calculate_xirr` — FUNCTION
 
-**Purpose:** Public function related to calculate xirr. Verify precise behavior against implementation before external publication.
+**Purpose:** Computes a loan's XIRR or related rate metric for a chosen calculation type.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 467; body declaration candidate line(s): 7786
+Computes a loan's XIRR or related rate metric for a chosen calculation type.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `LOAN_API.GET_MIN_FLOW_RATIO`, `PLOG.FATAL`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
-/*procedure norm_to_over(p_min_id  number default null,
-  p_max_id  number default null,
-  p_doc_no  in varchar2 default null);  */
-
-  function calculate_xirr(p_doc_no  varchar2,
-                          p_type    varchar2,
-                          p_calc_as varchar2 default 'XIRR') return number;
+function calculate_xirr(p_doc_no  varchar2,
+p_type    varchar2,
+p_calc_as varchar2 default 'XIRR') return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_calc_as` | IN | `varchar2 default 'XIRR'` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `number`. Business interpretation: Computes a loan's XIRR or related rate metric for a chosen calculation type.
+
+**Related Database Objects**
+
+- Observed reads: `APEX_KRD2201_1_COLL_V`, `APEX_KRD2201_4_COLL_V`, `KRD_TEKLIF_DETAY`, `LOAN_PAYMENT_PLAN`, `XIRR_SCHEDULE_TMP`.
+- Observed writes: `XIRR_SCHEDULE_TMP`.
+
+**Error Handling**
+
+- Observed message or error code: `Deyer yoxdu`
+- Observed message or error code: `Basqa problem`
+
+**Side Effects & Transaction Notes**
+
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+
+**Source Evidence:** Specification line 467; body declaration approximately line 7783.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_min_flow_ratio"></a>
 
 ### `get_min_flow_ratio` — FUNCTION
 
-**Purpose:** Public function related to get min flow ratio. Verify precise behavior against implementation before external publication.
+**Purpose:** Retrieves the minimum loan cash-flow ratio over an optional date range.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 475; body declaration candidate line(s): 8074
+Retrieves the minimum loan cash-flow ratio over an optional date range.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
-/*  function get_mix_operation_acsess(p_fid            varchar2,
-                                      p_oper_type      varchar2,
-                                      p_memo_oper_type varchar2) return number;
-  
-    function get_mix_operation_types(p_fid            varchar2,
-                                     p_memo_oper_type varchar2) return varchar2;
-  
-    procedure validate_mix_memorandum(p_memorandum_id varchar2,
-                                      p_oper_type     varchar2,
-                                      p_state         varchar2);
-  
-    procedure update_mix_memorandum(p_memorandum_id varchar2,
-                                    p_oper_type     varchar2,
-                                    p_tx_fid        number,
-                                    p_state         varchar2);
-  */
-
-  function get_min_flow_ratio(
-    p_doc_no     varchar2,
-    p_type       varchar2,
-    p_begin_date date default null,
-    p_end_date   date default null
-  ) return number;
+function get_min_flow_ratio(
+p_doc_no     varchar2,
+p_type       varchar2,
+p_begin_date date default null,
+p_end_date   date default null
+) return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `varchar2` | Loan document reference |
+| `p_type` | IN | `varchar2` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_begin_date` | IN | `date default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_end_date` | IN | `date default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `number`. Business interpretation: Retrieves the minimum loan cash-flow ratio over an optional date range.
+
+**Related Database Objects**
+
+- Observed reads: `APEX_KRD2201_6_COLL_V`, `LOAN_FLOW_RATIO_INFO`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 475; body declaration approximately line 8072.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_flow_ratio_info"></a>
 
 ### `get_flow_ratio_info` — FUNCTION
 
-**Purpose:** Public function related to get flow ratio info. Verify precise behavior against implementation before external publication.
+**Purpose:** Returns loan cash-flow ratio information at a date.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 499; body declaration candidate line(s): 8115
+Returns loan cash-flow ratio information at a date.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 FUNCTION get_flow_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N')
-    RETURN LOAN_FLOW_RATE_TAB;
+p_date      DATE DEFAULT glbl.getsysdate,
+p_full_info varchar2 default 'N')
+RETURN LOAN_FLOW_RATE_TAB;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `VARCHAR2` | Loan document reference |
+| `p_date` | IN | `DATE DEFAULT glbl.getsysdate` | Relevant calculation or operation date |
+| `p_full_info` | IN | `varchar2 default 'N'` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `LOAN_FLOW_RATE_TAB`. Business interpretation: Returns loan cash-flow ratio information at a date.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_FLOW_RATIO_INFO`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 499; body declaration approximately line 8115.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_stop_ratio_info"></a>
 
 ### `get_stop_ratio_info` — FUNCTION
 
-**Purpose:** Public function related to get stop ratio info. Verify precise behavior against implementation before external publication.
+**Purpose:** Returns stopped or suspended loan-rate information at a date.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 504; body declaration candidate line(s): 8151
+Returns stopped or suspended loan-rate information at a date.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 FUNCTION get_stop_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N',
-                               p_info_type varchar2 default 'INT')
-    RETURN LOAN_STOP_RATE_TAB;
+p_date      DATE DEFAULT glbl.getsysdate,
+p_full_info varchar2 default 'N',
+p_info_type varchar2 default 'INT')
+RETURN LOAN_STOP_RATE_TAB;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_doc_no` | IN | `VARCHAR2` | Loan document reference |
+| `p_date` | IN | `DATE DEFAULT glbl.getsysdate` | Relevant calculation or operation date |
+| `p_full_info` | IN | `varchar2 default 'N'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_info_type` | IN | `varchar2 default 'INT'` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `LOAN_STOP_RATE_TAB`. Business interpretation: Returns stopped or suspended loan-rate information at a date.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_STOP_RATIO_INFO`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 504; body declaration approximately line 8151.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_incorrect_days"></a>
 
 ### `get_incorrect_days` — FUNCTION
 
-**Purpose:** Public function related to get incorrect days. Verify precise behavior against implementation before external publication.
+**Purpose:** Produces a pipelined collection of days marked as incorrect for processing.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 510; body declaration candidate line(s): 8179
+Produces a pipelined collection of days marked as incorrect for processing.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_incorrect_days(p_date date) return NUMBER_TT
-    pipelined;
+pipelined;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_date` | IN | `date` | Relevant calculation or operation date |
+
+**Return Value:** `NUMBER_TT`. Business interpretation: Produces a pipelined collection of days marked as incorrect for processing.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 510; body declaration approximately line 8179.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="get_incorrect_days_count"></a>
+
 ### `get_incorrect_days_count` — FUNCTION
 
-**Purpose:** Public function related to get incorrect days count. Verify precise behavior against implementation before external publication.
+**Purpose:** Counts the dates marked as incorrect for processing.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 513; body declaration candidate line(s): 8218
+Counts the dates marked as incorrect for processing.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_incorrect_days_count(p_date date) return number;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_date` | IN | `date` | Relevant calculation or operation date |
+
+**Return Value:** `number`. Business interpretation: Counts the dates marked as incorrect for processing.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 513; body declaration approximately line 8218.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_schedule_from_memo"></a>
 
 ### `get_schedule_from_memo` — FUNCTION
 
-**Purpose:** Public function related to get schedule from memo. Verify precise behavior against implementation before external publication.
+**Purpose:** Builds a payment schedule derived from memorandum information.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 515; body declaration candidate line(s): 8225
+Builds a payment schedule derived from memorandum information.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_FAIZ.DAY_COUNT_BASIS_NEW`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_schedule_from_memo(p_memorandum_id varchar2,
-                                  p_int_ratio     number,
-                                  p_int_calc_type varchar2,
-                                  p_int_amount    number) return SCHEDULE_TT
-    pipelined;
+p_int_ratio     number,
+p_int_calc_type varchar2,
+p_int_amount    number) return SCHEDULE_TT
+pipelined;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_memorandum_id` | IN | `varchar2` | Memorandum identifier |
+| `p_int_ratio` | IN | `number` | Interest rate input |
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+| `p_int_amount` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `SCHEDULE_TT`. Business interpretation: Builds a payment schedule derived from memorandum information.
+
+**Related Database Objects**
+
+- Observed reads: `KRD_SCOR_ODEME_PLAN`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 515; body declaration approximately line 8225.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_standart_schedule"></a>
 
 ### `get_standart_schedule` — FUNCTION
 
-**Purpose:** Returns pipelined standard schedule rows.
+**Purpose:** Generates a standard schedule with grace periods and optional rate/stop-rate inputs.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 521; body declaration candidate line(s): 8324
+Generates a standard schedule with grace periods and optional rate/stop-rate inputs.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
 function get_standart_schedule(p_begin_date          date default glbl.getsysdate,
-                                 p_main_pymt_date      date,
-                                 p_int_pymt_date       date,
-                                 p_pymt_day            number default null,
-                                 p_end_date            date,
-                                 p_offer_amount        number,
-                                 p_ovd_main_amount     number default 0,
-                                 p_int_calc_type       varchar2,
-                                 p_main_grace_period   varchar2 default null,
-                                 p_int_grace_period    varchar2 default null,
-                                 p_remain_int_amount   number default 0,
-                                 p_min_main_pay_amount number default null,
-                                 p_calc_int_in_grace   varchar2 default 'Y',
-                                 p_work_days           varchar2 default 'Y',
-                                 
-                                 p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                 p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
+p_main_pymt_date      date,
+p_int_pymt_date       date,
+p_pymt_day            number default null,
+p_end_date            date,
+p_offer_amount        number,
+p_ovd_main_amount     number default 0,
+p_int_calc_type       varchar2,
+p_main_grace_period   varchar2 default null,
+p_int_grace_period    varchar2 default null,
+p_remain_int_amount   number default 0,
+p_min_main_pay_amount number default null,
+p_calc_int_in_grace   varchar2 default 'Y',
+p_work_days           varchar2 default 'Y',
+p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
+p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
+return SCHEDULE_TT
+pipelined;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_begin_date` | IN | `date default glbl.getsysdate` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_main_pymt_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_pymt_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_pymt_day` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_end_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_offer_amount` | IN | `number` | Loan/offer principal amount |
+| `p_ovd_main_amount` | IN | `number default 0` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+| `p_main_grace_period` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_grace_period` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_remain_int_amount` | IN | `number default 0` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_min_main_pay_amount` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_calc_int_in_grace` | IN | `varchar2 default 'Y'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_work_days` | IN | `varchar2 default 'Y'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_loan_flow_rate_tab` | IN | `LOAN_FLOW_RATE_TAB default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_loan_stop_rate_tab` | IN | `LOAN_STOP_RATE_TAB default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `SCHEDULE_TT`. Business interpretation: Generates a standard schedule with grace periods and optional rate/stop-rate inputs.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 521; body declaration approximately line 8324.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="get_annuity_schedule"></a>
 
 ### `get_annuity_schedule` — FUNCTION
 
-**Purpose:** Returns pipelined annuity schedule rows.
+**Purpose:** Generates an annuity schedule with configured limits, grace periods and rate changes.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 542; body declaration candidate line(s): 8697
+Generates an annuity schedule with configured limits, grace periods and rate changes.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GLBL_TARIH.SONRAKI_ISGUNU_FOR_LOAN`, `GLBL_FAIZ.DAY_COUNT_BASIS_NEW`, `LOAN_API.GET_PLAN_MONTH_COUNT`, `LOAN_API.ADD_MONTHS_FOR_LOAN`.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 function get_annuity_schedule(p_begin_date      date,
-                                p_main_pymt_date  date,
-                                p_int_pymt_date   date,
-                                p_pymt_day        number default null,
-                                p_end_date        date,
-                                p_offer_amount    number,
-                                p_ovd_main_amount number default 0,
-                                p_int_calc_type   varchar2,
-                                
-                                p_main_grace_period varchar2 default null,
-                                p_int_grace_period  varchar2 default null,
-                                
-                                p_annuity_amount     number default null,
-                                p_max_annuity_amount number default null,
-                                p_remain_int_amount  number default 0,
-                                
-                                p_work_days         varchar2 default 'Y',
-                                p_own_annuity       varchar2 default 'N',
-                                p_calc_int_in_grace varchar2 default 'Y',
-                                p_is_mortgage       varchar2 default 'N',
-                                
-                                p_max_iteration number default null,
-                                
-                                p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
+p_main_pymt_date  date,
+p_int_pymt_date   date,
+p_pymt_day        number default null,
+p_end_date        date,
+p_offer_amount    number,
+p_ovd_main_amount number default 0,
+p_int_calc_type   varchar2,
+p_main_grace_period varchar2 default null,
+p_int_grace_period  varchar2 default null,
+p_annuity_amount     number default null,
+p_max_annuity_amount number default null,
+p_remain_int_amount  number default 0,
+p_work_days         varchar2 default 'Y',
+p_own_annuity       varchar2 default 'N',
+p_calc_int_in_grace varchar2 default 'Y',
+p_is_mortgage       varchar2 default 'N',
+p_max_iteration number default null,
+p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
+p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
+return SCHEDULE_TT
+pipelined;
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_begin_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_main_pymt_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_pymt_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_pymt_day` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_end_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_offer_amount` | IN | `number` | Loan/offer principal amount |
+| `p_ovd_main_amount` | IN | `number default 0` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+| `p_main_grace_period` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_grace_period` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_annuity_amount` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_max_annuity_amount` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_remain_int_amount` | IN | `number default 0` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_work_days` | IN | `varchar2 default 'Y'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_own_annuity` | IN | `varchar2 default 'N'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_calc_int_in_grace` | IN | `varchar2 default 'Y'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_is_mortgage` | IN | `varchar2 default 'N'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_max_iteration` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_loan_flow_rate_tab` | IN | `LOAN_FLOW_RATE_TAB default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_loan_stop_rate_tab` | IN | `LOAN_STOP_RATE_TAB default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Return Value:** `SCHEDULE_TT`. Business interpretation: Generates an annuity schedule with configured limits, grace periods and rate changes.
+
+**Related Database Objects**
+
+- Observed reads: `ALL_DATES`, `INTERVALS`, `SORTED_DATES`.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment. Called routines and dynamic SQL have not been proven side-effect-free.
+
+**Source Evidence:** Specification line 542; body declaration approximately line 8697.
+
+[↑ Back to index](#navigation)
 
 ---
 
+<a id="get_created_schedule"></a>
+
 ### `get_created_schedule` — PROCEDURE
 
-**Purpose:** Public procedure related to get created schedule. Verify precise behavior against implementation before external publication.
+**Purpose:** Loads or retrieves a previously created schedule by identifier.
 
-**Description confidence:** Name-based description — review required.
+**Business Logic**
 
-**Source:** specification line 570; body declaration candidate line(s): 9306
+Loads or retrieves a previously created schedule by identifier.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 Procedure get_created_schedule(p_fid number);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_fid` | IN | `number` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `CREATE_SCHEDULE_PARAMETRS`.
+
+**Error Handling**
+
+- Observed message or error code: `No record found for fid = `
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+
+**Source Evidence:** Specification line 570; body declaration approximately line 9306.
+
+[↑ Back to index](#navigation)
 
 ---
+
+<a id="create_schedule"></a>
 
 ### `create_schedule` — PROCEDURE
 
-**Purpose:** Builds a payment schedule using the supplied dates, amounts, interest and schedule options.
+**Purpose:** Creates a schedule based on schedule type, dates, amount, rates, and context.
 
-**Description confidence:** Body-reviewed summary.
+**Business Logic**
 
-**Source:** specification line 572; body declaration candidate line(s): 9392
+Creates a schedule based on schedule type, dates, amount, rates, and context.
 
-**Signature**
+**Business Rules / Preconditions**
+
+- **Verify:** Accepted codes, required upstream states, and boundary conditions are not fully specified in the package specification.
+
+**Public Signature**
 
 ```sql
--- new
-  procedure create_schedule(p_schedule_no         number,
-                            p_coll_name           varchar2 default null,
-                            p_fk_id               number default null,
-                            p_doc_no              varchar2 default 'XXX',
-                            p_memorandum_id       varchar2 default null,
-                            p_customer_no         number default null,
-                            p_tx_fid              number default null,
-                            p_begin_date          date default glbl.getsysdate,
-                            p_main_pymt_date      date,
-                            p_int_pymt_date       date,
-                            p_pymt_day            number default null,
-                            p_end_date            date,
-                            p_offer_amount        number,
-                            p_ovd_main_amount     number default 0,
-                            p_int_ratio           number,
-                            p_int_calc_type       varchar2,
-                            p_annuity_amount      number default null,
-                            p_max_annuity_amount  number default null,
-                            p_min_main_pay_amount number default null,
-                            p_remain_int_amount   number default 0,
-                            p_main_grace_period   varchar2 default null,
-                            p_int_grace_period    varchar2 default null,
-                            p_main_pymt_period    number default 1,
-                            p_int_pymt_period     number default 1,
-                            p_product_code        number default null,
-                            p_same_annuity        varchar2 default 'N',
-                            p_calc_int_in_grace   varchar2 default 'Y',
-                            p_return_type         varchar2 default 'NO_ZERO',
-                            p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
-                            p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
+procedure create_schedule(p_schedule_no         number,
+p_coll_name           varchar2 default null,
+p_fk_id               number default null,
+p_doc_no              varchar2 default 'XXX',
+p_memorandum_id       varchar2 default null,
+p_customer_no         number default null,
+p_tx_fid              number default null,
+p_begin_date          date default glbl.getsysdate,
+p_main_pymt_date      date,
+p_int_pymt_date       date,
+p_pymt_day            number default null,
+p_end_date            date,
+p_offer_amount        number,
+p_ovd_main_amount     number default 0,
+p_int_ratio           number,
+p_int_calc_type       varchar2,
+p_annuity_amount      number default null,
+p_max_annuity_amount  number default null,
+p_min_main_pay_amount number default null,
+p_remain_int_amount   number default 0,
+p_main_grace_period   varchar2 default null,
+p_int_grace_period    varchar2 default null,
+p_main_pymt_period    number default 1,
+p_int_pymt_period     number default 1,
+p_product_code        number default null,
+p_same_annuity        varchar2 default 'N',
+p_calc_int_in_grace   varchar2 default 'Y',
+p_return_type         varchar2 default 'NO_ZERO',
+p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
+p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_schedule_no` | IN | `number` | Schedule type/configuration number |
+| `p_coll_name` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_fk_id` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_doc_no` | IN | `varchar2 default 'XXX'` | Loan document reference |
+| `p_memorandum_id` | IN | `varchar2 default null` | Memorandum identifier |
+| `p_customer_no` | IN | `number default null` | Customer identifier |
+| `p_tx_fid` | IN | `number default null` | Transaction identifier |
+| `p_begin_date` | IN | `date default glbl.getsysdate` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_main_pymt_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_pymt_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_pymt_day` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_end_date` | IN | `date` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_offer_amount` | IN | `number` | Loan/offer principal amount |
+| `p_ovd_main_amount` | IN | `number default 0` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_ratio` | IN | `number` | Interest rate input |
+| `p_int_calc_type` | IN | `varchar2` | Interest day-count/calculation convention |
+| `p_annuity_amount` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_max_annuity_amount` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_min_main_pay_amount` | IN | `number default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_remain_int_amount` | IN | `number default 0` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_main_grace_period` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_grace_period` | IN | `varchar2 default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_main_pymt_period` | IN | `number default 1` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_int_pymt_period` | IN | `number default 1` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_product_code` | IN | `number default null` | Loan product code |
+| `p_same_annuity` | IN | `varchar2 default 'N'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_calc_int_in_grace` | IN | `varchar2 default 'Y'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_return_type` | IN | `varchar2 default 'NO_ZERO'` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_loan_flow_rate_tab` | IN | `LOAN_FLOW_RATE_TAB default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_loan_stop_rate_tab` | IN | `LOAN_STOP_RATE_TAB default null` | Context-specific parameter; confirm accepted values with the owning developer. |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- No direct static SQL dependencies identified in the isolated routine segment; dependencies may occur through called packages or dynamic SQL.
+
+**Error Handling**
+
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 574; body declaration approximately line 9392.
+
+[↑ Back to index](#navigation)
 
 ---
 
-### `do_loan_control` — PROCEDURE
+<a id="do_loan_control--overload-1"></a>
 
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
+### `do_loan_control` — PROCEDURE (overload 1)
 
-**Description confidence:** Name-based description — review required.
+**Purpose:** Performs loan controls for a requested operation and date.
 
-**Source:** specification line 604; body declaration candidate line(s): 9907, 9929
+**Business Logic**
 
-**Signature**
+Performs loan controls for a requested operation and date.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+Observed delegated calls include `GNI_UTILITY.RUN_TASK`.
+
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate);
+p_date      date default glbl.getsysdate);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
+
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_oper_type` | IN | `varchar2 default null` | Operation code used for routing or validation |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+
+**Outputs:** No OUT parameters in the published signature.
+
+**Related Database Objects**
+
+- Observed reads: `LOAN_EOD_CONTROL`.
+
+**Error Handling**
+
+- Observed message or error code: `Errors detected after operation [`
+
+**Side Effects & Transaction Notes**
+
+- No direct DML detected in the isolated implementation segment; delegated operations may still modify data.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
+
+**Source Evidence:** Specification line 604; body declaration approximately line 9907.
+
+[↑ Back to index](#navigation)
 
 ---
 
-### `do_loan_control` — PROCEDURE
+<a id="do_loan_control--overload-2"></a>
 
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
+### `do_loan_control` — PROCEDURE (overload 2)
 
-**Description confidence:** Name-based description — review required.
+**Purpose:** Performs loan controls over a constrained ROWID range for segmented processing.
 
-**Source:** specification line 607; body declaration candidate line(s): 9907, 9929
+**Business Logic**
 
-**Signature**
+Performs loan controls over a constrained ROWID range for segmented processing.
+The observed implementation reads configuration, loan records, payment schedules, or related data as applicable to this operation. Refer to the database objects below for the directly observed tables.
+The observed implementation modifies database records; this is **not** a read-only routine. Review transaction and rollback behavior before calling it.
+Observed delegated calls include `LOAN_API.GET_PLAN_ERROR`.
+
+**Business Rules / Preconditions**
+
+- The implementation contains conditional processing and validation; confirm product-specific conditions and boundary cases with the owning developer.
+
+**Public Signature**
 
 ```sql
 procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate,
-                            p_min_rowid rowid,
-                            p_max_rowid rowid);
+p_date      date default glbl.getsysdate,
+p_min_rowid rowid,
+p_max_rowid rowid);
 ```
 
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+**Parameters**
 
----
-
-## EOD/SOD & Operations
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 71; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
--- *
-
-  procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
-                                  p_doc_no                 in varchar2,
-                                  p_acc_type               in varchar2,
-                                  p_pen_calc_grace_days    in number,
-                                  p_ovd_amount             out number,
-                                  p_calculated_pen_day_cnt out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates` — FUNCTION
-
-**Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 80; body declaration candidate line(s): 259
-
-**Signature**
-
-```sql
-function get_interest_calc_dates(p_last_calc_access_date in date,
-                                   p_eod_sod               in varchar2,
-                                   p_int_calc_at           in varchar2)
-    return loan_api.g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates_ex` — FUNCTION
-
-**Purpose:** Public function related to get interest calc dates ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 85; body declaration candidate line(s): 323
-
-**Signature**
-
-```sql
-function get_interest_calc_dates_ex(p_date        in date,
-                                      p_eod_sod     in varchar2,
-                                      p_int_calc_at in varchar2)
-    return g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info` — PROCEDURE
-
-**Purpose:** Determines interest calculation day count and year-day basis from interest-calculation configuration.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 90; body declaration candidate line(s): 104
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info(p_last_calc_date       in date,
-                                   p_pymt_day             in number,
-                                   p_trn_date             in date,
-                                   p_int_calc_type        in varchar2,
-                                   p_rate_type            in varchar2,
-                                   p_int_rate_periodicity in varchar2,
-                                   p_calc_day_count       out number,
-                                   p_year_day_count       out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to get interest calc info ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 101; body declaration candidate line(s): 183
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info_ex(p_last_calc_date in date,
-                                   p_pymt_day       in number,
-                                   p_trn_date       in date,
-                                   p_int_calc_type  in varchar2,
-                                   p_calc_day_count out number,
-                                   p_year_day_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `clear_addtional_data` — PROCEDURE
-
-**Purpose:** Public procedure related to clear addtional data. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 109; body declaration candidate line(s): 378
-
-**Signature**
-
-```sql
-procedure clear_addtional_data(p_state varchar2 default 'CLEAR');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 111; body declaration candidate line(s): 404
-
-**Signature**
-
-```sql
-procedure add_additional_group(p_tag_name varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 113; body declaration candidate line(s): 410
-
-**Signature**
-
-```sql
-procedure end_additional_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_main_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional main group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 114; body declaration candidate line(s): 398
-
-**Signature**
-
-```sql
-procedure end_additional_main_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 115; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 117; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 118; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value varchar2,
-                              p_new_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 122; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value date,
-                              p_new_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `finalize_addtional_process` — PROCEDURE
-
-**Purpose:** Finalizes accumulated additional information and executes mapped updates for the supplied identifiers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 125; body declaration candidate line(s): 480
-
-**Signature**
-
-```sql
-procedure finalize_addtional_process(p_doc_no   varchar2,
-                                       p_offer_id varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `reverse_update` — PROCEDURE
-
-**Purpose:** Reads prior history additional information and attempts to restore recorded old values.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 128; body declaration candidate line(s): 591
-
-**Signature**
-
-```sql
-procedure reverse_update(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_loan_amount` — FUNCTION
-
-**Purpose:** Returns a loan amount using the TOTAL, DEBT, or DUE calculation mode and related account and schedule data.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 130; body declaration candidate line(s): 643
-
-**Signature**
-
-```sql
-function get_loan_amount(p_doc_no      in varchar2,
-                           p_amount_type in varchar2,
-                           p_date        in date default glbl.getsysdate,
-                           p_oper_type   in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_overdue_min_amount` — FUNCTION
-
-**Purpose:** Public function related to get overdue min amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 136; body declaration candidate line(s): 719
-
-**Signature**
-
-```sql
-function get_overdue_min_amount(p_product_code in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 137; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
-procedure get_pen_info_for_calc(p_date                in date default glbl.getsysdate,
-                                  p_doc_no              in varchar2,
-                                  p_pen_calc_grace_days in number,
-                                  p_PEN_INT_RATIO       in number,
-                                  p_ovd_amount_for_pen  out number,
-                                  p_pen_calc_days_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_trn_caller_id` — FUNCTION
-
-**Purpose:** Public function related to get trn caller id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 144; body declaration candidate line(s): 772
-
-**Signature**
-
-```sql
-function get_trn_caller_id(p_oper_type in varchar2) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_voucher_data_from_query` — FUNCTION
-
-**Purpose:** Executes a supplied SQL query with DBMS_SQL and maps returned column values for vouchers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 146; body declaration candidate line(s): 789
-
-**Signature**
-
-```sql
-function get_voucher_data_from_query(p_query       in varchar2,
-                                       p_result_type in varchar2)
-    return g_col_value_tab_map;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_formatted_grace_from_list` — FUNCTION
-
-**Purpose:** Public function related to get formatted grace from list. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 150; body declaration candidate line(s): 912
-
-**Signature**
-
-```sql
-function get_formatted_grace_from_list(p_period_list in varchar2)
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_grace_info` — FUNCTION
-
-**Purpose:** Public function related to get grace info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 153; body declaration candidate line(s): 952
-
-**Signature**
-
-```sql
-function get_grace_info(p_Doc_No          In Varchar2,
-                          p_period_end_date in date,
-                          p_acc_type        In Varchar2 default 'A',
-                          p_info_type       in varchar2) Return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_basis_year_days_cnt` — FUNCTION
-
-**Purpose:** Public function related to get basis year days cnt. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 158; body declaration candidate line(s): 998
-
-**Signature**
-
-```sql
-function get_basis_year_days_cnt(p_int_calc_type in varchar2,
-                                   p_date          in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_value` — FUNCTION
-
-**Purpose:** Public function related to get gl value. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 161; body declaration candidate line(s): 1026
-
-**Signature**
-
-```sql
-function get_gl_value(p_parameter_name in varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 163; body declaration candidate line(s): 1043
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation(p_trn_date        in date,
-                                    p_oper_type       in varchar2,
-                                    p_trn_type        in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 177; body declaration candidate line(s): 1197
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation_ex(p_oper_type       in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_active_passive` — FUNCTION
-
-**Purpose:** Public function related to get gl acc active passive. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 189; body declaration candidate line(s): 1345
-
-**Signature**
-
-```sql
-function get_gl_acc_active_passive(p_acc_no in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_from_matrix` — FUNCTION
-
-**Purpose:** Public function related to get gl acc from matrix. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 191; body declaration candidate line(s): 1367
-
-**Signature**
-
-```sql
-function get_gl_acc_from_matrix(p_product_code in number default null,
-                                  p_cust_type    in number default null,
-                                  p_period_id    in number default null,
-                                  p_currency_id  in number default null,
-                                  p_base_type    in varchar2,
-                                  p_loan_doc_no  in varchar2 default null,
-                                  p_customer_no  in varchar2 default null,
-                                  p_acc_type     in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `Get_Delay_Int_Rate` — FUNCTION
-
-**Purpose:** Public function related to get delay int rate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 200; body declaration candidate line(s): 1602
-
-**Signature**
-
-```sql
--- krd_eod.Get_Delay_Int_Rate
-  Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
-                              p_Delay_Type In Varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_commission_schedule` — FUNCTION
-
-**Purpose:** Public function related to get commission schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 203; body declaration candidate line(s): 1628
-
-**Signature**
-
-```sql
--- kredi_api.Get_Krd_Kom_Plan
-  Function get_commission_schedule(p_begin_date    In Date,
-                                   p_end_date      In Date,
-                                   p_amount        In Number,
-                                   p_int_calc_type in varchar2)
-    Return Krd_Kom_Plan_Tt
-    Pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_months_for_loan` — FUNCTION
-
-**Purpose:** Public function related to add months for loan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 211; body declaration candidate line(s): 1744
-
-**Signature**
-
-```sql
-function add_months_for_loan(p_date   date,
-                               p_months number,
-                               p_day    number default null) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_next_Plan_Pym` — FUNCTION
-
-**Purpose:** Public function related to get next plan pym. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 215; body declaration candidate line(s): 1776
-
-**Signature**
-
-```sql
-Function get_next_Plan_Pym(p_doc_no   In Varchar2,
-                             P_date     In Date,
-                             p_acc_type in varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_offer_id` — FUNCTION
-
-**Purpose:** Public function related to get offer id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 219; body declaration candidate line(s): 1809
-
-**Signature**
-
-```sql
-Function get_offer_id(p_branch_id In Number Default Glbl.Getsube,
-                        P_date      In Date Default Glbl.Getsysdate)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_payment_amount` — FUNCTION
-
-**Purpose:** Public function related to get plan payment amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 223; body declaration candidate line(s): 1832
-
-**Signature**
-
-```sql
--- krd_eod.get_Plan_Pym +
-  function get_plan_payment_amount(p_doc_no   in varchar2,
-                                   p_date     in date default glbl.getsysdate,
-                                   p_acc_type in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_ovd_date` — FUNCTION
-
-**Purpose:** Public function related to get ovd date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 229; body declaration candidate line(s): 2734
-
-**Signature**
-
-```sql
-Function get_ovd_date(p_doc_no   varchar2,
-                        p_acc_type varchar2,
-                        p_date     date default glbl.getsysdate) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_amount_for_pen_calc` — FUNCTION
-
-**Purpose:** Public function related to get amount for pen calc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 233; body declaration candidate line(s): 1850
-
-**Signature**
-
-```sql
-Function get_amount_for_pen_calc(p_doc_no        In Varchar2,
-                                   P_date          In Date,
-                                   p_for_spec_days in varchar2 default 'N',
-                                   p_int_calc_type in varchar2 default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Plan_Month_Count` — FUNCTION
-
-**Purpose:** Public function related to get plan month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 239; body declaration candidate line(s): 1944
-
-**Signature**
-
-```sql
--- kredi_api.get_Plan_Month_Count +
-  /*Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ')
-    Return Number;*/
-  Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ',
-                                p_work_days     varchar2 default 'Y',
-                                p_pymt_day      number default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_paid_month_count` — FUNCTION
-
-**Purpose:** Public function related to get plan paid month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 251; body declaration candidate line(s): 1987
-
-**Signature**
-
-```sql
--- new
-  function get_plan_paid_month_count(p_doc_no in varchar2,
-                                     p_term   in number,
-                                     p_date   in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_error` — FUNCTION
-
-**Purpose:** Public function related to get plan error. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 255; body declaration candidate line(s): 2047
-
-**Signature**
-
-```sql
--- kredi_api.get_plan_error +
-  Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Annuity_Amount` — FUNCTION
-
-**Purpose:** Public function related to get annuity amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 258; body declaration candidate line(s): 2604
-
-**Signature**
-
-```sql
--- kredi_api.Get_Annuitet_Amount +
-  Function get_Annuity_Amount(p_Doc_No      In Varchar2,
-                              p_return_type In varchar2 default 'NO_ZERO')
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Pym_Startdate` — FUNCTION
-
-**Purpose:** Public function related to get pym startdate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 263; body declaration candidate line(s): 2633
-
-**Signature**
-
-```sql
--- kredi_api.Get_Pym_Startdate +
-  Function get_Pym_Startdate(p_Doc_No          In Varchar2,
-                             p_pymt_date       In Date,
-                             p_pymt_day        In Number,
-                             p_pymt_period     In Number,
-                             p_acc_type        In varchar2,
-                             p_loan_end_Date   in date,
-                             p_check_is_closed in varchar2 default 'Y')
-    Return Date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_account_feature` — FUNCTION
-
-**Purpose:** Public function related to get account feature. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 273; body declaration candidate line(s): 2799
-
-**Signature**
-
-```sql
-function get_account_feature(p_branch_no   number,
-                               p_account_no  number,
-                               p_account_sub number)
-    return cs_account.account_feature%type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_acc_exists` — FUNCTION
-
-**Purpose:** Public function related to is acc exists. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 278; body declaration candidate line(s): 2818
-
-**Signature**
-
-```sql
-function is_acc_exists(p_customer_no   number,
-                         p_memorandum_id varchar2 default null,
-                         p_doc_no        varchar2,
-                         p_acc_type      varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_Payment_Date` — FUNCTION
-
-**Purpose:** Public function related to is payment date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 283; body declaration candidate line(s): 2845
-
-**Signature**
-
-```sql
--- kredi_api.Is_Payment_Date +
-  Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_online_offer` — FUNCTION
-
-**Purpose:** Public function related to is online offer. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 287; body declaration candidate line(s): 2858
-
-**Signature**
-
-```sql
-function is_online_offer(p_memorandum_id varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `table_log_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to table log operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 289; body declaration candidate line(s): 3344
-
-**Signature**
-
-```sql
-procedure table_log_operation(p_doc_no     in varchar2,
-                                p_table_name in varchar2,
-                                p_tx_fid     in number,
-                                p_oper_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_entry` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal entry. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 294; body declaration candidate line(s): 2876
-
-**Signature**
-
-```sql
-Procedure do_journal_entry(p_entries_list  g_entries_list_tab,
-                             p_trn_caller_id in number,
-                             p_tx_fid        in out number,
-                             p_trn_type      in varchar2,
-                             p_is_eod        in varchar2 default 'Y');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_journal_entries` — PROCEDURE
-
-**Purpose:** Public procedure related to create journal entries. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 300; body declaration candidate line(s): 2954
-
-**Signature**
-
-```sql
-procedure create_journal_entries(p_oper_type in varchar2,
-                                   p_tx_fid    in number,
-                                   p_trn_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_account` — PROCEDURE
-
-**Purpose:** Creates/assigns loan-related accounts based on the requested operation and returns the created account list.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 304; body declaration candidate line(s): 3129
-
-**Signature**
-
-```sql
-procedure create_account(p_doc_no        in varchar2,
-                           p_memorandum_id in varchar2 default null,
-                           p_oper_type     in varchar2,
-                           p_acc_type      in varchar2 default null,
-                           p_tx_fid        in number,
-                           p_created_acc   out g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `recalculate_int_payment_plan` — PROCEDURE
-
-**Purpose:** Public procedure related to recalculate int payment plan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 311; body declaration candidate line(s): 3445
-
-**Signature**
-
-```sql
-procedure recalculate_int_payment_plan(p_doc_no               in varchar2,
-                                         p_acc_type             in varchar2,
-                                         p_main_amount          in number,
-                                         p_INT_RATIO            in number,
-                                         p_int_calc_type        in varchar2,
-                                         p_schedule_update_type in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_new_acc` — FUNCTION
-
-**Purpose:** Public function related to get new acc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 318; body declaration candidate line(s): 2520
-
-**Signature**
-
-```sql
---kredi_api.open_new_acc +
-  function get_new_acc(p_branch_no       in number,
-                       p_customer_no     in number,
-                       p_balance_acc     in varchar2,
-                       p_detail_code     in varchar2,
-                       p_ccy_id          in number,
-                       p_main_acc        in number default null,
-                       p_cr_int_rate     in number default null,
-                       p_dr_int_rate     in number default null,
-                       p_com_int_rate    in number default null,
-                       p_product_code    in number default null,
-                       p_period_id       in number default null,
-                       p_acc_description in varchar2,
-                       p_memorandum_id   in varchar2 default null,
-                       p_loan_doc_no     in varchar2,
-                       p_loan_acc_type   in varchar2,
-                       p_tx_fid          in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_plan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do plan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 336; body declaration candidate line(s): 3506
-
-**Signature**
-
-```sql
--- kredi_api.plan_control +
-  procedure do_plan_control(p_document_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_status_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan status control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 338; body declaration candidate line(s): 3515
-
-**Signature**
-
-```sql
--- kredi_api.loan_status_control +
-  procedure do_loan_status_control(p_branch_no   in number,
-                                   p_customer_no in number,
-                                   p_loan_acc    in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_loan_history` — PROCEDURE
-
-**Purpose:** Writes a loan-operation history record for a transaction.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 343; body declaration candidate line(s): 3587
-
-**Signature**
-
-```sql
-procedure create_loan_history(p_oper_type VARCHAR2 default null,
-                                p_doc_no    VARCHAR2 default null,
-                                p_trn_date  DATE default glbl.getsysdate,
-                                p_tx_fid    NUMBER,
-                                p_trn_type  varchar2,
-                                p_add_info  add_info_tab default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_collateral_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 350; body declaration candidate line(s): 3942
-
-**Signature**
-
-```sql
---krd_eod.loan_collateral_out +
-  procedure do_loan_collateral_out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_acc_type_by_status` — FUNCTION
-
-**Purpose:** Public function related to get acc type by status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 353; body declaration candidate line(s): 4211
-
-**Signature**
-
-```sql
-function get_acc_type_by_status(p_acc_type         varchar2,
-                                  p_to_loan_status   varchar2,
-                                  p_from_loan_status varchar2 default 'NORM')
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `generate_allocated_payment_list` — PROCEDURE
-
-**Purpose:** Computes a payment allocation list for a loan operation.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 358; body declaration candidate line(s): 4239
-
-**Signature**
-
-```sql
-procedure generate_allocated_payment_list(p_doc_no                in varchar2,
-                                            p_oper_type             in varchar2,
-                                            p_pym_amount            in number,
-                                            p_has_schedule_upd_type out varchar2,
-                                            p_payment_list          out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_payment_details` — PROCEDURE
-
-**Purpose:** Public procedure related to add payment details. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 364; body declaration candidate line(s): 4389
-
-**Signature**
-
-```sql
-procedure add_payment_details(p_doc_no                in varchar2,
-                                p_has_schedule_upd_type out varchar2,
-                                p_payment_list          in out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_delete_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do delete operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 368; body declaration candidate line(s): 4483
-
-**Signature**
-
-```sql
-procedure do_delete_operation(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Auto_Payment` — PROCEDURE
-
-**Purpose:** Executes automatic loan payment processing in EOD/SOD context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 370; body declaration candidate line(s): 4540
-
-**Signature**
-
-```sql
-/** Makes automatic loan payments at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S                           
-  */
-  Procedure do_Auto_Payment(p_min_id     number default null,
-                            p_max_id     number default null,
-                            p_doc_no     in varchar2 default null,
-                            p_eod_sod    in varchar2 default 'E',
-                            p_test_param in number default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation` — PROCEDURE
-
-**Purpose:** Performs batch interest calculation with optional branch range, loan document and EOD/SOD arguments.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 382; body declaration candidate line(s): 5135
-
-**Signature**
-
-```sql
-/** Makes automatic loan int calculation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S 
-      p_date - operation date                            
-  */
-  
-  procedure do_int_calculation(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to do int calculation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 396; body declaration candidate line(s): 5768
-
-**Signature**
-
-```sql
-procedure do_int_calculation_ex(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_overdue_transit_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do overdue transit operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 402; body declaration candidate line(s): 4832
-
-**Signature**
-
-```sql
-/** Makes automatic loan overdue operation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_branch_id - loan branch id  
-      p_customer_no - unique customer number 
-      p_loan_acc - loan account sub 
-      p_date - operation date                            
-  */
-
-  Procedure do_overdue_transit_operation(p_min_id number default null,
-                                         p_max_id number default null,
-                                         p_doc_no in varchar2 default null,
-                                         p_date   in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_commission_recognition` — PROCEDURE
-
-**Purpose:** Public procedure related to do commission recognition. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 416; body declaration candidate line(s): 6338
-
-**Signature**
-
-```sql
-Procedure do_commission_recognition(Pdate In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_guarantee_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do guarantee out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 418; body declaration candidate line(s): 6236
-
-**Signature**
-
-```sql
-Procedure do_guarantee_out(p_branch_id   In Number Default Null,
-                             p_customer_no In Number Default Null,
-                             p_loan_acc    In Number Default Null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Close_With_Collateral_Out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan close with collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 422; body declaration candidate line(s): 6594
-
-**Signature**
-
-```sql
-procedure do_Loan_Close_With_Collateral_Out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_non_cash_loan_close` — PROCEDURE
-
-**Purpose:** Public procedure related to do non cash loan close. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 424; body declaration candidate line(s): 6756
-
-**Signature**
-
-```sql
-Procedure do_non_cash_loan_close(p_doc_no in varchar2,
-                                   p_Date   In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 427; body declaration candidate line(s): 6861
-
-**Signature**
-
-```sql
--- new
-  procedure do_journal_control(p_branch_id   IN Number,
-                               p_customer_no IN Number,
-                               p_account_sub IN Number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 431; body declaration candidate line(s): 7118
-
-**Signature**
-
-```sql
--- new
-  /*procedure over_to_norm(p_min_id  number default null,
-                              p_max_id  number default null,
-                              p_doc_no  in varchar2 default null);
-  */
-  --kredi_api.Odeme_Plani_Duzenle
-  Procedure do_schedule_allignment(p_doc_no         In Varchar2,
-                                   p_payment_amount In Number,
-                                   p_acc_type       In Varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_com_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do com schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 441; body declaration candidate line(s): 7190
-
-**Signature**
-
-```sql
--- kredi_api.Kom_Odeme_Plani_Duzenle
-  Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
-                                       p_option_code In Varchar2,
-                                       p_amount      In Number,
-                                       p_plan_type   In Varchar2,
-                                       p_mig_status  In Number Default 0);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Delay_Int_Rate_Upd` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan delay int rate upd. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 448; body declaration candidate line(s): 7310
-
-**Signature**
-
-```sql
--- krd_eod.Loan_Delay_Int_Rate_Upd
-  Procedure do_Loan_Delay_Int_Rate_Upd;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `change_account_status` — PROCEDURE
-
-**Purpose:** Public procedure related to change account status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 451; body declaration candidate line(s): 7351
-
-**Signature**
-
-```sql
--- kredi_api.Kredi_Hesap_Kapat , kredi_api.Kredi_Hesap_Ac
-  procedure change_account_status(p_doc_no in varchar2,
-                                  p_status in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_eod_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop eod task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 455; body declaration candidate line(s): 7389
-
-**Signature**
-
-```sql
-procedure stop_eod_task;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_loan_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop loan task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 457; body declaration candidate line(s): 7405
-
-**Signature**
-
-```sql
-procedure stop_loan_task(p_task_code in varchar2 default null,
-                           p_task_type in varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `run_loan_task` — PROCEDURE
-
-**Purpose:** Runs a task identified by its task code and task type.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 460; body declaration candidate line(s): 7442
-
-**Signature**
-
-```sql
-/** Parallel execution for loan processes
-      @params
-      p_task_code  - task_code in loan_tasks_list table                  
-  */
-
-  procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `calculate_xirr` — FUNCTION
-
-**Purpose:** Public function related to calculate xirr. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 467; body declaration candidate line(s): 7786
-
-**Signature**
-
-```sql
-/*procedure norm_to_over(p_min_id  number default null,
-  p_max_id  number default null,
-  p_doc_no  in varchar2 default null);  */
-
-  function calculate_xirr(p_doc_no  varchar2,
-                          p_type    varchar2,
-                          p_calc_as varchar2 default 'XIRR') return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_min_flow_ratio` — FUNCTION
-
-**Purpose:** Public function related to get min flow ratio. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 475; body declaration candidate line(s): 8074
-
-**Signature**
-
-```sql
-/*  function get_mix_operation_acsess(p_fid            varchar2,
-                                      p_oper_type      varchar2,
-                                      p_memo_oper_type varchar2) return number;
-  
-    function get_mix_operation_types(p_fid            varchar2,
-                                     p_memo_oper_type varchar2) return varchar2;
-  
-    procedure validate_mix_memorandum(p_memorandum_id varchar2,
-                                      p_oper_type     varchar2,
-                                      p_state         varchar2);
-  
-    procedure update_mix_memorandum(p_memorandum_id varchar2,
-                                    p_oper_type     varchar2,
-                                    p_tx_fid        number,
-                                    p_state         varchar2);
-  */
-
-  function get_min_flow_ratio(
-    p_doc_no     varchar2,
-    p_type       varchar2,
-    p_begin_date date default null,
-    p_end_date   date default null
-  ) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_flow_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get flow ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 499; body declaration candidate line(s): 8115
-
-**Signature**
-
-```sql
-FUNCTION get_flow_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N')
-    RETURN LOAN_FLOW_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_stop_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get stop ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 504; body declaration candidate line(s): 8151
-
-**Signature**
-
-```sql
-FUNCTION get_stop_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N',
-                               p_info_type varchar2 default 'INT')
-    RETURN LOAN_STOP_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 510; body declaration candidate line(s): 8179
-
-**Signature**
-
-```sql
-function get_incorrect_days(p_date date) return NUMBER_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days_count` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 513; body declaration candidate line(s): 8218
-
-**Signature**
-
-```sql
-function get_incorrect_days_count(p_date date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_schedule_from_memo` — FUNCTION
-
-**Purpose:** Public function related to get schedule from memo. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 515; body declaration candidate line(s): 8225
-
-**Signature**
-
-```sql
-function get_schedule_from_memo(p_memorandum_id varchar2,
-                                  p_int_ratio     number,
-                                  p_int_calc_type varchar2,
-                                  p_int_amount    number) return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_standart_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined standard schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 521; body declaration candidate line(s): 8324
-
-**Signature**
-
-```sql
-function get_standart_schedule(p_begin_date          date default glbl.getsysdate,
-                                 p_main_pymt_date      date,
-                                 p_int_pymt_date       date,
-                                 p_pymt_day            number default null,
-                                 p_end_date            date,
-                                 p_offer_amount        number,
-                                 p_ovd_main_amount     number default 0,
-                                 p_int_calc_type       varchar2,
-                                 p_main_grace_period   varchar2 default null,
-                                 p_int_grace_period    varchar2 default null,
-                                 p_remain_int_amount   number default 0,
-                                 p_min_main_pay_amount number default null,
-                                 p_calc_int_in_grace   varchar2 default 'Y',
-                                 p_work_days           varchar2 default 'Y',
-                                 
-                                 p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                 p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_annuity_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined annuity schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 542; body declaration candidate line(s): 8697
-
-**Signature**
-
-```sql
-function get_annuity_schedule(p_begin_date      date,
-                                p_main_pymt_date  date,
-                                p_int_pymt_date   date,
-                                p_pymt_day        number default null,
-                                p_end_date        date,
-                                p_offer_amount    number,
-                                p_ovd_main_amount number default 0,
-                                p_int_calc_type   varchar2,
-                                
-                                p_main_grace_period varchar2 default null,
-                                p_int_grace_period  varchar2 default null,
-                                
-                                p_annuity_amount     number default null,
-                                p_max_annuity_amount number default null,
-                                p_remain_int_amount  number default 0,
-                                
-                                p_work_days         varchar2 default 'Y',
-                                p_own_annuity       varchar2 default 'N',
-                                p_calc_int_in_grace varchar2 default 'Y',
-                                p_is_mortgage       varchar2 default 'N',
-                                
-                                p_max_iteration number default null,
-                                
-                                p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_created_schedule` — PROCEDURE
-
-**Purpose:** Public procedure related to get created schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 570; body declaration candidate line(s): 9306
-
-**Signature**
-
-```sql
-Procedure get_created_schedule(p_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_schedule` — PROCEDURE
-
-**Purpose:** Builds a payment schedule using the supplied dates, amounts, interest and schedule options.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 572; body declaration candidate line(s): 9392
-
-**Signature**
-
-```sql
--- new
-  procedure create_schedule(p_schedule_no         number,
-                            p_coll_name           varchar2 default null,
-                            p_fk_id               number default null,
-                            p_doc_no              varchar2 default 'XXX',
-                            p_memorandum_id       varchar2 default null,
-                            p_customer_no         number default null,
-                            p_tx_fid              number default null,
-                            p_begin_date          date default glbl.getsysdate,
-                            p_main_pymt_date      date,
-                            p_int_pymt_date       date,
-                            p_pymt_day            number default null,
-                            p_end_date            date,
-                            p_offer_amount        number,
-                            p_ovd_main_amount     number default 0,
-                            p_int_ratio           number,
-                            p_int_calc_type       varchar2,
-                            p_annuity_amount      number default null,
-                            p_max_annuity_amount  number default null,
-                            p_min_main_pay_amount number default null,
-                            p_remain_int_amount   number default 0,
-                            p_main_grace_period   varchar2 default null,
-                            p_int_grace_period    varchar2 default null,
-                            p_main_pymt_period    number default 1,
-                            p_int_pymt_period     number default 1,
-                            p_product_code        number default null,
-                            p_same_annuity        varchar2 default 'N',
-                            p_calc_int_in_grace   varchar2 default 'Y',
-                            p_return_type         varchar2 default 'NO_ZERO',
-                            p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
-                            p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 604; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 607; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate,
-                            p_min_rowid rowid,
-                            p_max_rowid rowid);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-## History & Changes
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 71; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
--- *
-
-  procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
-                                  p_doc_no                 in varchar2,
-                                  p_acc_type               in varchar2,
-                                  p_pen_calc_grace_days    in number,
-                                  p_ovd_amount             out number,
-                                  p_calculated_pen_day_cnt out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates` — FUNCTION
-
-**Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 80; body declaration candidate line(s): 259
-
-**Signature**
-
-```sql
-function get_interest_calc_dates(p_last_calc_access_date in date,
-                                   p_eod_sod               in varchar2,
-                                   p_int_calc_at           in varchar2)
-    return loan_api.g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates_ex` — FUNCTION
-
-**Purpose:** Public function related to get interest calc dates ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 85; body declaration candidate line(s): 323
-
-**Signature**
-
-```sql
-function get_interest_calc_dates_ex(p_date        in date,
-                                      p_eod_sod     in varchar2,
-                                      p_int_calc_at in varchar2)
-    return g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info` — PROCEDURE
-
-**Purpose:** Determines interest calculation day count and year-day basis from interest-calculation configuration.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 90; body declaration candidate line(s): 104
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info(p_last_calc_date       in date,
-                                   p_pymt_day             in number,
-                                   p_trn_date             in date,
-                                   p_int_calc_type        in varchar2,
-                                   p_rate_type            in varchar2,
-                                   p_int_rate_periodicity in varchar2,
-                                   p_calc_day_count       out number,
-                                   p_year_day_count       out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to get interest calc info ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 101; body declaration candidate line(s): 183
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info_ex(p_last_calc_date in date,
-                                   p_pymt_day       in number,
-                                   p_trn_date       in date,
-                                   p_int_calc_type  in varchar2,
-                                   p_calc_day_count out number,
-                                   p_year_day_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `clear_addtional_data` — PROCEDURE
-
-**Purpose:** Public procedure related to clear addtional data. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 109; body declaration candidate line(s): 378
-
-**Signature**
-
-```sql
-procedure clear_addtional_data(p_state varchar2 default 'CLEAR');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 111; body declaration candidate line(s): 404
-
-**Signature**
-
-```sql
-procedure add_additional_group(p_tag_name varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 113; body declaration candidate line(s): 410
-
-**Signature**
-
-```sql
-procedure end_additional_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_main_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional main group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 114; body declaration candidate line(s): 398
-
-**Signature**
-
-```sql
-procedure end_additional_main_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 115; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 117; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 118; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value varchar2,
-                              p_new_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 122; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value date,
-                              p_new_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `finalize_addtional_process` — PROCEDURE
-
-**Purpose:** Finalizes accumulated additional information and executes mapped updates for the supplied identifiers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 125; body declaration candidate line(s): 480
-
-**Signature**
-
-```sql
-procedure finalize_addtional_process(p_doc_no   varchar2,
-                                       p_offer_id varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `reverse_update` — PROCEDURE
-
-**Purpose:** Reads prior history additional information and attempts to restore recorded old values.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 128; body declaration candidate line(s): 591
-
-**Signature**
-
-```sql
-procedure reverse_update(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_loan_amount` — FUNCTION
-
-**Purpose:** Returns a loan amount using the TOTAL, DEBT, or DUE calculation mode and related account and schedule data.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 130; body declaration candidate line(s): 643
-
-**Signature**
-
-```sql
-function get_loan_amount(p_doc_no      in varchar2,
-                           p_amount_type in varchar2,
-                           p_date        in date default glbl.getsysdate,
-                           p_oper_type   in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_overdue_min_amount` — FUNCTION
-
-**Purpose:** Public function related to get overdue min amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 136; body declaration candidate line(s): 719
-
-**Signature**
-
-```sql
-function get_overdue_min_amount(p_product_code in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 137; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
-procedure get_pen_info_for_calc(p_date                in date default glbl.getsysdate,
-                                  p_doc_no              in varchar2,
-                                  p_pen_calc_grace_days in number,
-                                  p_PEN_INT_RATIO       in number,
-                                  p_ovd_amount_for_pen  out number,
-                                  p_pen_calc_days_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_trn_caller_id` — FUNCTION
-
-**Purpose:** Public function related to get trn caller id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 144; body declaration candidate line(s): 772
-
-**Signature**
-
-```sql
-function get_trn_caller_id(p_oper_type in varchar2) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_voucher_data_from_query` — FUNCTION
-
-**Purpose:** Executes a supplied SQL query with DBMS_SQL and maps returned column values for vouchers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 146; body declaration candidate line(s): 789
-
-**Signature**
-
-```sql
-function get_voucher_data_from_query(p_query       in varchar2,
-                                       p_result_type in varchar2)
-    return g_col_value_tab_map;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_formatted_grace_from_list` — FUNCTION
-
-**Purpose:** Public function related to get formatted grace from list. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 150; body declaration candidate line(s): 912
-
-**Signature**
-
-```sql
-function get_formatted_grace_from_list(p_period_list in varchar2)
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_grace_info` — FUNCTION
-
-**Purpose:** Public function related to get grace info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 153; body declaration candidate line(s): 952
-
-**Signature**
-
-```sql
-function get_grace_info(p_Doc_No          In Varchar2,
-                          p_period_end_date in date,
-                          p_acc_type        In Varchar2 default 'A',
-                          p_info_type       in varchar2) Return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_basis_year_days_cnt` — FUNCTION
-
-**Purpose:** Public function related to get basis year days cnt. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 158; body declaration candidate line(s): 998
-
-**Signature**
-
-```sql
-function get_basis_year_days_cnt(p_int_calc_type in varchar2,
-                                   p_date          in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_value` — FUNCTION
-
-**Purpose:** Public function related to get gl value. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 161; body declaration candidate line(s): 1026
-
-**Signature**
-
-```sql
-function get_gl_value(p_parameter_name in varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 163; body declaration candidate line(s): 1043
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation(p_trn_date        in date,
-                                    p_oper_type       in varchar2,
-                                    p_trn_type        in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 177; body declaration candidate line(s): 1197
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation_ex(p_oper_type       in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_active_passive` — FUNCTION
-
-**Purpose:** Public function related to get gl acc active passive. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 189; body declaration candidate line(s): 1345
-
-**Signature**
-
-```sql
-function get_gl_acc_active_passive(p_acc_no in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_from_matrix` — FUNCTION
-
-**Purpose:** Public function related to get gl acc from matrix. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 191; body declaration candidate line(s): 1367
-
-**Signature**
-
-```sql
-function get_gl_acc_from_matrix(p_product_code in number default null,
-                                  p_cust_type    in number default null,
-                                  p_period_id    in number default null,
-                                  p_currency_id  in number default null,
-                                  p_base_type    in varchar2,
-                                  p_loan_doc_no  in varchar2 default null,
-                                  p_customer_no  in varchar2 default null,
-                                  p_acc_type     in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `Get_Delay_Int_Rate` — FUNCTION
-
-**Purpose:** Public function related to get delay int rate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 200; body declaration candidate line(s): 1602
-
-**Signature**
-
-```sql
--- krd_eod.Get_Delay_Int_Rate
-  Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
-                              p_Delay_Type In Varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_commission_schedule` — FUNCTION
-
-**Purpose:** Public function related to get commission schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 203; body declaration candidate line(s): 1628
-
-**Signature**
-
-```sql
--- kredi_api.Get_Krd_Kom_Plan
-  Function get_commission_schedule(p_begin_date    In Date,
-                                   p_end_date      In Date,
-                                   p_amount        In Number,
-                                   p_int_calc_type in varchar2)
-    Return Krd_Kom_Plan_Tt
-    Pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_months_for_loan` — FUNCTION
-
-**Purpose:** Public function related to add months for loan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 211; body declaration candidate line(s): 1744
-
-**Signature**
-
-```sql
-function add_months_for_loan(p_date   date,
-                               p_months number,
-                               p_day    number default null) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_next_Plan_Pym` — FUNCTION
-
-**Purpose:** Public function related to get next plan pym. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 215; body declaration candidate line(s): 1776
-
-**Signature**
-
-```sql
-Function get_next_Plan_Pym(p_doc_no   In Varchar2,
-                             P_date     In Date,
-                             p_acc_type in varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_offer_id` — FUNCTION
-
-**Purpose:** Public function related to get offer id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 219; body declaration candidate line(s): 1809
-
-**Signature**
-
-```sql
-Function get_offer_id(p_branch_id In Number Default Glbl.Getsube,
-                        P_date      In Date Default Glbl.Getsysdate)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_payment_amount` — FUNCTION
-
-**Purpose:** Public function related to get plan payment amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 223; body declaration candidate line(s): 1832
-
-**Signature**
-
-```sql
--- krd_eod.get_Plan_Pym +
-  function get_plan_payment_amount(p_doc_no   in varchar2,
-                                   p_date     in date default glbl.getsysdate,
-                                   p_acc_type in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_ovd_date` — FUNCTION
-
-**Purpose:** Public function related to get ovd date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 229; body declaration candidate line(s): 2734
-
-**Signature**
-
-```sql
-Function get_ovd_date(p_doc_no   varchar2,
-                        p_acc_type varchar2,
-                        p_date     date default glbl.getsysdate) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_amount_for_pen_calc` — FUNCTION
-
-**Purpose:** Public function related to get amount for pen calc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 233; body declaration candidate line(s): 1850
-
-**Signature**
-
-```sql
-Function get_amount_for_pen_calc(p_doc_no        In Varchar2,
-                                   P_date          In Date,
-                                   p_for_spec_days in varchar2 default 'N',
-                                   p_int_calc_type in varchar2 default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Plan_Month_Count` — FUNCTION
-
-**Purpose:** Public function related to get plan month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 239; body declaration candidate line(s): 1944
-
-**Signature**
-
-```sql
--- kredi_api.get_Plan_Month_Count +
-  /*Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ')
-    Return Number;*/
-  Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ',
-                                p_work_days     varchar2 default 'Y',
-                                p_pymt_day      number default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_paid_month_count` — FUNCTION
-
-**Purpose:** Public function related to get plan paid month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 251; body declaration candidate line(s): 1987
-
-**Signature**
-
-```sql
--- new
-  function get_plan_paid_month_count(p_doc_no in varchar2,
-                                     p_term   in number,
-                                     p_date   in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_error` — FUNCTION
-
-**Purpose:** Public function related to get plan error. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 255; body declaration candidate line(s): 2047
-
-**Signature**
-
-```sql
--- kredi_api.get_plan_error +
-  Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Annuity_Amount` — FUNCTION
-
-**Purpose:** Public function related to get annuity amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 258; body declaration candidate line(s): 2604
-
-**Signature**
-
-```sql
--- kredi_api.Get_Annuitet_Amount +
-  Function get_Annuity_Amount(p_Doc_No      In Varchar2,
-                              p_return_type In varchar2 default 'NO_ZERO')
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Pym_Startdate` — FUNCTION
-
-**Purpose:** Public function related to get pym startdate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 263; body declaration candidate line(s): 2633
-
-**Signature**
-
-```sql
--- kredi_api.Get_Pym_Startdate +
-  Function get_Pym_Startdate(p_Doc_No          In Varchar2,
-                             p_pymt_date       In Date,
-                             p_pymt_day        In Number,
-                             p_pymt_period     In Number,
-                             p_acc_type        In varchar2,
-                             p_loan_end_Date   in date,
-                             p_check_is_closed in varchar2 default 'Y')
-    Return Date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_account_feature` — FUNCTION
-
-**Purpose:** Public function related to get account feature. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 273; body declaration candidate line(s): 2799
-
-**Signature**
-
-```sql
-function get_account_feature(p_branch_no   number,
-                               p_account_no  number,
-                               p_account_sub number)
-    return cs_account.account_feature%type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_acc_exists` — FUNCTION
-
-**Purpose:** Public function related to is acc exists. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 278; body declaration candidate line(s): 2818
-
-**Signature**
-
-```sql
-function is_acc_exists(p_customer_no   number,
-                         p_memorandum_id varchar2 default null,
-                         p_doc_no        varchar2,
-                         p_acc_type      varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_Payment_Date` — FUNCTION
-
-**Purpose:** Public function related to is payment date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 283; body declaration candidate line(s): 2845
-
-**Signature**
-
-```sql
--- kredi_api.Is_Payment_Date +
-  Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_online_offer` — FUNCTION
-
-**Purpose:** Public function related to is online offer. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 287; body declaration candidate line(s): 2858
-
-**Signature**
-
-```sql
-function is_online_offer(p_memorandum_id varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `table_log_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to table log operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 289; body declaration candidate line(s): 3344
-
-**Signature**
-
-```sql
-procedure table_log_operation(p_doc_no     in varchar2,
-                                p_table_name in varchar2,
-                                p_tx_fid     in number,
-                                p_oper_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_entry` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal entry. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 294; body declaration candidate line(s): 2876
-
-**Signature**
-
-```sql
-Procedure do_journal_entry(p_entries_list  g_entries_list_tab,
-                             p_trn_caller_id in number,
-                             p_tx_fid        in out number,
-                             p_trn_type      in varchar2,
-                             p_is_eod        in varchar2 default 'Y');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_journal_entries` — PROCEDURE
-
-**Purpose:** Public procedure related to create journal entries. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 300; body declaration candidate line(s): 2954
-
-**Signature**
-
-```sql
-procedure create_journal_entries(p_oper_type in varchar2,
-                                   p_tx_fid    in number,
-                                   p_trn_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_account` — PROCEDURE
-
-**Purpose:** Creates/assigns loan-related accounts based on the requested operation and returns the created account list.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 304; body declaration candidate line(s): 3129
-
-**Signature**
-
-```sql
-procedure create_account(p_doc_no        in varchar2,
-                           p_memorandum_id in varchar2 default null,
-                           p_oper_type     in varchar2,
-                           p_acc_type      in varchar2 default null,
-                           p_tx_fid        in number,
-                           p_created_acc   out g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `recalculate_int_payment_plan` — PROCEDURE
-
-**Purpose:** Public procedure related to recalculate int payment plan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 311; body declaration candidate line(s): 3445
-
-**Signature**
-
-```sql
-procedure recalculate_int_payment_plan(p_doc_no               in varchar2,
-                                         p_acc_type             in varchar2,
-                                         p_main_amount          in number,
-                                         p_INT_RATIO            in number,
-                                         p_int_calc_type        in varchar2,
-                                         p_schedule_update_type in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_new_acc` — FUNCTION
-
-**Purpose:** Public function related to get new acc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 318; body declaration candidate line(s): 2520
-
-**Signature**
-
-```sql
---kredi_api.open_new_acc +
-  function get_new_acc(p_branch_no       in number,
-                       p_customer_no     in number,
-                       p_balance_acc     in varchar2,
-                       p_detail_code     in varchar2,
-                       p_ccy_id          in number,
-                       p_main_acc        in number default null,
-                       p_cr_int_rate     in number default null,
-                       p_dr_int_rate     in number default null,
-                       p_com_int_rate    in number default null,
-                       p_product_code    in number default null,
-                       p_period_id       in number default null,
-                       p_acc_description in varchar2,
-                       p_memorandum_id   in varchar2 default null,
-                       p_loan_doc_no     in varchar2,
-                       p_loan_acc_type   in varchar2,
-                       p_tx_fid          in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_plan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do plan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 336; body declaration candidate line(s): 3506
-
-**Signature**
-
-```sql
--- kredi_api.plan_control +
-  procedure do_plan_control(p_document_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_status_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan status control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 338; body declaration candidate line(s): 3515
-
-**Signature**
-
-```sql
--- kredi_api.loan_status_control +
-  procedure do_loan_status_control(p_branch_no   in number,
-                                   p_customer_no in number,
-                                   p_loan_acc    in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_loan_history` — PROCEDURE
-
-**Purpose:** Writes a loan-operation history record for a transaction.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 343; body declaration candidate line(s): 3587
-
-**Signature**
-
-```sql
-procedure create_loan_history(p_oper_type VARCHAR2 default null,
-                                p_doc_no    VARCHAR2 default null,
-                                p_trn_date  DATE default glbl.getsysdate,
-                                p_tx_fid    NUMBER,
-                                p_trn_type  varchar2,
-                                p_add_info  add_info_tab default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_collateral_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 350; body declaration candidate line(s): 3942
-
-**Signature**
-
-```sql
---krd_eod.loan_collateral_out +
-  procedure do_loan_collateral_out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_acc_type_by_status` — FUNCTION
-
-**Purpose:** Public function related to get acc type by status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 353; body declaration candidate line(s): 4211
-
-**Signature**
-
-```sql
-function get_acc_type_by_status(p_acc_type         varchar2,
-                                  p_to_loan_status   varchar2,
-                                  p_from_loan_status varchar2 default 'NORM')
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `generate_allocated_payment_list` — PROCEDURE
-
-**Purpose:** Computes a payment allocation list for a loan operation.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 358; body declaration candidate line(s): 4239
-
-**Signature**
-
-```sql
-procedure generate_allocated_payment_list(p_doc_no                in varchar2,
-                                            p_oper_type             in varchar2,
-                                            p_pym_amount            in number,
-                                            p_has_schedule_upd_type out varchar2,
-                                            p_payment_list          out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_payment_details` — PROCEDURE
-
-**Purpose:** Public procedure related to add payment details. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 364; body declaration candidate line(s): 4389
-
-**Signature**
-
-```sql
-procedure add_payment_details(p_doc_no                in varchar2,
-                                p_has_schedule_upd_type out varchar2,
-                                p_payment_list          in out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_delete_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do delete operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 368; body declaration candidate line(s): 4483
-
-**Signature**
-
-```sql
-procedure do_delete_operation(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Auto_Payment` — PROCEDURE
-
-**Purpose:** Executes automatic loan payment processing in EOD/SOD context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 370; body declaration candidate line(s): 4540
-
-**Signature**
-
-```sql
-/** Makes automatic loan payments at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S                           
-  */
-  Procedure do_Auto_Payment(p_min_id     number default null,
-                            p_max_id     number default null,
-                            p_doc_no     in varchar2 default null,
-                            p_eod_sod    in varchar2 default 'E',
-                            p_test_param in number default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation` — PROCEDURE
-
-**Purpose:** Performs batch interest calculation with optional branch range, loan document and EOD/SOD arguments.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 382; body declaration candidate line(s): 5135
-
-**Signature**
-
-```sql
-/** Makes automatic loan int calculation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S 
-      p_date - operation date                            
-  */
-  
-  procedure do_int_calculation(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to do int calculation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 396; body declaration candidate line(s): 5768
-
-**Signature**
-
-```sql
-procedure do_int_calculation_ex(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_overdue_transit_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do overdue transit operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 402; body declaration candidate line(s): 4832
-
-**Signature**
-
-```sql
-/** Makes automatic loan overdue operation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_branch_id - loan branch id  
-      p_customer_no - unique customer number 
-      p_loan_acc - loan account sub 
-      p_date - operation date                            
-  */
-
-  Procedure do_overdue_transit_operation(p_min_id number default null,
-                                         p_max_id number default null,
-                                         p_doc_no in varchar2 default null,
-                                         p_date   in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_commission_recognition` — PROCEDURE
-
-**Purpose:** Public procedure related to do commission recognition. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 416; body declaration candidate line(s): 6338
-
-**Signature**
-
-```sql
-Procedure do_commission_recognition(Pdate In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_guarantee_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do guarantee out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 418; body declaration candidate line(s): 6236
-
-**Signature**
-
-```sql
-Procedure do_guarantee_out(p_branch_id   In Number Default Null,
-                             p_customer_no In Number Default Null,
-                             p_loan_acc    In Number Default Null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Close_With_Collateral_Out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan close with collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 422; body declaration candidate line(s): 6594
-
-**Signature**
-
-```sql
-procedure do_Loan_Close_With_Collateral_Out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_non_cash_loan_close` — PROCEDURE
-
-**Purpose:** Public procedure related to do non cash loan close. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 424; body declaration candidate line(s): 6756
-
-**Signature**
-
-```sql
-Procedure do_non_cash_loan_close(p_doc_no in varchar2,
-                                   p_Date   In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 427; body declaration candidate line(s): 6861
-
-**Signature**
-
-```sql
--- new
-  procedure do_journal_control(p_branch_id   IN Number,
-                               p_customer_no IN Number,
-                               p_account_sub IN Number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 431; body declaration candidate line(s): 7118
-
-**Signature**
-
-```sql
--- new
-  /*procedure over_to_norm(p_min_id  number default null,
-                              p_max_id  number default null,
-                              p_doc_no  in varchar2 default null);
-  */
-  --kredi_api.Odeme_Plani_Duzenle
-  Procedure do_schedule_allignment(p_doc_no         In Varchar2,
-                                   p_payment_amount In Number,
-                                   p_acc_type       In Varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_com_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do com schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 441; body declaration candidate line(s): 7190
-
-**Signature**
-
-```sql
--- kredi_api.Kom_Odeme_Plani_Duzenle
-  Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
-                                       p_option_code In Varchar2,
-                                       p_amount      In Number,
-                                       p_plan_type   In Varchar2,
-                                       p_mig_status  In Number Default 0);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Delay_Int_Rate_Upd` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan delay int rate upd. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 448; body declaration candidate line(s): 7310
-
-**Signature**
-
-```sql
--- krd_eod.Loan_Delay_Int_Rate_Upd
-  Procedure do_Loan_Delay_Int_Rate_Upd;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `change_account_status` — PROCEDURE
-
-**Purpose:** Public procedure related to change account status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 451; body declaration candidate line(s): 7351
-
-**Signature**
-
-```sql
--- kredi_api.Kredi_Hesap_Kapat , kredi_api.Kredi_Hesap_Ac
-  procedure change_account_status(p_doc_no in varchar2,
-                                  p_status in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_eod_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop eod task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 455; body declaration candidate line(s): 7389
-
-**Signature**
-
-```sql
-procedure stop_eod_task;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_loan_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop loan task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 457; body declaration candidate line(s): 7405
-
-**Signature**
-
-```sql
-procedure stop_loan_task(p_task_code in varchar2 default null,
-                           p_task_type in varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `run_loan_task` — PROCEDURE
-
-**Purpose:** Runs a task identified by its task code and task type.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 460; body declaration candidate line(s): 7442
-
-**Signature**
-
-```sql
-/** Parallel execution for loan processes
-      @params
-      p_task_code  - task_code in loan_tasks_list table                  
-  */
-
-  procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `calculate_xirr` — FUNCTION
-
-**Purpose:** Public function related to calculate xirr. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 467; body declaration candidate line(s): 7786
-
-**Signature**
-
-```sql
-/*procedure norm_to_over(p_min_id  number default null,
-  p_max_id  number default null,
-  p_doc_no  in varchar2 default null);  */
-
-  function calculate_xirr(p_doc_no  varchar2,
-                          p_type    varchar2,
-                          p_calc_as varchar2 default 'XIRR') return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_min_flow_ratio` — FUNCTION
-
-**Purpose:** Public function related to get min flow ratio. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 475; body declaration candidate line(s): 8074
-
-**Signature**
-
-```sql
-/*  function get_mix_operation_acsess(p_fid            varchar2,
-                                      p_oper_type      varchar2,
-                                      p_memo_oper_type varchar2) return number;
-  
-    function get_mix_operation_types(p_fid            varchar2,
-                                     p_memo_oper_type varchar2) return varchar2;
-  
-    procedure validate_mix_memorandum(p_memorandum_id varchar2,
-                                      p_oper_type     varchar2,
-                                      p_state         varchar2);
-  
-    procedure update_mix_memorandum(p_memorandum_id varchar2,
-                                    p_oper_type     varchar2,
-                                    p_tx_fid        number,
-                                    p_state         varchar2);
-  */
-
-  function get_min_flow_ratio(
-    p_doc_no     varchar2,
-    p_type       varchar2,
-    p_begin_date date default null,
-    p_end_date   date default null
-  ) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_flow_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get flow ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 499; body declaration candidate line(s): 8115
-
-**Signature**
-
-```sql
-FUNCTION get_flow_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N')
-    RETURN LOAN_FLOW_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_stop_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get stop ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 504; body declaration candidate line(s): 8151
-
-**Signature**
-
-```sql
-FUNCTION get_stop_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N',
-                               p_info_type varchar2 default 'INT')
-    RETURN LOAN_STOP_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 510; body declaration candidate line(s): 8179
-
-**Signature**
-
-```sql
-function get_incorrect_days(p_date date) return NUMBER_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days_count` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 513; body declaration candidate line(s): 8218
-
-**Signature**
-
-```sql
-function get_incorrect_days_count(p_date date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_schedule_from_memo` — FUNCTION
-
-**Purpose:** Public function related to get schedule from memo. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 515; body declaration candidate line(s): 8225
-
-**Signature**
-
-```sql
-function get_schedule_from_memo(p_memorandum_id varchar2,
-                                  p_int_ratio     number,
-                                  p_int_calc_type varchar2,
-                                  p_int_amount    number) return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_standart_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined standard schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 521; body declaration candidate line(s): 8324
-
-**Signature**
-
-```sql
-function get_standart_schedule(p_begin_date          date default glbl.getsysdate,
-                                 p_main_pymt_date      date,
-                                 p_int_pymt_date       date,
-                                 p_pymt_day            number default null,
-                                 p_end_date            date,
-                                 p_offer_amount        number,
-                                 p_ovd_main_amount     number default 0,
-                                 p_int_calc_type       varchar2,
-                                 p_main_grace_period   varchar2 default null,
-                                 p_int_grace_period    varchar2 default null,
-                                 p_remain_int_amount   number default 0,
-                                 p_min_main_pay_amount number default null,
-                                 p_calc_int_in_grace   varchar2 default 'Y',
-                                 p_work_days           varchar2 default 'Y',
-                                 
-                                 p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                 p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_annuity_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined annuity schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 542; body declaration candidate line(s): 8697
-
-**Signature**
-
-```sql
-function get_annuity_schedule(p_begin_date      date,
-                                p_main_pymt_date  date,
-                                p_int_pymt_date   date,
-                                p_pymt_day        number default null,
-                                p_end_date        date,
-                                p_offer_amount    number,
-                                p_ovd_main_amount number default 0,
-                                p_int_calc_type   varchar2,
-                                
-                                p_main_grace_period varchar2 default null,
-                                p_int_grace_period  varchar2 default null,
-                                
-                                p_annuity_amount     number default null,
-                                p_max_annuity_amount number default null,
-                                p_remain_int_amount  number default 0,
-                                
-                                p_work_days         varchar2 default 'Y',
-                                p_own_annuity       varchar2 default 'N',
-                                p_calc_int_in_grace varchar2 default 'Y',
-                                p_is_mortgage       varchar2 default 'N',
-                                
-                                p_max_iteration number default null,
-                                
-                                p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_created_schedule` — PROCEDURE
-
-**Purpose:** Public procedure related to get created schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 570; body declaration candidate line(s): 9306
-
-**Signature**
-
-```sql
-Procedure get_created_schedule(p_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_schedule` — PROCEDURE
-
-**Purpose:** Builds a payment schedule using the supplied dates, amounts, interest and schedule options.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 572; body declaration candidate line(s): 9392
-
-**Signature**
-
-```sql
--- new
-  procedure create_schedule(p_schedule_no         number,
-                            p_coll_name           varchar2 default null,
-                            p_fk_id               number default null,
-                            p_doc_no              varchar2 default 'XXX',
-                            p_memorandum_id       varchar2 default null,
-                            p_customer_no         number default null,
-                            p_tx_fid              number default null,
-                            p_begin_date          date default glbl.getsysdate,
-                            p_main_pymt_date      date,
-                            p_int_pymt_date       date,
-                            p_pymt_day            number default null,
-                            p_end_date            date,
-                            p_offer_amount        number,
-                            p_ovd_main_amount     number default 0,
-                            p_int_ratio           number,
-                            p_int_calc_type       varchar2,
-                            p_annuity_amount      number default null,
-                            p_max_annuity_amount  number default null,
-                            p_min_main_pay_amount number default null,
-                            p_remain_int_amount   number default 0,
-                            p_main_grace_period   varchar2 default null,
-                            p_int_grace_period    varchar2 default null,
-                            p_main_pymt_period    number default 1,
-                            p_int_pymt_period     number default 1,
-                            p_product_code        number default null,
-                            p_same_annuity        varchar2 default 'N',
-                            p_calc_int_in_grace   varchar2 default 'Y',
-                            p_return_type         varchar2 default 'NO_ZERO',
-                            p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
-                            p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 604; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 607; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate,
-                            p_min_rowid rowid,
-                            p_max_rowid rowid);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-## Interest & Penalties
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 71; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
--- *
-
-  procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
-                                  p_doc_no                 in varchar2,
-                                  p_acc_type               in varchar2,
-                                  p_pen_calc_grace_days    in number,
-                                  p_ovd_amount             out number,
-                                  p_calculated_pen_day_cnt out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates` — FUNCTION
-
-**Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 80; body declaration candidate line(s): 259
-
-**Signature**
-
-```sql
-function get_interest_calc_dates(p_last_calc_access_date in date,
-                                   p_eod_sod               in varchar2,
-                                   p_int_calc_at           in varchar2)
-    return loan_api.g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates_ex` — FUNCTION
-
-**Purpose:** Public function related to get interest calc dates ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 85; body declaration candidate line(s): 323
-
-**Signature**
-
-```sql
-function get_interest_calc_dates_ex(p_date        in date,
-                                      p_eod_sod     in varchar2,
-                                      p_int_calc_at in varchar2)
-    return g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info` — PROCEDURE
-
-**Purpose:** Determines interest calculation day count and year-day basis from interest-calculation configuration.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 90; body declaration candidate line(s): 104
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info(p_last_calc_date       in date,
-                                   p_pymt_day             in number,
-                                   p_trn_date             in date,
-                                   p_int_calc_type        in varchar2,
-                                   p_rate_type            in varchar2,
-                                   p_int_rate_periodicity in varchar2,
-                                   p_calc_day_count       out number,
-                                   p_year_day_count       out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to get interest calc info ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 101; body declaration candidate line(s): 183
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info_ex(p_last_calc_date in date,
-                                   p_pymt_day       in number,
-                                   p_trn_date       in date,
-                                   p_int_calc_type  in varchar2,
-                                   p_calc_day_count out number,
-                                   p_year_day_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `clear_addtional_data` — PROCEDURE
-
-**Purpose:** Public procedure related to clear addtional data. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 109; body declaration candidate line(s): 378
-
-**Signature**
-
-```sql
-procedure clear_addtional_data(p_state varchar2 default 'CLEAR');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 111; body declaration candidate line(s): 404
-
-**Signature**
-
-```sql
-procedure add_additional_group(p_tag_name varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 113; body declaration candidate line(s): 410
-
-**Signature**
-
-```sql
-procedure end_additional_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_main_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional main group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 114; body declaration candidate line(s): 398
-
-**Signature**
-
-```sql
-procedure end_additional_main_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 115; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 117; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 118; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value varchar2,
-                              p_new_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 122; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value date,
-                              p_new_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `finalize_addtional_process` — PROCEDURE
-
-**Purpose:** Finalizes accumulated additional information and executes mapped updates for the supplied identifiers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 125; body declaration candidate line(s): 480
-
-**Signature**
-
-```sql
-procedure finalize_addtional_process(p_doc_no   varchar2,
-                                       p_offer_id varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `reverse_update` — PROCEDURE
-
-**Purpose:** Reads prior history additional information and attempts to restore recorded old values.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 128; body declaration candidate line(s): 591
-
-**Signature**
-
-```sql
-procedure reverse_update(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_loan_amount` — FUNCTION
-
-**Purpose:** Returns a loan amount using the TOTAL, DEBT, or DUE calculation mode and related account and schedule data.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 130; body declaration candidate line(s): 643
-
-**Signature**
-
-```sql
-function get_loan_amount(p_doc_no      in varchar2,
-                           p_amount_type in varchar2,
-                           p_date        in date default glbl.getsysdate,
-                           p_oper_type   in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_overdue_min_amount` — FUNCTION
-
-**Purpose:** Public function related to get overdue min amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 136; body declaration candidate line(s): 719
-
-**Signature**
-
-```sql
-function get_overdue_min_amount(p_product_code in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 137; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
-procedure get_pen_info_for_calc(p_date                in date default glbl.getsysdate,
-                                  p_doc_no              in varchar2,
-                                  p_pen_calc_grace_days in number,
-                                  p_PEN_INT_RATIO       in number,
-                                  p_ovd_amount_for_pen  out number,
-                                  p_pen_calc_days_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_trn_caller_id` — FUNCTION
-
-**Purpose:** Public function related to get trn caller id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 144; body declaration candidate line(s): 772
-
-**Signature**
-
-```sql
-function get_trn_caller_id(p_oper_type in varchar2) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_voucher_data_from_query` — FUNCTION
-
-**Purpose:** Executes a supplied SQL query with DBMS_SQL and maps returned column values for vouchers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 146; body declaration candidate line(s): 789
-
-**Signature**
-
-```sql
-function get_voucher_data_from_query(p_query       in varchar2,
-                                       p_result_type in varchar2)
-    return g_col_value_tab_map;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_formatted_grace_from_list` — FUNCTION
-
-**Purpose:** Public function related to get formatted grace from list. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 150; body declaration candidate line(s): 912
-
-**Signature**
-
-```sql
-function get_formatted_grace_from_list(p_period_list in varchar2)
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_grace_info` — FUNCTION
-
-**Purpose:** Public function related to get grace info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 153; body declaration candidate line(s): 952
-
-**Signature**
-
-```sql
-function get_grace_info(p_Doc_No          In Varchar2,
-                          p_period_end_date in date,
-                          p_acc_type        In Varchar2 default 'A',
-                          p_info_type       in varchar2) Return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_basis_year_days_cnt` — FUNCTION
-
-**Purpose:** Public function related to get basis year days cnt. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 158; body declaration candidate line(s): 998
-
-**Signature**
-
-```sql
-function get_basis_year_days_cnt(p_int_calc_type in varchar2,
-                                   p_date          in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_value` — FUNCTION
-
-**Purpose:** Public function related to get gl value. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 161; body declaration candidate line(s): 1026
-
-**Signature**
-
-```sql
-function get_gl_value(p_parameter_name in varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 163; body declaration candidate line(s): 1043
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation(p_trn_date        in date,
-                                    p_oper_type       in varchar2,
-                                    p_trn_type        in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 177; body declaration candidate line(s): 1197
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation_ex(p_oper_type       in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_active_passive` — FUNCTION
-
-**Purpose:** Public function related to get gl acc active passive. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 189; body declaration candidate line(s): 1345
-
-**Signature**
-
-```sql
-function get_gl_acc_active_passive(p_acc_no in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_from_matrix` — FUNCTION
-
-**Purpose:** Public function related to get gl acc from matrix. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 191; body declaration candidate line(s): 1367
-
-**Signature**
-
-```sql
-function get_gl_acc_from_matrix(p_product_code in number default null,
-                                  p_cust_type    in number default null,
-                                  p_period_id    in number default null,
-                                  p_currency_id  in number default null,
-                                  p_base_type    in varchar2,
-                                  p_loan_doc_no  in varchar2 default null,
-                                  p_customer_no  in varchar2 default null,
-                                  p_acc_type     in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `Get_Delay_Int_Rate` — FUNCTION
-
-**Purpose:** Public function related to get delay int rate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 200; body declaration candidate line(s): 1602
-
-**Signature**
-
-```sql
--- krd_eod.Get_Delay_Int_Rate
-  Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
-                              p_Delay_Type In Varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_commission_schedule` — FUNCTION
-
-**Purpose:** Public function related to get commission schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 203; body declaration candidate line(s): 1628
-
-**Signature**
-
-```sql
--- kredi_api.Get_Krd_Kom_Plan
-  Function get_commission_schedule(p_begin_date    In Date,
-                                   p_end_date      In Date,
-                                   p_amount        In Number,
-                                   p_int_calc_type in varchar2)
-    Return Krd_Kom_Plan_Tt
-    Pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_months_for_loan` — FUNCTION
-
-**Purpose:** Public function related to add months for loan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 211; body declaration candidate line(s): 1744
-
-**Signature**
-
-```sql
-function add_months_for_loan(p_date   date,
-                               p_months number,
-                               p_day    number default null) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_next_Plan_Pym` — FUNCTION
-
-**Purpose:** Public function related to get next plan pym. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 215; body declaration candidate line(s): 1776
-
-**Signature**
-
-```sql
-Function get_next_Plan_Pym(p_doc_no   In Varchar2,
-                             P_date     In Date,
-                             p_acc_type in varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_offer_id` — FUNCTION
-
-**Purpose:** Public function related to get offer id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 219; body declaration candidate line(s): 1809
-
-**Signature**
-
-```sql
-Function get_offer_id(p_branch_id In Number Default Glbl.Getsube,
-                        P_date      In Date Default Glbl.Getsysdate)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_payment_amount` — FUNCTION
-
-**Purpose:** Public function related to get plan payment amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 223; body declaration candidate line(s): 1832
-
-**Signature**
-
-```sql
--- krd_eod.get_Plan_Pym +
-  function get_plan_payment_amount(p_doc_no   in varchar2,
-                                   p_date     in date default glbl.getsysdate,
-                                   p_acc_type in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_ovd_date` — FUNCTION
-
-**Purpose:** Public function related to get ovd date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 229; body declaration candidate line(s): 2734
-
-**Signature**
-
-```sql
-Function get_ovd_date(p_doc_no   varchar2,
-                        p_acc_type varchar2,
-                        p_date     date default glbl.getsysdate) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_amount_for_pen_calc` — FUNCTION
-
-**Purpose:** Public function related to get amount for pen calc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 233; body declaration candidate line(s): 1850
-
-**Signature**
-
-```sql
-Function get_amount_for_pen_calc(p_doc_no        In Varchar2,
-                                   P_date          In Date,
-                                   p_for_spec_days in varchar2 default 'N',
-                                   p_int_calc_type in varchar2 default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Plan_Month_Count` — FUNCTION
-
-**Purpose:** Public function related to get plan month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 239; body declaration candidate line(s): 1944
-
-**Signature**
-
-```sql
--- kredi_api.get_Plan_Month_Count +
-  /*Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ')
-    Return Number;*/
-  Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ',
-                                p_work_days     varchar2 default 'Y',
-                                p_pymt_day      number default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_paid_month_count` — FUNCTION
-
-**Purpose:** Public function related to get plan paid month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 251; body declaration candidate line(s): 1987
-
-**Signature**
-
-```sql
--- new
-  function get_plan_paid_month_count(p_doc_no in varchar2,
-                                     p_term   in number,
-                                     p_date   in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_error` — FUNCTION
-
-**Purpose:** Public function related to get plan error. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 255; body declaration candidate line(s): 2047
-
-**Signature**
-
-```sql
--- kredi_api.get_plan_error +
-  Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Annuity_Amount` — FUNCTION
-
-**Purpose:** Public function related to get annuity amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 258; body declaration candidate line(s): 2604
-
-**Signature**
-
-```sql
--- kredi_api.Get_Annuitet_Amount +
-  Function get_Annuity_Amount(p_Doc_No      In Varchar2,
-                              p_return_type In varchar2 default 'NO_ZERO')
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Pym_Startdate` — FUNCTION
-
-**Purpose:** Public function related to get pym startdate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 263; body declaration candidate line(s): 2633
-
-**Signature**
-
-```sql
--- kredi_api.Get_Pym_Startdate +
-  Function get_Pym_Startdate(p_Doc_No          In Varchar2,
-                             p_pymt_date       In Date,
-                             p_pymt_day        In Number,
-                             p_pymt_period     In Number,
-                             p_acc_type        In varchar2,
-                             p_loan_end_Date   in date,
-                             p_check_is_closed in varchar2 default 'Y')
-    Return Date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_account_feature` — FUNCTION
-
-**Purpose:** Public function related to get account feature. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 273; body declaration candidate line(s): 2799
-
-**Signature**
-
-```sql
-function get_account_feature(p_branch_no   number,
-                               p_account_no  number,
-                               p_account_sub number)
-    return cs_account.account_feature%type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_acc_exists` — FUNCTION
-
-**Purpose:** Public function related to is acc exists. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 278; body declaration candidate line(s): 2818
-
-**Signature**
-
-```sql
-function is_acc_exists(p_customer_no   number,
-                         p_memorandum_id varchar2 default null,
-                         p_doc_no        varchar2,
-                         p_acc_type      varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_Payment_Date` — FUNCTION
-
-**Purpose:** Public function related to is payment date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 283; body declaration candidate line(s): 2845
-
-**Signature**
-
-```sql
--- kredi_api.Is_Payment_Date +
-  Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_online_offer` — FUNCTION
-
-**Purpose:** Public function related to is online offer. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 287; body declaration candidate line(s): 2858
-
-**Signature**
-
-```sql
-function is_online_offer(p_memorandum_id varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `table_log_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to table log operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 289; body declaration candidate line(s): 3344
-
-**Signature**
-
-```sql
-procedure table_log_operation(p_doc_no     in varchar2,
-                                p_table_name in varchar2,
-                                p_tx_fid     in number,
-                                p_oper_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_entry` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal entry. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 294; body declaration candidate line(s): 2876
-
-**Signature**
-
-```sql
-Procedure do_journal_entry(p_entries_list  g_entries_list_tab,
-                             p_trn_caller_id in number,
-                             p_tx_fid        in out number,
-                             p_trn_type      in varchar2,
-                             p_is_eod        in varchar2 default 'Y');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_journal_entries` — PROCEDURE
-
-**Purpose:** Public procedure related to create journal entries. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 300; body declaration candidate line(s): 2954
-
-**Signature**
-
-```sql
-procedure create_journal_entries(p_oper_type in varchar2,
-                                   p_tx_fid    in number,
-                                   p_trn_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_account` — PROCEDURE
-
-**Purpose:** Creates/assigns loan-related accounts based on the requested operation and returns the created account list.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 304; body declaration candidate line(s): 3129
-
-**Signature**
-
-```sql
-procedure create_account(p_doc_no        in varchar2,
-                           p_memorandum_id in varchar2 default null,
-                           p_oper_type     in varchar2,
-                           p_acc_type      in varchar2 default null,
-                           p_tx_fid        in number,
-                           p_created_acc   out g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `recalculate_int_payment_plan` — PROCEDURE
-
-**Purpose:** Public procedure related to recalculate int payment plan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 311; body declaration candidate line(s): 3445
-
-**Signature**
-
-```sql
-procedure recalculate_int_payment_plan(p_doc_no               in varchar2,
-                                         p_acc_type             in varchar2,
-                                         p_main_amount          in number,
-                                         p_INT_RATIO            in number,
-                                         p_int_calc_type        in varchar2,
-                                         p_schedule_update_type in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_new_acc` — FUNCTION
-
-**Purpose:** Public function related to get new acc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 318; body declaration candidate line(s): 2520
-
-**Signature**
-
-```sql
---kredi_api.open_new_acc +
-  function get_new_acc(p_branch_no       in number,
-                       p_customer_no     in number,
-                       p_balance_acc     in varchar2,
-                       p_detail_code     in varchar2,
-                       p_ccy_id          in number,
-                       p_main_acc        in number default null,
-                       p_cr_int_rate     in number default null,
-                       p_dr_int_rate     in number default null,
-                       p_com_int_rate    in number default null,
-                       p_product_code    in number default null,
-                       p_period_id       in number default null,
-                       p_acc_description in varchar2,
-                       p_memorandum_id   in varchar2 default null,
-                       p_loan_doc_no     in varchar2,
-                       p_loan_acc_type   in varchar2,
-                       p_tx_fid          in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_plan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do plan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 336; body declaration candidate line(s): 3506
-
-**Signature**
-
-```sql
--- kredi_api.plan_control +
-  procedure do_plan_control(p_document_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_status_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan status control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 338; body declaration candidate line(s): 3515
-
-**Signature**
-
-```sql
--- kredi_api.loan_status_control +
-  procedure do_loan_status_control(p_branch_no   in number,
-                                   p_customer_no in number,
-                                   p_loan_acc    in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_loan_history` — PROCEDURE
-
-**Purpose:** Writes a loan-operation history record for a transaction.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 343; body declaration candidate line(s): 3587
-
-**Signature**
-
-```sql
-procedure create_loan_history(p_oper_type VARCHAR2 default null,
-                                p_doc_no    VARCHAR2 default null,
-                                p_trn_date  DATE default glbl.getsysdate,
-                                p_tx_fid    NUMBER,
-                                p_trn_type  varchar2,
-                                p_add_info  add_info_tab default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_collateral_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 350; body declaration candidate line(s): 3942
-
-**Signature**
-
-```sql
---krd_eod.loan_collateral_out +
-  procedure do_loan_collateral_out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_acc_type_by_status` — FUNCTION
-
-**Purpose:** Public function related to get acc type by status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 353; body declaration candidate line(s): 4211
-
-**Signature**
-
-```sql
-function get_acc_type_by_status(p_acc_type         varchar2,
-                                  p_to_loan_status   varchar2,
-                                  p_from_loan_status varchar2 default 'NORM')
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `generate_allocated_payment_list` — PROCEDURE
-
-**Purpose:** Computes a payment allocation list for a loan operation.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 358; body declaration candidate line(s): 4239
-
-**Signature**
-
-```sql
-procedure generate_allocated_payment_list(p_doc_no                in varchar2,
-                                            p_oper_type             in varchar2,
-                                            p_pym_amount            in number,
-                                            p_has_schedule_upd_type out varchar2,
-                                            p_payment_list          out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_payment_details` — PROCEDURE
-
-**Purpose:** Public procedure related to add payment details. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 364; body declaration candidate line(s): 4389
-
-**Signature**
-
-```sql
-procedure add_payment_details(p_doc_no                in varchar2,
-                                p_has_schedule_upd_type out varchar2,
-                                p_payment_list          in out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_delete_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do delete operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 368; body declaration candidate line(s): 4483
-
-**Signature**
-
-```sql
-procedure do_delete_operation(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Auto_Payment` — PROCEDURE
-
-**Purpose:** Executes automatic loan payment processing in EOD/SOD context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 370; body declaration candidate line(s): 4540
-
-**Signature**
-
-```sql
-/** Makes automatic loan payments at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S                           
-  */
-  Procedure do_Auto_Payment(p_min_id     number default null,
-                            p_max_id     number default null,
-                            p_doc_no     in varchar2 default null,
-                            p_eod_sod    in varchar2 default 'E',
-                            p_test_param in number default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation` — PROCEDURE
-
-**Purpose:** Performs batch interest calculation with optional branch range, loan document and EOD/SOD arguments.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 382; body declaration candidate line(s): 5135
-
-**Signature**
-
-```sql
-/** Makes automatic loan int calculation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S 
-      p_date - operation date                            
-  */
-  
-  procedure do_int_calculation(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to do int calculation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 396; body declaration candidate line(s): 5768
-
-**Signature**
-
-```sql
-procedure do_int_calculation_ex(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_overdue_transit_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do overdue transit operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 402; body declaration candidate line(s): 4832
-
-**Signature**
-
-```sql
-/** Makes automatic loan overdue operation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_branch_id - loan branch id  
-      p_customer_no - unique customer number 
-      p_loan_acc - loan account sub 
-      p_date - operation date                            
-  */
-
-  Procedure do_overdue_transit_operation(p_min_id number default null,
-                                         p_max_id number default null,
-                                         p_doc_no in varchar2 default null,
-                                         p_date   in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_commission_recognition` — PROCEDURE
-
-**Purpose:** Public procedure related to do commission recognition. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 416; body declaration candidate line(s): 6338
-
-**Signature**
-
-```sql
-Procedure do_commission_recognition(Pdate In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_guarantee_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do guarantee out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 418; body declaration candidate line(s): 6236
-
-**Signature**
-
-```sql
-Procedure do_guarantee_out(p_branch_id   In Number Default Null,
-                             p_customer_no In Number Default Null,
-                             p_loan_acc    In Number Default Null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Close_With_Collateral_Out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan close with collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 422; body declaration candidate line(s): 6594
-
-**Signature**
-
-```sql
-procedure do_Loan_Close_With_Collateral_Out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_non_cash_loan_close` — PROCEDURE
-
-**Purpose:** Public procedure related to do non cash loan close. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 424; body declaration candidate line(s): 6756
-
-**Signature**
-
-```sql
-Procedure do_non_cash_loan_close(p_doc_no in varchar2,
-                                   p_Date   In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 427; body declaration candidate line(s): 6861
-
-**Signature**
-
-```sql
--- new
-  procedure do_journal_control(p_branch_id   IN Number,
-                               p_customer_no IN Number,
-                               p_account_sub IN Number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 431; body declaration candidate line(s): 7118
-
-**Signature**
-
-```sql
--- new
-  /*procedure over_to_norm(p_min_id  number default null,
-                              p_max_id  number default null,
-                              p_doc_no  in varchar2 default null);
-  */
-  --kredi_api.Odeme_Plani_Duzenle
-  Procedure do_schedule_allignment(p_doc_no         In Varchar2,
-                                   p_payment_amount In Number,
-                                   p_acc_type       In Varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_com_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do com schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 441; body declaration candidate line(s): 7190
-
-**Signature**
-
-```sql
--- kredi_api.Kom_Odeme_Plani_Duzenle
-  Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
-                                       p_option_code In Varchar2,
-                                       p_amount      In Number,
-                                       p_plan_type   In Varchar2,
-                                       p_mig_status  In Number Default 0);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Delay_Int_Rate_Upd` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan delay int rate upd. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 448; body declaration candidate line(s): 7310
-
-**Signature**
-
-```sql
--- krd_eod.Loan_Delay_Int_Rate_Upd
-  Procedure do_Loan_Delay_Int_Rate_Upd;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `change_account_status` — PROCEDURE
-
-**Purpose:** Public procedure related to change account status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 451; body declaration candidate line(s): 7351
-
-**Signature**
-
-```sql
--- kredi_api.Kredi_Hesap_Kapat , kredi_api.Kredi_Hesap_Ac
-  procedure change_account_status(p_doc_no in varchar2,
-                                  p_status in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_eod_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop eod task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 455; body declaration candidate line(s): 7389
-
-**Signature**
-
-```sql
-procedure stop_eod_task;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_loan_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop loan task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 457; body declaration candidate line(s): 7405
-
-**Signature**
-
-```sql
-procedure stop_loan_task(p_task_code in varchar2 default null,
-                           p_task_type in varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `run_loan_task` — PROCEDURE
-
-**Purpose:** Runs a task identified by its task code and task type.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 460; body declaration candidate line(s): 7442
-
-**Signature**
-
-```sql
-/** Parallel execution for loan processes
-      @params
-      p_task_code  - task_code in loan_tasks_list table                  
-  */
-
-  procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `calculate_xirr` — FUNCTION
-
-**Purpose:** Public function related to calculate xirr. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 467; body declaration candidate line(s): 7786
-
-**Signature**
-
-```sql
-/*procedure norm_to_over(p_min_id  number default null,
-  p_max_id  number default null,
-  p_doc_no  in varchar2 default null);  */
-
-  function calculate_xirr(p_doc_no  varchar2,
-                          p_type    varchar2,
-                          p_calc_as varchar2 default 'XIRR') return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_min_flow_ratio` — FUNCTION
-
-**Purpose:** Public function related to get min flow ratio. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 475; body declaration candidate line(s): 8074
-
-**Signature**
-
-```sql
-/*  function get_mix_operation_acsess(p_fid            varchar2,
-                                      p_oper_type      varchar2,
-                                      p_memo_oper_type varchar2) return number;
-  
-    function get_mix_operation_types(p_fid            varchar2,
-                                     p_memo_oper_type varchar2) return varchar2;
-  
-    procedure validate_mix_memorandum(p_memorandum_id varchar2,
-                                      p_oper_type     varchar2,
-                                      p_state         varchar2);
-  
-    procedure update_mix_memorandum(p_memorandum_id varchar2,
-                                    p_oper_type     varchar2,
-                                    p_tx_fid        number,
-                                    p_state         varchar2);
-  */
-
-  function get_min_flow_ratio(
-    p_doc_no     varchar2,
-    p_type       varchar2,
-    p_begin_date date default null,
-    p_end_date   date default null
-  ) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_flow_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get flow ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 499; body declaration candidate line(s): 8115
-
-**Signature**
-
-```sql
-FUNCTION get_flow_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N')
-    RETURN LOAN_FLOW_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_stop_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get stop ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 504; body declaration candidate line(s): 8151
-
-**Signature**
-
-```sql
-FUNCTION get_stop_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N',
-                               p_info_type varchar2 default 'INT')
-    RETURN LOAN_STOP_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 510; body declaration candidate line(s): 8179
-
-**Signature**
-
-```sql
-function get_incorrect_days(p_date date) return NUMBER_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days_count` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 513; body declaration candidate line(s): 8218
-
-**Signature**
-
-```sql
-function get_incorrect_days_count(p_date date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_schedule_from_memo` — FUNCTION
-
-**Purpose:** Public function related to get schedule from memo. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 515; body declaration candidate line(s): 8225
-
-**Signature**
-
-```sql
-function get_schedule_from_memo(p_memorandum_id varchar2,
-                                  p_int_ratio     number,
-                                  p_int_calc_type varchar2,
-                                  p_int_amount    number) return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_standart_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined standard schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 521; body declaration candidate line(s): 8324
-
-**Signature**
-
-```sql
-function get_standart_schedule(p_begin_date          date default glbl.getsysdate,
-                                 p_main_pymt_date      date,
-                                 p_int_pymt_date       date,
-                                 p_pymt_day            number default null,
-                                 p_end_date            date,
-                                 p_offer_amount        number,
-                                 p_ovd_main_amount     number default 0,
-                                 p_int_calc_type       varchar2,
-                                 p_main_grace_period   varchar2 default null,
-                                 p_int_grace_period    varchar2 default null,
-                                 p_remain_int_amount   number default 0,
-                                 p_min_main_pay_amount number default null,
-                                 p_calc_int_in_grace   varchar2 default 'Y',
-                                 p_work_days           varchar2 default 'Y',
-                                 
-                                 p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                 p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_annuity_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined annuity schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 542; body declaration candidate line(s): 8697
-
-**Signature**
-
-```sql
-function get_annuity_schedule(p_begin_date      date,
-                                p_main_pymt_date  date,
-                                p_int_pymt_date   date,
-                                p_pymt_day        number default null,
-                                p_end_date        date,
-                                p_offer_amount    number,
-                                p_ovd_main_amount number default 0,
-                                p_int_calc_type   varchar2,
-                                
-                                p_main_grace_period varchar2 default null,
-                                p_int_grace_period  varchar2 default null,
-                                
-                                p_annuity_amount     number default null,
-                                p_max_annuity_amount number default null,
-                                p_remain_int_amount  number default 0,
-                                
-                                p_work_days         varchar2 default 'Y',
-                                p_own_annuity       varchar2 default 'N',
-                                p_calc_int_in_grace varchar2 default 'Y',
-                                p_is_mortgage       varchar2 default 'N',
-                                
-                                p_max_iteration number default null,
-                                
-                                p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_created_schedule` — PROCEDURE
-
-**Purpose:** Public procedure related to get created schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 570; body declaration candidate line(s): 9306
-
-**Signature**
-
-```sql
-Procedure get_created_schedule(p_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_schedule` — PROCEDURE
-
-**Purpose:** Builds a payment schedule using the supplied dates, amounts, interest and schedule options.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 572; body declaration candidate line(s): 9392
-
-**Signature**
-
-```sql
--- new
-  procedure create_schedule(p_schedule_no         number,
-                            p_coll_name           varchar2 default null,
-                            p_fk_id               number default null,
-                            p_doc_no              varchar2 default 'XXX',
-                            p_memorandum_id       varchar2 default null,
-                            p_customer_no         number default null,
-                            p_tx_fid              number default null,
-                            p_begin_date          date default glbl.getsysdate,
-                            p_main_pymt_date      date,
-                            p_int_pymt_date       date,
-                            p_pymt_day            number default null,
-                            p_end_date            date,
-                            p_offer_amount        number,
-                            p_ovd_main_amount     number default 0,
-                            p_int_ratio           number,
-                            p_int_calc_type       varchar2,
-                            p_annuity_amount      number default null,
-                            p_max_annuity_amount  number default null,
-                            p_min_main_pay_amount number default null,
-                            p_remain_int_amount   number default 0,
-                            p_main_grace_period   varchar2 default null,
-                            p_int_grace_period    varchar2 default null,
-                            p_main_pymt_period    number default 1,
-                            p_int_pymt_period     number default 1,
-                            p_product_code        number default null,
-                            p_same_annuity        varchar2 default 'N',
-                            p_calc_int_in_grace   varchar2 default 'Y',
-                            p_return_type         varchar2 default 'NO_ZERO',
-                            p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
-                            p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 604; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 607; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate,
-                            p_min_rowid rowid,
-                            p_max_rowid rowid);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-## Journal & Vouchers
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 71; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
--- *
-
-  procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
-                                  p_doc_no                 in varchar2,
-                                  p_acc_type               in varchar2,
-                                  p_pen_calc_grace_days    in number,
-                                  p_ovd_amount             out number,
-                                  p_calculated_pen_day_cnt out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates` — FUNCTION
-
-**Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 80; body declaration candidate line(s): 259
-
-**Signature**
-
-```sql
-function get_interest_calc_dates(p_last_calc_access_date in date,
-                                   p_eod_sod               in varchar2,
-                                   p_int_calc_at           in varchar2)
-    return loan_api.g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates_ex` — FUNCTION
-
-**Purpose:** Public function related to get interest calc dates ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 85; body declaration candidate line(s): 323
-
-**Signature**
-
-```sql
-function get_interest_calc_dates_ex(p_date        in date,
-                                      p_eod_sod     in varchar2,
-                                      p_int_calc_at in varchar2)
-    return g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info` — PROCEDURE
-
-**Purpose:** Determines interest calculation day count and year-day basis from interest-calculation configuration.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 90; body declaration candidate line(s): 104
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info(p_last_calc_date       in date,
-                                   p_pymt_day             in number,
-                                   p_trn_date             in date,
-                                   p_int_calc_type        in varchar2,
-                                   p_rate_type            in varchar2,
-                                   p_int_rate_periodicity in varchar2,
-                                   p_calc_day_count       out number,
-                                   p_year_day_count       out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to get interest calc info ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 101; body declaration candidate line(s): 183
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info_ex(p_last_calc_date in date,
-                                   p_pymt_day       in number,
-                                   p_trn_date       in date,
-                                   p_int_calc_type  in varchar2,
-                                   p_calc_day_count out number,
-                                   p_year_day_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `clear_addtional_data` — PROCEDURE
-
-**Purpose:** Public procedure related to clear addtional data. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 109; body declaration candidate line(s): 378
-
-**Signature**
-
-```sql
-procedure clear_addtional_data(p_state varchar2 default 'CLEAR');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 111; body declaration candidate line(s): 404
-
-**Signature**
-
-```sql
-procedure add_additional_group(p_tag_name varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 113; body declaration candidate line(s): 410
-
-**Signature**
-
-```sql
-procedure end_additional_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_main_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional main group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 114; body declaration candidate line(s): 398
-
-**Signature**
-
-```sql
-procedure end_additional_main_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 115; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 117; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 118; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value varchar2,
-                              p_new_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 122; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value date,
-                              p_new_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `finalize_addtional_process` — PROCEDURE
-
-**Purpose:** Finalizes accumulated additional information and executes mapped updates for the supplied identifiers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 125; body declaration candidate line(s): 480
-
-**Signature**
-
-```sql
-procedure finalize_addtional_process(p_doc_no   varchar2,
-                                       p_offer_id varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `reverse_update` — PROCEDURE
-
-**Purpose:** Reads prior history additional information and attempts to restore recorded old values.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 128; body declaration candidate line(s): 591
-
-**Signature**
-
-```sql
-procedure reverse_update(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_loan_amount` — FUNCTION
-
-**Purpose:** Returns a loan amount using the TOTAL, DEBT, or DUE calculation mode and related account and schedule data.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 130; body declaration candidate line(s): 643
-
-**Signature**
-
-```sql
-function get_loan_amount(p_doc_no      in varchar2,
-                           p_amount_type in varchar2,
-                           p_date        in date default glbl.getsysdate,
-                           p_oper_type   in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_overdue_min_amount` — FUNCTION
-
-**Purpose:** Public function related to get overdue min amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 136; body declaration candidate line(s): 719
-
-**Signature**
-
-```sql
-function get_overdue_min_amount(p_product_code in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 137; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
-procedure get_pen_info_for_calc(p_date                in date default glbl.getsysdate,
-                                  p_doc_no              in varchar2,
-                                  p_pen_calc_grace_days in number,
-                                  p_PEN_INT_RATIO       in number,
-                                  p_ovd_amount_for_pen  out number,
-                                  p_pen_calc_days_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_trn_caller_id` — FUNCTION
-
-**Purpose:** Public function related to get trn caller id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 144; body declaration candidate line(s): 772
-
-**Signature**
-
-```sql
-function get_trn_caller_id(p_oper_type in varchar2) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_voucher_data_from_query` — FUNCTION
-
-**Purpose:** Executes a supplied SQL query with DBMS_SQL and maps returned column values for vouchers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 146; body declaration candidate line(s): 789
-
-**Signature**
-
-```sql
-function get_voucher_data_from_query(p_query       in varchar2,
-                                       p_result_type in varchar2)
-    return g_col_value_tab_map;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_formatted_grace_from_list` — FUNCTION
-
-**Purpose:** Public function related to get formatted grace from list. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 150; body declaration candidate line(s): 912
-
-**Signature**
-
-```sql
-function get_formatted_grace_from_list(p_period_list in varchar2)
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_grace_info` — FUNCTION
-
-**Purpose:** Public function related to get grace info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 153; body declaration candidate line(s): 952
-
-**Signature**
-
-```sql
-function get_grace_info(p_Doc_No          In Varchar2,
-                          p_period_end_date in date,
-                          p_acc_type        In Varchar2 default 'A',
-                          p_info_type       in varchar2) Return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_basis_year_days_cnt` — FUNCTION
-
-**Purpose:** Public function related to get basis year days cnt. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 158; body declaration candidate line(s): 998
-
-**Signature**
-
-```sql
-function get_basis_year_days_cnt(p_int_calc_type in varchar2,
-                                   p_date          in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_value` — FUNCTION
-
-**Purpose:** Public function related to get gl value. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 161; body declaration candidate line(s): 1026
-
-**Signature**
-
-```sql
-function get_gl_value(p_parameter_name in varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 163; body declaration candidate line(s): 1043
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation(p_trn_date        in date,
-                                    p_oper_type       in varchar2,
-                                    p_trn_type        in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 177; body declaration candidate line(s): 1197
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation_ex(p_oper_type       in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_active_passive` — FUNCTION
-
-**Purpose:** Public function related to get gl acc active passive. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 189; body declaration candidate line(s): 1345
-
-**Signature**
-
-```sql
-function get_gl_acc_active_passive(p_acc_no in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_from_matrix` — FUNCTION
-
-**Purpose:** Public function related to get gl acc from matrix. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 191; body declaration candidate line(s): 1367
-
-**Signature**
-
-```sql
-function get_gl_acc_from_matrix(p_product_code in number default null,
-                                  p_cust_type    in number default null,
-                                  p_period_id    in number default null,
-                                  p_currency_id  in number default null,
-                                  p_base_type    in varchar2,
-                                  p_loan_doc_no  in varchar2 default null,
-                                  p_customer_no  in varchar2 default null,
-                                  p_acc_type     in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `Get_Delay_Int_Rate` — FUNCTION
-
-**Purpose:** Public function related to get delay int rate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 200; body declaration candidate line(s): 1602
-
-**Signature**
-
-```sql
--- krd_eod.Get_Delay_Int_Rate
-  Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
-                              p_Delay_Type In Varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_commission_schedule` — FUNCTION
-
-**Purpose:** Public function related to get commission schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 203; body declaration candidate line(s): 1628
-
-**Signature**
-
-```sql
--- kredi_api.Get_Krd_Kom_Plan
-  Function get_commission_schedule(p_begin_date    In Date,
-                                   p_end_date      In Date,
-                                   p_amount        In Number,
-                                   p_int_calc_type in varchar2)
-    Return Krd_Kom_Plan_Tt
-    Pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_months_for_loan` — FUNCTION
-
-**Purpose:** Public function related to add months for loan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 211; body declaration candidate line(s): 1744
-
-**Signature**
-
-```sql
-function add_months_for_loan(p_date   date,
-                               p_months number,
-                               p_day    number default null) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_next_Plan_Pym` — FUNCTION
-
-**Purpose:** Public function related to get next plan pym. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 215; body declaration candidate line(s): 1776
-
-**Signature**
-
-```sql
-Function get_next_Plan_Pym(p_doc_no   In Varchar2,
-                             P_date     In Date,
-                             p_acc_type in varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_offer_id` — FUNCTION
-
-**Purpose:** Public function related to get offer id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 219; body declaration candidate line(s): 1809
-
-**Signature**
-
-```sql
-Function get_offer_id(p_branch_id In Number Default Glbl.Getsube,
-                        P_date      In Date Default Glbl.Getsysdate)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_payment_amount` — FUNCTION
-
-**Purpose:** Public function related to get plan payment amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 223; body declaration candidate line(s): 1832
-
-**Signature**
-
-```sql
--- krd_eod.get_Plan_Pym +
-  function get_plan_payment_amount(p_doc_no   in varchar2,
-                                   p_date     in date default glbl.getsysdate,
-                                   p_acc_type in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_ovd_date` — FUNCTION
-
-**Purpose:** Public function related to get ovd date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 229; body declaration candidate line(s): 2734
-
-**Signature**
-
-```sql
-Function get_ovd_date(p_doc_no   varchar2,
-                        p_acc_type varchar2,
-                        p_date     date default glbl.getsysdate) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_amount_for_pen_calc` — FUNCTION
-
-**Purpose:** Public function related to get amount for pen calc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 233; body declaration candidate line(s): 1850
-
-**Signature**
-
-```sql
-Function get_amount_for_pen_calc(p_doc_no        In Varchar2,
-                                   P_date          In Date,
-                                   p_for_spec_days in varchar2 default 'N',
-                                   p_int_calc_type in varchar2 default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Plan_Month_Count` — FUNCTION
-
-**Purpose:** Public function related to get plan month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 239; body declaration candidate line(s): 1944
-
-**Signature**
-
-```sql
--- kredi_api.get_Plan_Month_Count +
-  /*Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ')
-    Return Number;*/
-  Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ',
-                                p_work_days     varchar2 default 'Y',
-                                p_pymt_day      number default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_paid_month_count` — FUNCTION
-
-**Purpose:** Public function related to get plan paid month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 251; body declaration candidate line(s): 1987
-
-**Signature**
-
-```sql
--- new
-  function get_plan_paid_month_count(p_doc_no in varchar2,
-                                     p_term   in number,
-                                     p_date   in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_error` — FUNCTION
-
-**Purpose:** Public function related to get plan error. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 255; body declaration candidate line(s): 2047
-
-**Signature**
-
-```sql
--- kredi_api.get_plan_error +
-  Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Annuity_Amount` — FUNCTION
-
-**Purpose:** Public function related to get annuity amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 258; body declaration candidate line(s): 2604
-
-**Signature**
-
-```sql
--- kredi_api.Get_Annuitet_Amount +
-  Function get_Annuity_Amount(p_Doc_No      In Varchar2,
-                              p_return_type In varchar2 default 'NO_ZERO')
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Pym_Startdate` — FUNCTION
-
-**Purpose:** Public function related to get pym startdate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 263; body declaration candidate line(s): 2633
-
-**Signature**
-
-```sql
--- kredi_api.Get_Pym_Startdate +
-  Function get_Pym_Startdate(p_Doc_No          In Varchar2,
-                             p_pymt_date       In Date,
-                             p_pymt_day        In Number,
-                             p_pymt_period     In Number,
-                             p_acc_type        In varchar2,
-                             p_loan_end_Date   in date,
-                             p_check_is_closed in varchar2 default 'Y')
-    Return Date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_account_feature` — FUNCTION
-
-**Purpose:** Public function related to get account feature. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 273; body declaration candidate line(s): 2799
-
-**Signature**
-
-```sql
-function get_account_feature(p_branch_no   number,
-                               p_account_no  number,
-                               p_account_sub number)
-    return cs_account.account_feature%type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_acc_exists` — FUNCTION
-
-**Purpose:** Public function related to is acc exists. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 278; body declaration candidate line(s): 2818
-
-**Signature**
-
-```sql
-function is_acc_exists(p_customer_no   number,
-                         p_memorandum_id varchar2 default null,
-                         p_doc_no        varchar2,
-                         p_acc_type      varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_Payment_Date` — FUNCTION
-
-**Purpose:** Public function related to is payment date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 283; body declaration candidate line(s): 2845
-
-**Signature**
-
-```sql
--- kredi_api.Is_Payment_Date +
-  Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_online_offer` — FUNCTION
-
-**Purpose:** Public function related to is online offer. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 287; body declaration candidate line(s): 2858
-
-**Signature**
-
-```sql
-function is_online_offer(p_memorandum_id varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `table_log_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to table log operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 289; body declaration candidate line(s): 3344
-
-**Signature**
-
-```sql
-procedure table_log_operation(p_doc_no     in varchar2,
-                                p_table_name in varchar2,
-                                p_tx_fid     in number,
-                                p_oper_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_entry` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal entry. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 294; body declaration candidate line(s): 2876
-
-**Signature**
-
-```sql
-Procedure do_journal_entry(p_entries_list  g_entries_list_tab,
-                             p_trn_caller_id in number,
-                             p_tx_fid        in out number,
-                             p_trn_type      in varchar2,
-                             p_is_eod        in varchar2 default 'Y');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_journal_entries` — PROCEDURE
-
-**Purpose:** Public procedure related to create journal entries. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 300; body declaration candidate line(s): 2954
-
-**Signature**
-
-```sql
-procedure create_journal_entries(p_oper_type in varchar2,
-                                   p_tx_fid    in number,
-                                   p_trn_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_account` — PROCEDURE
-
-**Purpose:** Creates/assigns loan-related accounts based on the requested operation and returns the created account list.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 304; body declaration candidate line(s): 3129
-
-**Signature**
-
-```sql
-procedure create_account(p_doc_no        in varchar2,
-                           p_memorandum_id in varchar2 default null,
-                           p_oper_type     in varchar2,
-                           p_acc_type      in varchar2 default null,
-                           p_tx_fid        in number,
-                           p_created_acc   out g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `recalculate_int_payment_plan` — PROCEDURE
-
-**Purpose:** Public procedure related to recalculate int payment plan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 311; body declaration candidate line(s): 3445
-
-**Signature**
-
-```sql
-procedure recalculate_int_payment_plan(p_doc_no               in varchar2,
-                                         p_acc_type             in varchar2,
-                                         p_main_amount          in number,
-                                         p_INT_RATIO            in number,
-                                         p_int_calc_type        in varchar2,
-                                         p_schedule_update_type in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_new_acc` — FUNCTION
-
-**Purpose:** Public function related to get new acc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 318; body declaration candidate line(s): 2520
-
-**Signature**
-
-```sql
---kredi_api.open_new_acc +
-  function get_new_acc(p_branch_no       in number,
-                       p_customer_no     in number,
-                       p_balance_acc     in varchar2,
-                       p_detail_code     in varchar2,
-                       p_ccy_id          in number,
-                       p_main_acc        in number default null,
-                       p_cr_int_rate     in number default null,
-                       p_dr_int_rate     in number default null,
-                       p_com_int_rate    in number default null,
-                       p_product_code    in number default null,
-                       p_period_id       in number default null,
-                       p_acc_description in varchar2,
-                       p_memorandum_id   in varchar2 default null,
-                       p_loan_doc_no     in varchar2,
-                       p_loan_acc_type   in varchar2,
-                       p_tx_fid          in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_plan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do plan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 336; body declaration candidate line(s): 3506
-
-**Signature**
-
-```sql
--- kredi_api.plan_control +
-  procedure do_plan_control(p_document_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_status_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan status control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 338; body declaration candidate line(s): 3515
-
-**Signature**
-
-```sql
--- kredi_api.loan_status_control +
-  procedure do_loan_status_control(p_branch_no   in number,
-                                   p_customer_no in number,
-                                   p_loan_acc    in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_loan_history` — PROCEDURE
-
-**Purpose:** Writes a loan-operation history record for a transaction.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 343; body declaration candidate line(s): 3587
-
-**Signature**
-
-```sql
-procedure create_loan_history(p_oper_type VARCHAR2 default null,
-                                p_doc_no    VARCHAR2 default null,
-                                p_trn_date  DATE default glbl.getsysdate,
-                                p_tx_fid    NUMBER,
-                                p_trn_type  varchar2,
-                                p_add_info  add_info_tab default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_collateral_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 350; body declaration candidate line(s): 3942
-
-**Signature**
-
-```sql
---krd_eod.loan_collateral_out +
-  procedure do_loan_collateral_out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_acc_type_by_status` — FUNCTION
-
-**Purpose:** Public function related to get acc type by status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 353; body declaration candidate line(s): 4211
-
-**Signature**
-
-```sql
-function get_acc_type_by_status(p_acc_type         varchar2,
-                                  p_to_loan_status   varchar2,
-                                  p_from_loan_status varchar2 default 'NORM')
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `generate_allocated_payment_list` — PROCEDURE
-
-**Purpose:** Computes a payment allocation list for a loan operation.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 358; body declaration candidate line(s): 4239
-
-**Signature**
-
-```sql
-procedure generate_allocated_payment_list(p_doc_no                in varchar2,
-                                            p_oper_type             in varchar2,
-                                            p_pym_amount            in number,
-                                            p_has_schedule_upd_type out varchar2,
-                                            p_payment_list          out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_payment_details` — PROCEDURE
-
-**Purpose:** Public procedure related to add payment details. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 364; body declaration candidate line(s): 4389
-
-**Signature**
-
-```sql
-procedure add_payment_details(p_doc_no                in varchar2,
-                                p_has_schedule_upd_type out varchar2,
-                                p_payment_list          in out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_delete_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do delete operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 368; body declaration candidate line(s): 4483
-
-**Signature**
-
-```sql
-procedure do_delete_operation(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Auto_Payment` — PROCEDURE
-
-**Purpose:** Executes automatic loan payment processing in EOD/SOD context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 370; body declaration candidate line(s): 4540
-
-**Signature**
-
-```sql
-/** Makes automatic loan payments at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S                           
-  */
-  Procedure do_Auto_Payment(p_min_id     number default null,
-                            p_max_id     number default null,
-                            p_doc_no     in varchar2 default null,
-                            p_eod_sod    in varchar2 default 'E',
-                            p_test_param in number default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation` — PROCEDURE
-
-**Purpose:** Performs batch interest calculation with optional branch range, loan document and EOD/SOD arguments.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 382; body declaration candidate line(s): 5135
-
-**Signature**
-
-```sql
-/** Makes automatic loan int calculation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S 
-      p_date - operation date                            
-  */
-  
-  procedure do_int_calculation(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to do int calculation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 396; body declaration candidate line(s): 5768
-
-**Signature**
-
-```sql
-procedure do_int_calculation_ex(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_overdue_transit_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do overdue transit operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 402; body declaration candidate line(s): 4832
-
-**Signature**
-
-```sql
-/** Makes automatic loan overdue operation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_branch_id - loan branch id  
-      p_customer_no - unique customer number 
-      p_loan_acc - loan account sub 
-      p_date - operation date                            
-  */
-
-  Procedure do_overdue_transit_operation(p_min_id number default null,
-                                         p_max_id number default null,
-                                         p_doc_no in varchar2 default null,
-                                         p_date   in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_commission_recognition` — PROCEDURE
-
-**Purpose:** Public procedure related to do commission recognition. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 416; body declaration candidate line(s): 6338
-
-**Signature**
-
-```sql
-Procedure do_commission_recognition(Pdate In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_guarantee_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do guarantee out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 418; body declaration candidate line(s): 6236
-
-**Signature**
-
-```sql
-Procedure do_guarantee_out(p_branch_id   In Number Default Null,
-                             p_customer_no In Number Default Null,
-                             p_loan_acc    In Number Default Null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Close_With_Collateral_Out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan close with collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 422; body declaration candidate line(s): 6594
-
-**Signature**
-
-```sql
-procedure do_Loan_Close_With_Collateral_Out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_non_cash_loan_close` — PROCEDURE
-
-**Purpose:** Public procedure related to do non cash loan close. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 424; body declaration candidate line(s): 6756
-
-**Signature**
-
-```sql
-Procedure do_non_cash_loan_close(p_doc_no in varchar2,
-                                   p_Date   In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 427; body declaration candidate line(s): 6861
-
-**Signature**
-
-```sql
--- new
-  procedure do_journal_control(p_branch_id   IN Number,
-                               p_customer_no IN Number,
-                               p_account_sub IN Number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 431; body declaration candidate line(s): 7118
-
-**Signature**
-
-```sql
--- new
-  /*procedure over_to_norm(p_min_id  number default null,
-                              p_max_id  number default null,
-                              p_doc_no  in varchar2 default null);
-  */
-  --kredi_api.Odeme_Plani_Duzenle
-  Procedure do_schedule_allignment(p_doc_no         In Varchar2,
-                                   p_payment_amount In Number,
-                                   p_acc_type       In Varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_com_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do com schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 441; body declaration candidate line(s): 7190
-
-**Signature**
-
-```sql
--- kredi_api.Kom_Odeme_Plani_Duzenle
-  Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
-                                       p_option_code In Varchar2,
-                                       p_amount      In Number,
-                                       p_plan_type   In Varchar2,
-                                       p_mig_status  In Number Default 0);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Delay_Int_Rate_Upd` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan delay int rate upd. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 448; body declaration candidate line(s): 7310
-
-**Signature**
-
-```sql
--- krd_eod.Loan_Delay_Int_Rate_Upd
-  Procedure do_Loan_Delay_Int_Rate_Upd;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `change_account_status` — PROCEDURE
-
-**Purpose:** Public procedure related to change account status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 451; body declaration candidate line(s): 7351
-
-**Signature**
-
-```sql
--- kredi_api.Kredi_Hesap_Kapat , kredi_api.Kredi_Hesap_Ac
-  procedure change_account_status(p_doc_no in varchar2,
-                                  p_status in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_eod_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop eod task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 455; body declaration candidate line(s): 7389
-
-**Signature**
-
-```sql
-procedure stop_eod_task;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_loan_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop loan task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 457; body declaration candidate line(s): 7405
-
-**Signature**
-
-```sql
-procedure stop_loan_task(p_task_code in varchar2 default null,
-                           p_task_type in varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `run_loan_task` — PROCEDURE
-
-**Purpose:** Runs a task identified by its task code and task type.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 460; body declaration candidate line(s): 7442
-
-**Signature**
-
-```sql
-/** Parallel execution for loan processes
-      @params
-      p_task_code  - task_code in loan_tasks_list table                  
-  */
-
-  procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `calculate_xirr` — FUNCTION
-
-**Purpose:** Public function related to calculate xirr. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 467; body declaration candidate line(s): 7786
-
-**Signature**
-
-```sql
-/*procedure norm_to_over(p_min_id  number default null,
-  p_max_id  number default null,
-  p_doc_no  in varchar2 default null);  */
-
-  function calculate_xirr(p_doc_no  varchar2,
-                          p_type    varchar2,
-                          p_calc_as varchar2 default 'XIRR') return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_min_flow_ratio` — FUNCTION
-
-**Purpose:** Public function related to get min flow ratio. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 475; body declaration candidate line(s): 8074
-
-**Signature**
-
-```sql
-/*  function get_mix_operation_acsess(p_fid            varchar2,
-                                      p_oper_type      varchar2,
-                                      p_memo_oper_type varchar2) return number;
-  
-    function get_mix_operation_types(p_fid            varchar2,
-                                     p_memo_oper_type varchar2) return varchar2;
-  
-    procedure validate_mix_memorandum(p_memorandum_id varchar2,
-                                      p_oper_type     varchar2,
-                                      p_state         varchar2);
-  
-    procedure update_mix_memorandum(p_memorandum_id varchar2,
-                                    p_oper_type     varchar2,
-                                    p_tx_fid        number,
-                                    p_state         varchar2);
-  */
-
-  function get_min_flow_ratio(
-    p_doc_no     varchar2,
-    p_type       varchar2,
-    p_begin_date date default null,
-    p_end_date   date default null
-  ) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_flow_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get flow ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 499; body declaration candidate line(s): 8115
-
-**Signature**
-
-```sql
-FUNCTION get_flow_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N')
-    RETURN LOAN_FLOW_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_stop_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get stop ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 504; body declaration candidate line(s): 8151
-
-**Signature**
-
-```sql
-FUNCTION get_stop_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N',
-                               p_info_type varchar2 default 'INT')
-    RETURN LOAN_STOP_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 510; body declaration candidate line(s): 8179
-
-**Signature**
-
-```sql
-function get_incorrect_days(p_date date) return NUMBER_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days_count` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 513; body declaration candidate line(s): 8218
-
-**Signature**
-
-```sql
-function get_incorrect_days_count(p_date date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_schedule_from_memo` — FUNCTION
-
-**Purpose:** Public function related to get schedule from memo. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 515; body declaration candidate line(s): 8225
-
-**Signature**
-
-```sql
-function get_schedule_from_memo(p_memorandum_id varchar2,
-                                  p_int_ratio     number,
-                                  p_int_calc_type varchar2,
-                                  p_int_amount    number) return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_standart_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined standard schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 521; body declaration candidate line(s): 8324
-
-**Signature**
-
-```sql
-function get_standart_schedule(p_begin_date          date default glbl.getsysdate,
-                                 p_main_pymt_date      date,
-                                 p_int_pymt_date       date,
-                                 p_pymt_day            number default null,
-                                 p_end_date            date,
-                                 p_offer_amount        number,
-                                 p_ovd_main_amount     number default 0,
-                                 p_int_calc_type       varchar2,
-                                 p_main_grace_period   varchar2 default null,
-                                 p_int_grace_period    varchar2 default null,
-                                 p_remain_int_amount   number default 0,
-                                 p_min_main_pay_amount number default null,
-                                 p_calc_int_in_grace   varchar2 default 'Y',
-                                 p_work_days           varchar2 default 'Y',
-                                 
-                                 p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                 p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_annuity_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined annuity schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 542; body declaration candidate line(s): 8697
-
-**Signature**
-
-```sql
-function get_annuity_schedule(p_begin_date      date,
-                                p_main_pymt_date  date,
-                                p_int_pymt_date   date,
-                                p_pymt_day        number default null,
-                                p_end_date        date,
-                                p_offer_amount    number,
-                                p_ovd_main_amount number default 0,
-                                p_int_calc_type   varchar2,
-                                
-                                p_main_grace_period varchar2 default null,
-                                p_int_grace_period  varchar2 default null,
-                                
-                                p_annuity_amount     number default null,
-                                p_max_annuity_amount number default null,
-                                p_remain_int_amount  number default 0,
-                                
-                                p_work_days         varchar2 default 'Y',
-                                p_own_annuity       varchar2 default 'N',
-                                p_calc_int_in_grace varchar2 default 'Y',
-                                p_is_mortgage       varchar2 default 'N',
-                                
-                                p_max_iteration number default null,
-                                
-                                p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_created_schedule` — PROCEDURE
-
-**Purpose:** Public procedure related to get created schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 570; body declaration candidate line(s): 9306
-
-**Signature**
-
-```sql
-Procedure get_created_schedule(p_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_schedule` — PROCEDURE
-
-**Purpose:** Builds a payment schedule using the supplied dates, amounts, interest and schedule options.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 572; body declaration candidate line(s): 9392
-
-**Signature**
-
-```sql
--- new
-  procedure create_schedule(p_schedule_no         number,
-                            p_coll_name           varchar2 default null,
-                            p_fk_id               number default null,
-                            p_doc_no              varchar2 default 'XXX',
-                            p_memorandum_id       varchar2 default null,
-                            p_customer_no         number default null,
-                            p_tx_fid              number default null,
-                            p_begin_date          date default glbl.getsysdate,
-                            p_main_pymt_date      date,
-                            p_int_pymt_date       date,
-                            p_pymt_day            number default null,
-                            p_end_date            date,
-                            p_offer_amount        number,
-                            p_ovd_main_amount     number default 0,
-                            p_int_ratio           number,
-                            p_int_calc_type       varchar2,
-                            p_annuity_amount      number default null,
-                            p_max_annuity_amount  number default null,
-                            p_min_main_pay_amount number default null,
-                            p_remain_int_amount   number default 0,
-                            p_main_grace_period   varchar2 default null,
-                            p_int_grace_period    varchar2 default null,
-                            p_main_pymt_period    number default 1,
-                            p_int_pymt_period     number default 1,
-                            p_product_code        number default null,
-                            p_same_annuity        varchar2 default 'N',
-                            p_calc_int_in_grace   varchar2 default 'Y',
-                            p_return_type         varchar2 default 'NO_ZERO',
-                            p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
-                            p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 604; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 607; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate,
-                            p_min_rowid rowid,
-                            p_max_rowid rowid);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-## Payments & Allocation
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 71; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
--- *
-
-  procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
-                                  p_doc_no                 in varchar2,
-                                  p_acc_type               in varchar2,
-                                  p_pen_calc_grace_days    in number,
-                                  p_ovd_amount             out number,
-                                  p_calculated_pen_day_cnt out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates` — FUNCTION
-
-**Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 80; body declaration candidate line(s): 259
-
-**Signature**
-
-```sql
-function get_interest_calc_dates(p_last_calc_access_date in date,
-                                   p_eod_sod               in varchar2,
-                                   p_int_calc_at           in varchar2)
-    return loan_api.g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates_ex` — FUNCTION
-
-**Purpose:** Public function related to get interest calc dates ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 85; body declaration candidate line(s): 323
-
-**Signature**
-
-```sql
-function get_interest_calc_dates_ex(p_date        in date,
-                                      p_eod_sod     in varchar2,
-                                      p_int_calc_at in varchar2)
-    return g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info` — PROCEDURE
-
-**Purpose:** Determines interest calculation day count and year-day basis from interest-calculation configuration.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 90; body declaration candidate line(s): 104
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info(p_last_calc_date       in date,
-                                   p_pymt_day             in number,
-                                   p_trn_date             in date,
-                                   p_int_calc_type        in varchar2,
-                                   p_rate_type            in varchar2,
-                                   p_int_rate_periodicity in varchar2,
-                                   p_calc_day_count       out number,
-                                   p_year_day_count       out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to get interest calc info ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 101; body declaration candidate line(s): 183
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info_ex(p_last_calc_date in date,
-                                   p_pymt_day       in number,
-                                   p_trn_date       in date,
-                                   p_int_calc_type  in varchar2,
-                                   p_calc_day_count out number,
-                                   p_year_day_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `clear_addtional_data` — PROCEDURE
-
-**Purpose:** Public procedure related to clear addtional data. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 109; body declaration candidate line(s): 378
-
-**Signature**
-
-```sql
-procedure clear_addtional_data(p_state varchar2 default 'CLEAR');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 111; body declaration candidate line(s): 404
-
-**Signature**
-
-```sql
-procedure add_additional_group(p_tag_name varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 113; body declaration candidate line(s): 410
-
-**Signature**
-
-```sql
-procedure end_additional_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_main_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional main group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 114; body declaration candidate line(s): 398
-
-**Signature**
-
-```sql
-procedure end_additional_main_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 115; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 117; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 118; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value varchar2,
-                              p_new_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 122; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value date,
-                              p_new_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `finalize_addtional_process` — PROCEDURE
-
-**Purpose:** Finalizes accumulated additional information and executes mapped updates for the supplied identifiers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 125; body declaration candidate line(s): 480
-
-**Signature**
-
-```sql
-procedure finalize_addtional_process(p_doc_no   varchar2,
-                                       p_offer_id varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `reverse_update` — PROCEDURE
-
-**Purpose:** Reads prior history additional information and attempts to restore recorded old values.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 128; body declaration candidate line(s): 591
-
-**Signature**
-
-```sql
-procedure reverse_update(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_loan_amount` — FUNCTION
-
-**Purpose:** Returns a loan amount using the TOTAL, DEBT, or DUE calculation mode and related account and schedule data.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 130; body declaration candidate line(s): 643
-
-**Signature**
-
-```sql
-function get_loan_amount(p_doc_no      in varchar2,
-                           p_amount_type in varchar2,
-                           p_date        in date default glbl.getsysdate,
-                           p_oper_type   in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_overdue_min_amount` — FUNCTION
-
-**Purpose:** Public function related to get overdue min amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 136; body declaration candidate line(s): 719
-
-**Signature**
-
-```sql
-function get_overdue_min_amount(p_product_code in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 137; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
-procedure get_pen_info_for_calc(p_date                in date default glbl.getsysdate,
-                                  p_doc_no              in varchar2,
-                                  p_pen_calc_grace_days in number,
-                                  p_PEN_INT_RATIO       in number,
-                                  p_ovd_amount_for_pen  out number,
-                                  p_pen_calc_days_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_trn_caller_id` — FUNCTION
-
-**Purpose:** Public function related to get trn caller id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 144; body declaration candidate line(s): 772
-
-**Signature**
-
-```sql
-function get_trn_caller_id(p_oper_type in varchar2) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_voucher_data_from_query` — FUNCTION
-
-**Purpose:** Executes a supplied SQL query with DBMS_SQL and maps returned column values for vouchers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 146; body declaration candidate line(s): 789
-
-**Signature**
-
-```sql
-function get_voucher_data_from_query(p_query       in varchar2,
-                                       p_result_type in varchar2)
-    return g_col_value_tab_map;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_formatted_grace_from_list` — FUNCTION
-
-**Purpose:** Public function related to get formatted grace from list. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 150; body declaration candidate line(s): 912
-
-**Signature**
-
-```sql
-function get_formatted_grace_from_list(p_period_list in varchar2)
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_grace_info` — FUNCTION
-
-**Purpose:** Public function related to get grace info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 153; body declaration candidate line(s): 952
-
-**Signature**
-
-```sql
-function get_grace_info(p_Doc_No          In Varchar2,
-                          p_period_end_date in date,
-                          p_acc_type        In Varchar2 default 'A',
-                          p_info_type       in varchar2) Return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_basis_year_days_cnt` — FUNCTION
-
-**Purpose:** Public function related to get basis year days cnt. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 158; body declaration candidate line(s): 998
-
-**Signature**
-
-```sql
-function get_basis_year_days_cnt(p_int_calc_type in varchar2,
-                                   p_date          in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_value` — FUNCTION
-
-**Purpose:** Public function related to get gl value. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 161; body declaration candidate line(s): 1026
-
-**Signature**
-
-```sql
-function get_gl_value(p_parameter_name in varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 163; body declaration candidate line(s): 1043
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation(p_trn_date        in date,
-                                    p_oper_type       in varchar2,
-                                    p_trn_type        in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 177; body declaration candidate line(s): 1197
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation_ex(p_oper_type       in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_active_passive` — FUNCTION
-
-**Purpose:** Public function related to get gl acc active passive. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 189; body declaration candidate line(s): 1345
-
-**Signature**
-
-```sql
-function get_gl_acc_active_passive(p_acc_no in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_from_matrix` — FUNCTION
-
-**Purpose:** Public function related to get gl acc from matrix. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 191; body declaration candidate line(s): 1367
-
-**Signature**
-
-```sql
-function get_gl_acc_from_matrix(p_product_code in number default null,
-                                  p_cust_type    in number default null,
-                                  p_period_id    in number default null,
-                                  p_currency_id  in number default null,
-                                  p_base_type    in varchar2,
-                                  p_loan_doc_no  in varchar2 default null,
-                                  p_customer_no  in varchar2 default null,
-                                  p_acc_type     in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `Get_Delay_Int_Rate` — FUNCTION
-
-**Purpose:** Public function related to get delay int rate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 200; body declaration candidate line(s): 1602
-
-**Signature**
-
-```sql
--- krd_eod.Get_Delay_Int_Rate
-  Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
-                              p_Delay_Type In Varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_commission_schedule` — FUNCTION
-
-**Purpose:** Public function related to get commission schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 203; body declaration candidate line(s): 1628
-
-**Signature**
-
-```sql
--- kredi_api.Get_Krd_Kom_Plan
-  Function get_commission_schedule(p_begin_date    In Date,
-                                   p_end_date      In Date,
-                                   p_amount        In Number,
-                                   p_int_calc_type in varchar2)
-    Return Krd_Kom_Plan_Tt
-    Pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_months_for_loan` — FUNCTION
-
-**Purpose:** Public function related to add months for loan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 211; body declaration candidate line(s): 1744
-
-**Signature**
-
-```sql
-function add_months_for_loan(p_date   date,
-                               p_months number,
-                               p_day    number default null) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_next_Plan_Pym` — FUNCTION
-
-**Purpose:** Public function related to get next plan pym. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 215; body declaration candidate line(s): 1776
-
-**Signature**
-
-```sql
-Function get_next_Plan_Pym(p_doc_no   In Varchar2,
-                             P_date     In Date,
-                             p_acc_type in varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_offer_id` — FUNCTION
-
-**Purpose:** Public function related to get offer id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 219; body declaration candidate line(s): 1809
-
-**Signature**
-
-```sql
-Function get_offer_id(p_branch_id In Number Default Glbl.Getsube,
-                        P_date      In Date Default Glbl.Getsysdate)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_payment_amount` — FUNCTION
-
-**Purpose:** Public function related to get plan payment amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 223; body declaration candidate line(s): 1832
-
-**Signature**
-
-```sql
--- krd_eod.get_Plan_Pym +
-  function get_plan_payment_amount(p_doc_no   in varchar2,
-                                   p_date     in date default glbl.getsysdate,
-                                   p_acc_type in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_ovd_date` — FUNCTION
-
-**Purpose:** Public function related to get ovd date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 229; body declaration candidate line(s): 2734
-
-**Signature**
-
-```sql
-Function get_ovd_date(p_doc_no   varchar2,
-                        p_acc_type varchar2,
-                        p_date     date default glbl.getsysdate) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_amount_for_pen_calc` — FUNCTION
-
-**Purpose:** Public function related to get amount for pen calc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 233; body declaration candidate line(s): 1850
-
-**Signature**
-
-```sql
-Function get_amount_for_pen_calc(p_doc_no        In Varchar2,
-                                   P_date          In Date,
-                                   p_for_spec_days in varchar2 default 'N',
-                                   p_int_calc_type in varchar2 default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Plan_Month_Count` — FUNCTION
-
-**Purpose:** Public function related to get plan month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 239; body declaration candidate line(s): 1944
-
-**Signature**
-
-```sql
--- kredi_api.get_Plan_Month_Count +
-  /*Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ')
-    Return Number;*/
-  Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ',
-                                p_work_days     varchar2 default 'Y',
-                                p_pymt_day      number default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_paid_month_count` — FUNCTION
-
-**Purpose:** Public function related to get plan paid month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 251; body declaration candidate line(s): 1987
-
-**Signature**
-
-```sql
--- new
-  function get_plan_paid_month_count(p_doc_no in varchar2,
-                                     p_term   in number,
-                                     p_date   in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_error` — FUNCTION
-
-**Purpose:** Public function related to get plan error. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 255; body declaration candidate line(s): 2047
-
-**Signature**
-
-```sql
--- kredi_api.get_plan_error +
-  Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Annuity_Amount` — FUNCTION
-
-**Purpose:** Public function related to get annuity amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 258; body declaration candidate line(s): 2604
-
-**Signature**
-
-```sql
--- kredi_api.Get_Annuitet_Amount +
-  Function get_Annuity_Amount(p_Doc_No      In Varchar2,
-                              p_return_type In varchar2 default 'NO_ZERO')
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Pym_Startdate` — FUNCTION
-
-**Purpose:** Public function related to get pym startdate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 263; body declaration candidate line(s): 2633
-
-**Signature**
-
-```sql
--- kredi_api.Get_Pym_Startdate +
-  Function get_Pym_Startdate(p_Doc_No          In Varchar2,
-                             p_pymt_date       In Date,
-                             p_pymt_day        In Number,
-                             p_pymt_period     In Number,
-                             p_acc_type        In varchar2,
-                             p_loan_end_Date   in date,
-                             p_check_is_closed in varchar2 default 'Y')
-    Return Date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_account_feature` — FUNCTION
-
-**Purpose:** Public function related to get account feature. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 273; body declaration candidate line(s): 2799
-
-**Signature**
-
-```sql
-function get_account_feature(p_branch_no   number,
-                               p_account_no  number,
-                               p_account_sub number)
-    return cs_account.account_feature%type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_acc_exists` — FUNCTION
-
-**Purpose:** Public function related to is acc exists. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 278; body declaration candidate line(s): 2818
-
-**Signature**
-
-```sql
-function is_acc_exists(p_customer_no   number,
-                         p_memorandum_id varchar2 default null,
-                         p_doc_no        varchar2,
-                         p_acc_type      varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_Payment_Date` — FUNCTION
-
-**Purpose:** Public function related to is payment date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 283; body declaration candidate line(s): 2845
-
-**Signature**
-
-```sql
--- kredi_api.Is_Payment_Date +
-  Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_online_offer` — FUNCTION
-
-**Purpose:** Public function related to is online offer. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 287; body declaration candidate line(s): 2858
-
-**Signature**
-
-```sql
-function is_online_offer(p_memorandum_id varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `table_log_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to table log operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 289; body declaration candidate line(s): 3344
-
-**Signature**
-
-```sql
-procedure table_log_operation(p_doc_no     in varchar2,
-                                p_table_name in varchar2,
-                                p_tx_fid     in number,
-                                p_oper_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_entry` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal entry. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 294; body declaration candidate line(s): 2876
-
-**Signature**
-
-```sql
-Procedure do_journal_entry(p_entries_list  g_entries_list_tab,
-                             p_trn_caller_id in number,
-                             p_tx_fid        in out number,
-                             p_trn_type      in varchar2,
-                             p_is_eod        in varchar2 default 'Y');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_journal_entries` — PROCEDURE
-
-**Purpose:** Public procedure related to create journal entries. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 300; body declaration candidate line(s): 2954
-
-**Signature**
-
-```sql
-procedure create_journal_entries(p_oper_type in varchar2,
-                                   p_tx_fid    in number,
-                                   p_trn_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_account` — PROCEDURE
-
-**Purpose:** Creates/assigns loan-related accounts based on the requested operation and returns the created account list.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 304; body declaration candidate line(s): 3129
-
-**Signature**
-
-```sql
-procedure create_account(p_doc_no        in varchar2,
-                           p_memorandum_id in varchar2 default null,
-                           p_oper_type     in varchar2,
-                           p_acc_type      in varchar2 default null,
-                           p_tx_fid        in number,
-                           p_created_acc   out g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `recalculate_int_payment_plan` — PROCEDURE
-
-**Purpose:** Public procedure related to recalculate int payment plan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 311; body declaration candidate line(s): 3445
-
-**Signature**
-
-```sql
-procedure recalculate_int_payment_plan(p_doc_no               in varchar2,
-                                         p_acc_type             in varchar2,
-                                         p_main_amount          in number,
-                                         p_INT_RATIO            in number,
-                                         p_int_calc_type        in varchar2,
-                                         p_schedule_update_type in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_new_acc` — FUNCTION
-
-**Purpose:** Public function related to get new acc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 318; body declaration candidate line(s): 2520
-
-**Signature**
-
-```sql
---kredi_api.open_new_acc +
-  function get_new_acc(p_branch_no       in number,
-                       p_customer_no     in number,
-                       p_balance_acc     in varchar2,
-                       p_detail_code     in varchar2,
-                       p_ccy_id          in number,
-                       p_main_acc        in number default null,
-                       p_cr_int_rate     in number default null,
-                       p_dr_int_rate     in number default null,
-                       p_com_int_rate    in number default null,
-                       p_product_code    in number default null,
-                       p_period_id       in number default null,
-                       p_acc_description in varchar2,
-                       p_memorandum_id   in varchar2 default null,
-                       p_loan_doc_no     in varchar2,
-                       p_loan_acc_type   in varchar2,
-                       p_tx_fid          in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_plan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do plan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 336; body declaration candidate line(s): 3506
-
-**Signature**
-
-```sql
--- kredi_api.plan_control +
-  procedure do_plan_control(p_document_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_status_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan status control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 338; body declaration candidate line(s): 3515
-
-**Signature**
-
-```sql
--- kredi_api.loan_status_control +
-  procedure do_loan_status_control(p_branch_no   in number,
-                                   p_customer_no in number,
-                                   p_loan_acc    in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_loan_history` — PROCEDURE
-
-**Purpose:** Writes a loan-operation history record for a transaction.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 343; body declaration candidate line(s): 3587
-
-**Signature**
-
-```sql
-procedure create_loan_history(p_oper_type VARCHAR2 default null,
-                                p_doc_no    VARCHAR2 default null,
-                                p_trn_date  DATE default glbl.getsysdate,
-                                p_tx_fid    NUMBER,
-                                p_trn_type  varchar2,
-                                p_add_info  add_info_tab default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_collateral_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 350; body declaration candidate line(s): 3942
-
-**Signature**
-
-```sql
---krd_eod.loan_collateral_out +
-  procedure do_loan_collateral_out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_acc_type_by_status` — FUNCTION
-
-**Purpose:** Public function related to get acc type by status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 353; body declaration candidate line(s): 4211
-
-**Signature**
-
-```sql
-function get_acc_type_by_status(p_acc_type         varchar2,
-                                  p_to_loan_status   varchar2,
-                                  p_from_loan_status varchar2 default 'NORM')
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `generate_allocated_payment_list` — PROCEDURE
-
-**Purpose:** Computes a payment allocation list for a loan operation.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 358; body declaration candidate line(s): 4239
-
-**Signature**
-
-```sql
-procedure generate_allocated_payment_list(p_doc_no                in varchar2,
-                                            p_oper_type             in varchar2,
-                                            p_pym_amount            in number,
-                                            p_has_schedule_upd_type out varchar2,
-                                            p_payment_list          out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_payment_details` — PROCEDURE
-
-**Purpose:** Public procedure related to add payment details. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 364; body declaration candidate line(s): 4389
-
-**Signature**
-
-```sql
-procedure add_payment_details(p_doc_no                in varchar2,
-                                p_has_schedule_upd_type out varchar2,
-                                p_payment_list          in out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_delete_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do delete operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 368; body declaration candidate line(s): 4483
-
-**Signature**
-
-```sql
-procedure do_delete_operation(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Auto_Payment` — PROCEDURE
-
-**Purpose:** Executes automatic loan payment processing in EOD/SOD context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 370; body declaration candidate line(s): 4540
-
-**Signature**
-
-```sql
-/** Makes automatic loan payments at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S                           
-  */
-  Procedure do_Auto_Payment(p_min_id     number default null,
-                            p_max_id     number default null,
-                            p_doc_no     in varchar2 default null,
-                            p_eod_sod    in varchar2 default 'E',
-                            p_test_param in number default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation` — PROCEDURE
-
-**Purpose:** Performs batch interest calculation with optional branch range, loan document and EOD/SOD arguments.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 382; body declaration candidate line(s): 5135
-
-**Signature**
-
-```sql
-/** Makes automatic loan int calculation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S 
-      p_date - operation date                            
-  */
-  
-  procedure do_int_calculation(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to do int calculation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 396; body declaration candidate line(s): 5768
-
-**Signature**
-
-```sql
-procedure do_int_calculation_ex(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_overdue_transit_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do overdue transit operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 402; body declaration candidate line(s): 4832
-
-**Signature**
-
-```sql
-/** Makes automatic loan overdue operation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_branch_id - loan branch id  
-      p_customer_no - unique customer number 
-      p_loan_acc - loan account sub 
-      p_date - operation date                            
-  */
-
-  Procedure do_overdue_transit_operation(p_min_id number default null,
-                                         p_max_id number default null,
-                                         p_doc_no in varchar2 default null,
-                                         p_date   in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_commission_recognition` — PROCEDURE
-
-**Purpose:** Public procedure related to do commission recognition. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 416; body declaration candidate line(s): 6338
-
-**Signature**
-
-```sql
-Procedure do_commission_recognition(Pdate In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_guarantee_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do guarantee out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 418; body declaration candidate line(s): 6236
-
-**Signature**
-
-```sql
-Procedure do_guarantee_out(p_branch_id   In Number Default Null,
-                             p_customer_no In Number Default Null,
-                             p_loan_acc    In Number Default Null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Close_With_Collateral_Out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan close with collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 422; body declaration candidate line(s): 6594
-
-**Signature**
-
-```sql
-procedure do_Loan_Close_With_Collateral_Out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_non_cash_loan_close` — PROCEDURE
-
-**Purpose:** Public procedure related to do non cash loan close. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 424; body declaration candidate line(s): 6756
-
-**Signature**
-
-```sql
-Procedure do_non_cash_loan_close(p_doc_no in varchar2,
-                                   p_Date   In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 427; body declaration candidate line(s): 6861
-
-**Signature**
-
-```sql
--- new
-  procedure do_journal_control(p_branch_id   IN Number,
-                               p_customer_no IN Number,
-                               p_account_sub IN Number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 431; body declaration candidate line(s): 7118
-
-**Signature**
-
-```sql
--- new
-  /*procedure over_to_norm(p_min_id  number default null,
-                              p_max_id  number default null,
-                              p_doc_no  in varchar2 default null);
-  */
-  --kredi_api.Odeme_Plani_Duzenle
-  Procedure do_schedule_allignment(p_doc_no         In Varchar2,
-                                   p_payment_amount In Number,
-                                   p_acc_type       In Varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_com_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do com schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 441; body declaration candidate line(s): 7190
-
-**Signature**
-
-```sql
--- kredi_api.Kom_Odeme_Plani_Duzenle
-  Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
-                                       p_option_code In Varchar2,
-                                       p_amount      In Number,
-                                       p_plan_type   In Varchar2,
-                                       p_mig_status  In Number Default 0);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Delay_Int_Rate_Upd` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan delay int rate upd. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 448; body declaration candidate line(s): 7310
-
-**Signature**
-
-```sql
--- krd_eod.Loan_Delay_Int_Rate_Upd
-  Procedure do_Loan_Delay_Int_Rate_Upd;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `change_account_status` — PROCEDURE
-
-**Purpose:** Public procedure related to change account status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 451; body declaration candidate line(s): 7351
-
-**Signature**
-
-```sql
--- kredi_api.Kredi_Hesap_Kapat , kredi_api.Kredi_Hesap_Ac
-  procedure change_account_status(p_doc_no in varchar2,
-                                  p_status in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_eod_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop eod task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 455; body declaration candidate line(s): 7389
-
-**Signature**
-
-```sql
-procedure stop_eod_task;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_loan_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop loan task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 457; body declaration candidate line(s): 7405
-
-**Signature**
-
-```sql
-procedure stop_loan_task(p_task_code in varchar2 default null,
-                           p_task_type in varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `run_loan_task` — PROCEDURE
-
-**Purpose:** Runs a task identified by its task code and task type.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 460; body declaration candidate line(s): 7442
-
-**Signature**
-
-```sql
-/** Parallel execution for loan processes
-      @params
-      p_task_code  - task_code in loan_tasks_list table                  
-  */
-
-  procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `calculate_xirr` — FUNCTION
-
-**Purpose:** Public function related to calculate xirr. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 467; body declaration candidate line(s): 7786
-
-**Signature**
-
-```sql
-/*procedure norm_to_over(p_min_id  number default null,
-  p_max_id  number default null,
-  p_doc_no  in varchar2 default null);  */
-
-  function calculate_xirr(p_doc_no  varchar2,
-                          p_type    varchar2,
-                          p_calc_as varchar2 default 'XIRR') return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_min_flow_ratio` — FUNCTION
-
-**Purpose:** Public function related to get min flow ratio. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 475; body declaration candidate line(s): 8074
-
-**Signature**
-
-```sql
-/*  function get_mix_operation_acsess(p_fid            varchar2,
-                                      p_oper_type      varchar2,
-                                      p_memo_oper_type varchar2) return number;
-  
-    function get_mix_operation_types(p_fid            varchar2,
-                                     p_memo_oper_type varchar2) return varchar2;
-  
-    procedure validate_mix_memorandum(p_memorandum_id varchar2,
-                                      p_oper_type     varchar2,
-                                      p_state         varchar2);
-  
-    procedure update_mix_memorandum(p_memorandum_id varchar2,
-                                    p_oper_type     varchar2,
-                                    p_tx_fid        number,
-                                    p_state         varchar2);
-  */
-
-  function get_min_flow_ratio(
-    p_doc_no     varchar2,
-    p_type       varchar2,
-    p_begin_date date default null,
-    p_end_date   date default null
-  ) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_flow_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get flow ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 499; body declaration candidate line(s): 8115
-
-**Signature**
-
-```sql
-FUNCTION get_flow_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N')
-    RETURN LOAN_FLOW_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_stop_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get stop ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 504; body declaration candidate line(s): 8151
-
-**Signature**
-
-```sql
-FUNCTION get_stop_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N',
-                               p_info_type varchar2 default 'INT')
-    RETURN LOAN_STOP_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 510; body declaration candidate line(s): 8179
-
-**Signature**
-
-```sql
-function get_incorrect_days(p_date date) return NUMBER_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days_count` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 513; body declaration candidate line(s): 8218
-
-**Signature**
-
-```sql
-function get_incorrect_days_count(p_date date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_schedule_from_memo` — FUNCTION
-
-**Purpose:** Public function related to get schedule from memo. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 515; body declaration candidate line(s): 8225
-
-**Signature**
-
-```sql
-function get_schedule_from_memo(p_memorandum_id varchar2,
-                                  p_int_ratio     number,
-                                  p_int_calc_type varchar2,
-                                  p_int_amount    number) return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_standart_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined standard schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 521; body declaration candidate line(s): 8324
-
-**Signature**
-
-```sql
-function get_standart_schedule(p_begin_date          date default glbl.getsysdate,
-                                 p_main_pymt_date      date,
-                                 p_int_pymt_date       date,
-                                 p_pymt_day            number default null,
-                                 p_end_date            date,
-                                 p_offer_amount        number,
-                                 p_ovd_main_amount     number default 0,
-                                 p_int_calc_type       varchar2,
-                                 p_main_grace_period   varchar2 default null,
-                                 p_int_grace_period    varchar2 default null,
-                                 p_remain_int_amount   number default 0,
-                                 p_min_main_pay_amount number default null,
-                                 p_calc_int_in_grace   varchar2 default 'Y',
-                                 p_work_days           varchar2 default 'Y',
-                                 
-                                 p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                 p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_annuity_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined annuity schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 542; body declaration candidate line(s): 8697
-
-**Signature**
-
-```sql
-function get_annuity_schedule(p_begin_date      date,
-                                p_main_pymt_date  date,
-                                p_int_pymt_date   date,
-                                p_pymt_day        number default null,
-                                p_end_date        date,
-                                p_offer_amount    number,
-                                p_ovd_main_amount number default 0,
-                                p_int_calc_type   varchar2,
-                                
-                                p_main_grace_period varchar2 default null,
-                                p_int_grace_period  varchar2 default null,
-                                
-                                p_annuity_amount     number default null,
-                                p_max_annuity_amount number default null,
-                                p_remain_int_amount  number default 0,
-                                
-                                p_work_days         varchar2 default 'Y',
-                                p_own_annuity       varchar2 default 'N',
-                                p_calc_int_in_grace varchar2 default 'Y',
-                                p_is_mortgage       varchar2 default 'N',
-                                
-                                p_max_iteration number default null,
-                                
-                                p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_created_schedule` — PROCEDURE
-
-**Purpose:** Public procedure related to get created schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 570; body declaration candidate line(s): 9306
-
-**Signature**
-
-```sql
-Procedure get_created_schedule(p_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_schedule` — PROCEDURE
-
-**Purpose:** Builds a payment schedule using the supplied dates, amounts, interest and schedule options.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 572; body declaration candidate line(s): 9392
-
-**Signature**
-
-```sql
--- new
-  procedure create_schedule(p_schedule_no         number,
-                            p_coll_name           varchar2 default null,
-                            p_fk_id               number default null,
-                            p_doc_no              varchar2 default 'XXX',
-                            p_memorandum_id       varchar2 default null,
-                            p_customer_no         number default null,
-                            p_tx_fid              number default null,
-                            p_begin_date          date default glbl.getsysdate,
-                            p_main_pymt_date      date,
-                            p_int_pymt_date       date,
-                            p_pymt_day            number default null,
-                            p_end_date            date,
-                            p_offer_amount        number,
-                            p_ovd_main_amount     number default 0,
-                            p_int_ratio           number,
-                            p_int_calc_type       varchar2,
-                            p_annuity_amount      number default null,
-                            p_max_annuity_amount  number default null,
-                            p_min_main_pay_amount number default null,
-                            p_remain_int_amount   number default 0,
-                            p_main_grace_period   varchar2 default null,
-                            p_int_grace_period    varchar2 default null,
-                            p_main_pymt_period    number default 1,
-                            p_int_pymt_period     number default 1,
-                            p_product_code        number default null,
-                            p_same_annuity        varchar2 default 'N',
-                            p_calc_int_in_grace   varchar2 default 'Y',
-                            p_return_type         varchar2 default 'NO_ZERO',
-                            p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
-                            p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 604; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 607; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate,
-                            p_min_rowid rowid,
-                            p_max_rowid rowid);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-## Schedules & Rates
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 71; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
--- *
-
-  procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
-                                  p_doc_no                 in varchar2,
-                                  p_acc_type               in varchar2,
-                                  p_pen_calc_grace_days    in number,
-                                  p_ovd_amount             out number,
-                                  p_calculated_pen_day_cnt out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates` — FUNCTION
-
-**Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 80; body declaration candidate line(s): 259
-
-**Signature**
-
-```sql
-function get_interest_calc_dates(p_last_calc_access_date in date,
-                                   p_eod_sod               in varchar2,
-                                   p_int_calc_at           in varchar2)
-    return loan_api.g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates_ex` — FUNCTION
-
-**Purpose:** Public function related to get interest calc dates ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 85; body declaration candidate line(s): 323
-
-**Signature**
-
-```sql
-function get_interest_calc_dates_ex(p_date        in date,
-                                      p_eod_sod     in varchar2,
-                                      p_int_calc_at in varchar2)
-    return g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info` — PROCEDURE
-
-**Purpose:** Determines interest calculation day count and year-day basis from interest-calculation configuration.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 90; body declaration candidate line(s): 104
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info(p_last_calc_date       in date,
-                                   p_pymt_day             in number,
-                                   p_trn_date             in date,
-                                   p_int_calc_type        in varchar2,
-                                   p_rate_type            in varchar2,
-                                   p_int_rate_periodicity in varchar2,
-                                   p_calc_day_count       out number,
-                                   p_year_day_count       out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to get interest calc info ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 101; body declaration candidate line(s): 183
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info_ex(p_last_calc_date in date,
-                                   p_pymt_day       in number,
-                                   p_trn_date       in date,
-                                   p_int_calc_type  in varchar2,
-                                   p_calc_day_count out number,
-                                   p_year_day_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `clear_addtional_data` — PROCEDURE
-
-**Purpose:** Public procedure related to clear addtional data. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 109; body declaration candidate line(s): 378
-
-**Signature**
-
-```sql
-procedure clear_addtional_data(p_state varchar2 default 'CLEAR');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 111; body declaration candidate line(s): 404
-
-**Signature**
-
-```sql
-procedure add_additional_group(p_tag_name varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 113; body declaration candidate line(s): 410
-
-**Signature**
-
-```sql
-procedure end_additional_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_main_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional main group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 114; body declaration candidate line(s): 398
-
-**Signature**
-
-```sql
-procedure end_additional_main_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 115; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 117; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 118; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value varchar2,
-                              p_new_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 122; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value date,
-                              p_new_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `finalize_addtional_process` — PROCEDURE
-
-**Purpose:** Finalizes accumulated additional information and executes mapped updates for the supplied identifiers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 125; body declaration candidate line(s): 480
-
-**Signature**
-
-```sql
-procedure finalize_addtional_process(p_doc_no   varchar2,
-                                       p_offer_id varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `reverse_update` — PROCEDURE
-
-**Purpose:** Reads prior history additional information and attempts to restore recorded old values.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 128; body declaration candidate line(s): 591
-
-**Signature**
-
-```sql
-procedure reverse_update(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_loan_amount` — FUNCTION
-
-**Purpose:** Returns a loan amount using the TOTAL, DEBT, or DUE calculation mode and related account and schedule data.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 130; body declaration candidate line(s): 643
-
-**Signature**
-
-```sql
-function get_loan_amount(p_doc_no      in varchar2,
-                           p_amount_type in varchar2,
-                           p_date        in date default glbl.getsysdate,
-                           p_oper_type   in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_overdue_min_amount` — FUNCTION
-
-**Purpose:** Public function related to get overdue min amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 136; body declaration candidate line(s): 719
-
-**Signature**
-
-```sql
-function get_overdue_min_amount(p_product_code in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 137; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
-procedure get_pen_info_for_calc(p_date                in date default glbl.getsysdate,
-                                  p_doc_no              in varchar2,
-                                  p_pen_calc_grace_days in number,
-                                  p_PEN_INT_RATIO       in number,
-                                  p_ovd_amount_for_pen  out number,
-                                  p_pen_calc_days_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_trn_caller_id` — FUNCTION
-
-**Purpose:** Public function related to get trn caller id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 144; body declaration candidate line(s): 772
-
-**Signature**
-
-```sql
-function get_trn_caller_id(p_oper_type in varchar2) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_voucher_data_from_query` — FUNCTION
-
-**Purpose:** Executes a supplied SQL query with DBMS_SQL and maps returned column values for vouchers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 146; body declaration candidate line(s): 789
-
-**Signature**
-
-```sql
-function get_voucher_data_from_query(p_query       in varchar2,
-                                       p_result_type in varchar2)
-    return g_col_value_tab_map;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_formatted_grace_from_list` — FUNCTION
-
-**Purpose:** Public function related to get formatted grace from list. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 150; body declaration candidate line(s): 912
-
-**Signature**
-
-```sql
-function get_formatted_grace_from_list(p_period_list in varchar2)
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_grace_info` — FUNCTION
-
-**Purpose:** Public function related to get grace info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 153; body declaration candidate line(s): 952
-
-**Signature**
-
-```sql
-function get_grace_info(p_Doc_No          In Varchar2,
-                          p_period_end_date in date,
-                          p_acc_type        In Varchar2 default 'A',
-                          p_info_type       in varchar2) Return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_basis_year_days_cnt` — FUNCTION
-
-**Purpose:** Public function related to get basis year days cnt. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 158; body declaration candidate line(s): 998
-
-**Signature**
-
-```sql
-function get_basis_year_days_cnt(p_int_calc_type in varchar2,
-                                   p_date          in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_value` — FUNCTION
-
-**Purpose:** Public function related to get gl value. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 161; body declaration candidate line(s): 1026
-
-**Signature**
-
-```sql
-function get_gl_value(p_parameter_name in varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 163; body declaration candidate line(s): 1043
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation(p_trn_date        in date,
-                                    p_oper_type       in varchar2,
-                                    p_trn_type        in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 177; body declaration candidate line(s): 1197
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation_ex(p_oper_type       in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_active_passive` — FUNCTION
-
-**Purpose:** Public function related to get gl acc active passive. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 189; body declaration candidate line(s): 1345
-
-**Signature**
-
-```sql
-function get_gl_acc_active_passive(p_acc_no in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_from_matrix` — FUNCTION
-
-**Purpose:** Public function related to get gl acc from matrix. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 191; body declaration candidate line(s): 1367
-
-**Signature**
-
-```sql
-function get_gl_acc_from_matrix(p_product_code in number default null,
-                                  p_cust_type    in number default null,
-                                  p_period_id    in number default null,
-                                  p_currency_id  in number default null,
-                                  p_base_type    in varchar2,
-                                  p_loan_doc_no  in varchar2 default null,
-                                  p_customer_no  in varchar2 default null,
-                                  p_acc_type     in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `Get_Delay_Int_Rate` — FUNCTION
-
-**Purpose:** Public function related to get delay int rate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 200; body declaration candidate line(s): 1602
-
-**Signature**
-
-```sql
--- krd_eod.Get_Delay_Int_Rate
-  Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
-                              p_Delay_Type In Varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_commission_schedule` — FUNCTION
-
-**Purpose:** Public function related to get commission schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 203; body declaration candidate line(s): 1628
-
-**Signature**
-
-```sql
--- kredi_api.Get_Krd_Kom_Plan
-  Function get_commission_schedule(p_begin_date    In Date,
-                                   p_end_date      In Date,
-                                   p_amount        In Number,
-                                   p_int_calc_type in varchar2)
-    Return Krd_Kom_Plan_Tt
-    Pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_months_for_loan` — FUNCTION
-
-**Purpose:** Public function related to add months for loan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 211; body declaration candidate line(s): 1744
-
-**Signature**
-
-```sql
-function add_months_for_loan(p_date   date,
-                               p_months number,
-                               p_day    number default null) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_next_Plan_Pym` — FUNCTION
-
-**Purpose:** Public function related to get next plan pym. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 215; body declaration candidate line(s): 1776
-
-**Signature**
-
-```sql
-Function get_next_Plan_Pym(p_doc_no   In Varchar2,
-                             P_date     In Date,
-                             p_acc_type in varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_offer_id` — FUNCTION
-
-**Purpose:** Public function related to get offer id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 219; body declaration candidate line(s): 1809
-
-**Signature**
-
-```sql
-Function get_offer_id(p_branch_id In Number Default Glbl.Getsube,
-                        P_date      In Date Default Glbl.Getsysdate)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_payment_amount` — FUNCTION
-
-**Purpose:** Public function related to get plan payment amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 223; body declaration candidate line(s): 1832
-
-**Signature**
-
-```sql
--- krd_eod.get_Plan_Pym +
-  function get_plan_payment_amount(p_doc_no   in varchar2,
-                                   p_date     in date default glbl.getsysdate,
-                                   p_acc_type in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_ovd_date` — FUNCTION
-
-**Purpose:** Public function related to get ovd date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 229; body declaration candidate line(s): 2734
-
-**Signature**
-
-```sql
-Function get_ovd_date(p_doc_no   varchar2,
-                        p_acc_type varchar2,
-                        p_date     date default glbl.getsysdate) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_amount_for_pen_calc` — FUNCTION
-
-**Purpose:** Public function related to get amount for pen calc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 233; body declaration candidate line(s): 1850
-
-**Signature**
-
-```sql
-Function get_amount_for_pen_calc(p_doc_no        In Varchar2,
-                                   P_date          In Date,
-                                   p_for_spec_days in varchar2 default 'N',
-                                   p_int_calc_type in varchar2 default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Plan_Month_Count` — FUNCTION
-
-**Purpose:** Public function related to get plan month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 239; body declaration candidate line(s): 1944
-
-**Signature**
-
-```sql
--- kredi_api.get_Plan_Month_Count +
-  /*Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ')
-    Return Number;*/
-  Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ',
-                                p_work_days     varchar2 default 'Y',
-                                p_pymt_day      number default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_paid_month_count` — FUNCTION
-
-**Purpose:** Public function related to get plan paid month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 251; body declaration candidate line(s): 1987
-
-**Signature**
-
-```sql
--- new
-  function get_plan_paid_month_count(p_doc_no in varchar2,
-                                     p_term   in number,
-                                     p_date   in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_error` — FUNCTION
-
-**Purpose:** Public function related to get plan error. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 255; body declaration candidate line(s): 2047
-
-**Signature**
-
-```sql
--- kredi_api.get_plan_error +
-  Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Annuity_Amount` — FUNCTION
-
-**Purpose:** Public function related to get annuity amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 258; body declaration candidate line(s): 2604
-
-**Signature**
-
-```sql
--- kredi_api.Get_Annuitet_Amount +
-  Function get_Annuity_Amount(p_Doc_No      In Varchar2,
-                              p_return_type In varchar2 default 'NO_ZERO')
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Pym_Startdate` — FUNCTION
-
-**Purpose:** Public function related to get pym startdate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 263; body declaration candidate line(s): 2633
-
-**Signature**
-
-```sql
--- kredi_api.Get_Pym_Startdate +
-  Function get_Pym_Startdate(p_Doc_No          In Varchar2,
-                             p_pymt_date       In Date,
-                             p_pymt_day        In Number,
-                             p_pymt_period     In Number,
-                             p_acc_type        In varchar2,
-                             p_loan_end_Date   in date,
-                             p_check_is_closed in varchar2 default 'Y')
-    Return Date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_account_feature` — FUNCTION
-
-**Purpose:** Public function related to get account feature. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 273; body declaration candidate line(s): 2799
-
-**Signature**
-
-```sql
-function get_account_feature(p_branch_no   number,
-                               p_account_no  number,
-                               p_account_sub number)
-    return cs_account.account_feature%type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_acc_exists` — FUNCTION
-
-**Purpose:** Public function related to is acc exists. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 278; body declaration candidate line(s): 2818
-
-**Signature**
-
-```sql
-function is_acc_exists(p_customer_no   number,
-                         p_memorandum_id varchar2 default null,
-                         p_doc_no        varchar2,
-                         p_acc_type      varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_Payment_Date` — FUNCTION
-
-**Purpose:** Public function related to is payment date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 283; body declaration candidate line(s): 2845
-
-**Signature**
-
-```sql
--- kredi_api.Is_Payment_Date +
-  Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_online_offer` — FUNCTION
-
-**Purpose:** Public function related to is online offer. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 287; body declaration candidate line(s): 2858
-
-**Signature**
-
-```sql
-function is_online_offer(p_memorandum_id varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `table_log_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to table log operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 289; body declaration candidate line(s): 3344
-
-**Signature**
-
-```sql
-procedure table_log_operation(p_doc_no     in varchar2,
-                                p_table_name in varchar2,
-                                p_tx_fid     in number,
-                                p_oper_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_entry` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal entry. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 294; body declaration candidate line(s): 2876
-
-**Signature**
-
-```sql
-Procedure do_journal_entry(p_entries_list  g_entries_list_tab,
-                             p_trn_caller_id in number,
-                             p_tx_fid        in out number,
-                             p_trn_type      in varchar2,
-                             p_is_eod        in varchar2 default 'Y');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_journal_entries` — PROCEDURE
-
-**Purpose:** Public procedure related to create journal entries. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 300; body declaration candidate line(s): 2954
-
-**Signature**
-
-```sql
-procedure create_journal_entries(p_oper_type in varchar2,
-                                   p_tx_fid    in number,
-                                   p_trn_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_account` — PROCEDURE
-
-**Purpose:** Creates/assigns loan-related accounts based on the requested operation and returns the created account list.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 304; body declaration candidate line(s): 3129
-
-**Signature**
-
-```sql
-procedure create_account(p_doc_no        in varchar2,
-                           p_memorandum_id in varchar2 default null,
-                           p_oper_type     in varchar2,
-                           p_acc_type      in varchar2 default null,
-                           p_tx_fid        in number,
-                           p_created_acc   out g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `recalculate_int_payment_plan` — PROCEDURE
-
-**Purpose:** Public procedure related to recalculate int payment plan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 311; body declaration candidate line(s): 3445
-
-**Signature**
-
-```sql
-procedure recalculate_int_payment_plan(p_doc_no               in varchar2,
-                                         p_acc_type             in varchar2,
-                                         p_main_amount          in number,
-                                         p_INT_RATIO            in number,
-                                         p_int_calc_type        in varchar2,
-                                         p_schedule_update_type in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_new_acc` — FUNCTION
-
-**Purpose:** Public function related to get new acc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 318; body declaration candidate line(s): 2520
-
-**Signature**
-
-```sql
---kredi_api.open_new_acc +
-  function get_new_acc(p_branch_no       in number,
-                       p_customer_no     in number,
-                       p_balance_acc     in varchar2,
-                       p_detail_code     in varchar2,
-                       p_ccy_id          in number,
-                       p_main_acc        in number default null,
-                       p_cr_int_rate     in number default null,
-                       p_dr_int_rate     in number default null,
-                       p_com_int_rate    in number default null,
-                       p_product_code    in number default null,
-                       p_period_id       in number default null,
-                       p_acc_description in varchar2,
-                       p_memorandum_id   in varchar2 default null,
-                       p_loan_doc_no     in varchar2,
-                       p_loan_acc_type   in varchar2,
-                       p_tx_fid          in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_plan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do plan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 336; body declaration candidate line(s): 3506
-
-**Signature**
-
-```sql
--- kredi_api.plan_control +
-  procedure do_plan_control(p_document_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_status_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan status control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 338; body declaration candidate line(s): 3515
-
-**Signature**
-
-```sql
--- kredi_api.loan_status_control +
-  procedure do_loan_status_control(p_branch_no   in number,
-                                   p_customer_no in number,
-                                   p_loan_acc    in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_loan_history` — PROCEDURE
-
-**Purpose:** Writes a loan-operation history record for a transaction.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 343; body declaration candidate line(s): 3587
-
-**Signature**
-
-```sql
-procedure create_loan_history(p_oper_type VARCHAR2 default null,
-                                p_doc_no    VARCHAR2 default null,
-                                p_trn_date  DATE default glbl.getsysdate,
-                                p_tx_fid    NUMBER,
-                                p_trn_type  varchar2,
-                                p_add_info  add_info_tab default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_collateral_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 350; body declaration candidate line(s): 3942
-
-**Signature**
-
-```sql
---krd_eod.loan_collateral_out +
-  procedure do_loan_collateral_out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_acc_type_by_status` — FUNCTION
-
-**Purpose:** Public function related to get acc type by status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 353; body declaration candidate line(s): 4211
-
-**Signature**
-
-```sql
-function get_acc_type_by_status(p_acc_type         varchar2,
-                                  p_to_loan_status   varchar2,
-                                  p_from_loan_status varchar2 default 'NORM')
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `generate_allocated_payment_list` — PROCEDURE
-
-**Purpose:** Computes a payment allocation list for a loan operation.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 358; body declaration candidate line(s): 4239
-
-**Signature**
-
-```sql
-procedure generate_allocated_payment_list(p_doc_no                in varchar2,
-                                            p_oper_type             in varchar2,
-                                            p_pym_amount            in number,
-                                            p_has_schedule_upd_type out varchar2,
-                                            p_payment_list          out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_payment_details` — PROCEDURE
-
-**Purpose:** Public procedure related to add payment details. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 364; body declaration candidate line(s): 4389
-
-**Signature**
-
-```sql
-procedure add_payment_details(p_doc_no                in varchar2,
-                                p_has_schedule_upd_type out varchar2,
-                                p_payment_list          in out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_delete_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do delete operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 368; body declaration candidate line(s): 4483
-
-**Signature**
-
-```sql
-procedure do_delete_operation(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Auto_Payment` — PROCEDURE
-
-**Purpose:** Executes automatic loan payment processing in EOD/SOD context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 370; body declaration candidate line(s): 4540
-
-**Signature**
-
-```sql
-/** Makes automatic loan payments at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S                           
-  */
-  Procedure do_Auto_Payment(p_min_id     number default null,
-                            p_max_id     number default null,
-                            p_doc_no     in varchar2 default null,
-                            p_eod_sod    in varchar2 default 'E',
-                            p_test_param in number default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation` — PROCEDURE
-
-**Purpose:** Performs batch interest calculation with optional branch range, loan document and EOD/SOD arguments.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 382; body declaration candidate line(s): 5135
-
-**Signature**
-
-```sql
-/** Makes automatic loan int calculation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S 
-      p_date - operation date                            
-  */
-  
-  procedure do_int_calculation(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to do int calculation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 396; body declaration candidate line(s): 5768
-
-**Signature**
-
-```sql
-procedure do_int_calculation_ex(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_overdue_transit_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do overdue transit operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 402; body declaration candidate line(s): 4832
-
-**Signature**
-
-```sql
-/** Makes automatic loan overdue operation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_branch_id - loan branch id  
-      p_customer_no - unique customer number 
-      p_loan_acc - loan account sub 
-      p_date - operation date                            
-  */
-
-  Procedure do_overdue_transit_operation(p_min_id number default null,
-                                         p_max_id number default null,
-                                         p_doc_no in varchar2 default null,
-                                         p_date   in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_commission_recognition` — PROCEDURE
-
-**Purpose:** Public procedure related to do commission recognition. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 416; body declaration candidate line(s): 6338
-
-**Signature**
-
-```sql
-Procedure do_commission_recognition(Pdate In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_guarantee_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do guarantee out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 418; body declaration candidate line(s): 6236
-
-**Signature**
-
-```sql
-Procedure do_guarantee_out(p_branch_id   In Number Default Null,
-                             p_customer_no In Number Default Null,
-                             p_loan_acc    In Number Default Null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Close_With_Collateral_Out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan close with collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 422; body declaration candidate line(s): 6594
-
-**Signature**
-
-```sql
-procedure do_Loan_Close_With_Collateral_Out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_non_cash_loan_close` — PROCEDURE
-
-**Purpose:** Public procedure related to do non cash loan close. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 424; body declaration candidate line(s): 6756
-
-**Signature**
-
-```sql
-Procedure do_non_cash_loan_close(p_doc_no in varchar2,
-                                   p_Date   In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 427; body declaration candidate line(s): 6861
-
-**Signature**
-
-```sql
--- new
-  procedure do_journal_control(p_branch_id   IN Number,
-                               p_customer_no IN Number,
-                               p_account_sub IN Number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 431; body declaration candidate line(s): 7118
-
-**Signature**
-
-```sql
--- new
-  /*procedure over_to_norm(p_min_id  number default null,
-                              p_max_id  number default null,
-                              p_doc_no  in varchar2 default null);
-  */
-  --kredi_api.Odeme_Plani_Duzenle
-  Procedure do_schedule_allignment(p_doc_no         In Varchar2,
-                                   p_payment_amount In Number,
-                                   p_acc_type       In Varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_com_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do com schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 441; body declaration candidate line(s): 7190
-
-**Signature**
-
-```sql
--- kredi_api.Kom_Odeme_Plani_Duzenle
-  Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
-                                       p_option_code In Varchar2,
-                                       p_amount      In Number,
-                                       p_plan_type   In Varchar2,
-                                       p_mig_status  In Number Default 0);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Delay_Int_Rate_Upd` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan delay int rate upd. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 448; body declaration candidate line(s): 7310
-
-**Signature**
-
-```sql
--- krd_eod.Loan_Delay_Int_Rate_Upd
-  Procedure do_Loan_Delay_Int_Rate_Upd;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `change_account_status` — PROCEDURE
-
-**Purpose:** Public procedure related to change account status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 451; body declaration candidate line(s): 7351
-
-**Signature**
-
-```sql
--- kredi_api.Kredi_Hesap_Kapat , kredi_api.Kredi_Hesap_Ac
-  procedure change_account_status(p_doc_no in varchar2,
-                                  p_status in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_eod_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop eod task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 455; body declaration candidate line(s): 7389
-
-**Signature**
-
-```sql
-procedure stop_eod_task;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_loan_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop loan task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 457; body declaration candidate line(s): 7405
-
-**Signature**
-
-```sql
-procedure stop_loan_task(p_task_code in varchar2 default null,
-                           p_task_type in varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `run_loan_task` — PROCEDURE
-
-**Purpose:** Runs a task identified by its task code and task type.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 460; body declaration candidate line(s): 7442
-
-**Signature**
-
-```sql
-/** Parallel execution for loan processes
-      @params
-      p_task_code  - task_code in loan_tasks_list table                  
-  */
-
-  procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `calculate_xirr` — FUNCTION
-
-**Purpose:** Public function related to calculate xirr. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 467; body declaration candidate line(s): 7786
-
-**Signature**
-
-```sql
-/*procedure norm_to_over(p_min_id  number default null,
-  p_max_id  number default null,
-  p_doc_no  in varchar2 default null);  */
-
-  function calculate_xirr(p_doc_no  varchar2,
-                          p_type    varchar2,
-                          p_calc_as varchar2 default 'XIRR') return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_min_flow_ratio` — FUNCTION
-
-**Purpose:** Public function related to get min flow ratio. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 475; body declaration candidate line(s): 8074
-
-**Signature**
-
-```sql
-/*  function get_mix_operation_acsess(p_fid            varchar2,
-                                      p_oper_type      varchar2,
-                                      p_memo_oper_type varchar2) return number;
-  
-    function get_mix_operation_types(p_fid            varchar2,
-                                     p_memo_oper_type varchar2) return varchar2;
-  
-    procedure validate_mix_memorandum(p_memorandum_id varchar2,
-                                      p_oper_type     varchar2,
-                                      p_state         varchar2);
-  
-    procedure update_mix_memorandum(p_memorandum_id varchar2,
-                                    p_oper_type     varchar2,
-                                    p_tx_fid        number,
-                                    p_state         varchar2);
-  */
-
-  function get_min_flow_ratio(
-    p_doc_no     varchar2,
-    p_type       varchar2,
-    p_begin_date date default null,
-    p_end_date   date default null
-  ) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_flow_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get flow ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 499; body declaration candidate line(s): 8115
-
-**Signature**
-
-```sql
-FUNCTION get_flow_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N')
-    RETURN LOAN_FLOW_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_stop_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get stop ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 504; body declaration candidate line(s): 8151
-
-**Signature**
-
-```sql
-FUNCTION get_stop_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N',
-                               p_info_type varchar2 default 'INT')
-    RETURN LOAN_STOP_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 510; body declaration candidate line(s): 8179
-
-**Signature**
-
-```sql
-function get_incorrect_days(p_date date) return NUMBER_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days_count` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 513; body declaration candidate line(s): 8218
-
-**Signature**
-
-```sql
-function get_incorrect_days_count(p_date date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_schedule_from_memo` — FUNCTION
-
-**Purpose:** Public function related to get schedule from memo. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 515; body declaration candidate line(s): 8225
-
-**Signature**
-
-```sql
-function get_schedule_from_memo(p_memorandum_id varchar2,
-                                  p_int_ratio     number,
-                                  p_int_calc_type varchar2,
-                                  p_int_amount    number) return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_standart_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined standard schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 521; body declaration candidate line(s): 8324
-
-**Signature**
-
-```sql
-function get_standart_schedule(p_begin_date          date default glbl.getsysdate,
-                                 p_main_pymt_date      date,
-                                 p_int_pymt_date       date,
-                                 p_pymt_day            number default null,
-                                 p_end_date            date,
-                                 p_offer_amount        number,
-                                 p_ovd_main_amount     number default 0,
-                                 p_int_calc_type       varchar2,
-                                 p_main_grace_period   varchar2 default null,
-                                 p_int_grace_period    varchar2 default null,
-                                 p_remain_int_amount   number default 0,
-                                 p_min_main_pay_amount number default null,
-                                 p_calc_int_in_grace   varchar2 default 'Y',
-                                 p_work_days           varchar2 default 'Y',
-                                 
-                                 p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                 p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_annuity_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined annuity schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 542; body declaration candidate line(s): 8697
-
-**Signature**
-
-```sql
-function get_annuity_schedule(p_begin_date      date,
-                                p_main_pymt_date  date,
-                                p_int_pymt_date   date,
-                                p_pymt_day        number default null,
-                                p_end_date        date,
-                                p_offer_amount    number,
-                                p_ovd_main_amount number default 0,
-                                p_int_calc_type   varchar2,
-                                
-                                p_main_grace_period varchar2 default null,
-                                p_int_grace_period  varchar2 default null,
-                                
-                                p_annuity_amount     number default null,
-                                p_max_annuity_amount number default null,
-                                p_remain_int_amount  number default 0,
-                                
-                                p_work_days         varchar2 default 'Y',
-                                p_own_annuity       varchar2 default 'N',
-                                p_calc_int_in_grace varchar2 default 'Y',
-                                p_is_mortgage       varchar2 default 'N',
-                                
-                                p_max_iteration number default null,
-                                
-                                p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_created_schedule` — PROCEDURE
-
-**Purpose:** Public procedure related to get created schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 570; body declaration candidate line(s): 9306
-
-**Signature**
-
-```sql
-Procedure get_created_schedule(p_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_schedule` — PROCEDURE
-
-**Purpose:** Builds a payment schedule using the supplied dates, amounts, interest and schedule options.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 572; body declaration candidate line(s): 9392
-
-**Signature**
-
-```sql
--- new
-  procedure create_schedule(p_schedule_no         number,
-                            p_coll_name           varchar2 default null,
-                            p_fk_id               number default null,
-                            p_doc_no              varchar2 default 'XXX',
-                            p_memorandum_id       varchar2 default null,
-                            p_customer_no         number default null,
-                            p_tx_fid              number default null,
-                            p_begin_date          date default glbl.getsysdate,
-                            p_main_pymt_date      date,
-                            p_int_pymt_date       date,
-                            p_pymt_day            number default null,
-                            p_end_date            date,
-                            p_offer_amount        number,
-                            p_ovd_main_amount     number default 0,
-                            p_int_ratio           number,
-                            p_int_calc_type       varchar2,
-                            p_annuity_amount      number default null,
-                            p_max_annuity_amount  number default null,
-                            p_min_main_pay_amount number default null,
-                            p_remain_int_amount   number default 0,
-                            p_main_grace_period   varchar2 default null,
-                            p_int_grace_period    varchar2 default null,
-                            p_main_pymt_period    number default 1,
-                            p_int_pymt_period     number default 1,
-                            p_product_code        number default null,
-                            p_same_annuity        varchar2 default 'N',
-                            p_calc_int_in_grace   varchar2 default 'Y',
-                            p_return_type         varchar2 default 'NO_ZERO',
-                            p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
-                            p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 604; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 607; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate,
-                            p_min_rowid rowid,
-                            p_max_rowid rowid);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-## Utilities & Configuration
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 71; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
--- *
-
-  procedure get_pen_info_for_calc(p_date                   in date default glbl.getsysdate,
-                                  p_doc_no                 in varchar2,
-                                  p_acc_type               in varchar2,
-                                  p_pen_calc_grace_days    in number,
-                                  p_ovd_amount             out number,
-                                  p_calculated_pen_day_cnt out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates` — FUNCTION
-
-**Purpose:** Builds an interest calculation date collection based on EOD/SOD scheduling and the last calculation access date.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 80; body declaration candidate line(s): 259
-
-**Signature**
-
-```sql
-function get_interest_calc_dates(p_last_calc_access_date in date,
-                                   p_eod_sod               in varchar2,
-                                   p_int_calc_at           in varchar2)
-    return loan_api.g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_dates_ex` — FUNCTION
-
-**Purpose:** Public function related to get interest calc dates ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 85; body declaration candidate line(s): 323
-
-**Signature**
-
-```sql
-function get_interest_calc_dates_ex(p_date        in date,
-                                      p_eod_sod     in varchar2,
-                                      p_int_calc_at in varchar2)
-    return g_date_tab_type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info` — PROCEDURE
-
-**Purpose:** Determines interest calculation day count and year-day basis from interest-calculation configuration.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 90; body declaration candidate line(s): 104
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info(p_last_calc_date       in date,
-                                   p_pymt_day             in number,
-                                   p_trn_date             in date,
-                                   p_int_calc_type        in varchar2,
-                                   p_rate_type            in varchar2,
-                                   p_int_rate_periodicity in varchar2,
-                                   p_calc_day_count       out number,
-                                   p_year_day_count       out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_interest_calc_info_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to get interest calc info ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 101; body declaration candidate line(s): 183
-
-**Signature**
-
-```sql
-procedure get_interest_calc_info_ex(p_last_calc_date in date,
-                                   p_pymt_day       in number,
-                                   p_trn_date       in date,
-                                   p_int_calc_type  in varchar2,
-                                   p_calc_day_count out number,
-                                   p_year_day_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `clear_addtional_data` — PROCEDURE
-
-**Purpose:** Public procedure related to clear addtional data. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 109; body declaration candidate line(s): 378
-
-**Signature**
-
-```sql
-procedure clear_addtional_data(p_state varchar2 default 'CLEAR');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 111; body declaration candidate line(s): 404
-
-**Signature**
-
-```sql
-procedure add_additional_group(p_tag_name varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 113; body declaration candidate line(s): 410
-
-**Signature**
-
-```sql
-procedure end_additional_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `end_additional_main_group` — PROCEDURE
-
-**Purpose:** Public procedure related to end additional main group. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 114; body declaration candidate line(s): 398
-
-**Signature**
-
-```sql
-procedure end_additional_main_group;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 115; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_additional_info` — PROCEDURE
-
-**Purpose:** Public procedure related to add additional info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 117; body declaration candidate line(s): 416, 428
-
-**Signature**
-
-```sql
-procedure add_additional_info(p_tag_name varchar2, p_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 118; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value varchar2,
-                              p_new_value varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_column_update` — PROCEDURE
-
-**Purpose:** Adds a mapped column-level update to the pending change-history context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 122; body declaration candidate line(s): 434, 471
-
-**Signature**
-
-```sql
-procedure add_column_update(p_tag_name  varchar2,
-                              p_old_value date,
-                              p_new_value date);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `finalize_addtional_process` — PROCEDURE
-
-**Purpose:** Finalizes accumulated additional information and executes mapped updates for the supplied identifiers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 125; body declaration candidate line(s): 480
-
-**Signature**
-
-```sql
-procedure finalize_addtional_process(p_doc_no   varchar2,
-                                       p_offer_id varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `reverse_update` — PROCEDURE
-
-**Purpose:** Reads prior history additional information and attempts to restore recorded old values.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 128; body declaration candidate line(s): 591
-
-**Signature**
-
-```sql
-procedure reverse_update(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_loan_amount` — FUNCTION
-
-**Purpose:** Returns a loan amount using the TOTAL, DEBT, or DUE calculation mode and related account and schedule data.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 130; body declaration candidate line(s): 643
-
-**Signature**
-
-```sql
-function get_loan_amount(p_doc_no      in varchar2,
-                           p_amount_type in varchar2,
-                           p_date        in date default glbl.getsysdate,
-                           p_oper_type   in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_overdue_min_amount` — FUNCTION
-
-**Purpose:** Public function related to get overdue min amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 136; body declaration candidate line(s): 719
-
-**Signature**
-
-```sql
-function get_overdue_min_amount(p_product_code in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_pen_info_for_calc` — PROCEDURE
-
-**Purpose:** Reads overdue amounts and penalty calculation day count from the payment plan; overloaded variants differ in inputs.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 137; body declaration candidate line(s): 70, 736
-
-**Signature**
-
-```sql
-procedure get_pen_info_for_calc(p_date                in date default glbl.getsysdate,
-                                  p_doc_no              in varchar2,
-                                  p_pen_calc_grace_days in number,
-                                  p_PEN_INT_RATIO       in number,
-                                  p_ovd_amount_for_pen  out number,
-                                  p_pen_calc_days_count out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_trn_caller_id` — FUNCTION
-
-**Purpose:** Public function related to get trn caller id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 144; body declaration candidate line(s): 772
-
-**Signature**
-
-```sql
-function get_trn_caller_id(p_oper_type in varchar2) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_voucher_data_from_query` — FUNCTION
-
-**Purpose:** Executes a supplied SQL query with DBMS_SQL and maps returned column values for vouchers.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 146; body declaration candidate line(s): 789
-
-**Signature**
-
-```sql
-function get_voucher_data_from_query(p_query       in varchar2,
-                                       p_result_type in varchar2)
-    return g_col_value_tab_map;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_formatted_grace_from_list` — FUNCTION
-
-**Purpose:** Public function related to get formatted grace from list. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 150; body declaration candidate line(s): 912
-
-**Signature**
-
-```sql
-function get_formatted_grace_from_list(p_period_list in varchar2)
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_grace_info` — FUNCTION
-
-**Purpose:** Public function related to get grace info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 153; body declaration candidate line(s): 952
-
-**Signature**
-
-```sql
-function get_grace_info(p_Doc_No          In Varchar2,
-                          p_period_end_date in date,
-                          p_acc_type        In Varchar2 default 'A',
-                          p_info_type       in varchar2) Return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_basis_year_days_cnt` — FUNCTION
-
-**Purpose:** Public function related to get basis year days cnt. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 158; body declaration candidate line(s): 998
-
-**Signature**
-
-```sql
-function get_basis_year_days_cnt(p_int_calc_type in varchar2,
-                                   p_date          in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_value` — FUNCTION
-
-**Purpose:** Public function related to get gl value. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 161; body declaration candidate line(s): 1026
-
-**Signature**
-
-```sql
-function get_gl_value(p_parameter_name in varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 163; body declaration candidate line(s): 1043
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation(p_trn_date        in date,
-                                    p_oper_type       in varchar2,
-                                    p_trn_type        in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `loan_int_diff_operation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to loan int diff operation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 177; body declaration candidate line(s): 1197
-
-**Signature**
-
-```sql
-procedure loan_int_diff_operation_ex(p_oper_type       in varchar2,
-                                    p_doc_no          in varchar2,
-                                    p_acc_type        in varchar2,
-                                    p_source_acc_type in varchar2,
-                                    p_tx_fid          number,
-                                    p_original_amount in number,
-                                    p_eod_sod         in varchar2,
-                                    p_payment_date    in date,
-                                    p_plan_int_amount in number,
-                                    p_int_amount      in number,
-                                    p_calc_amount     out number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_active_passive` — FUNCTION
-
-**Purpose:** Public function related to get gl acc active passive. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 189; body declaration candidate line(s): 1345
-
-**Signature**
-
-```sql
-function get_gl_acc_active_passive(p_acc_no in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_gl_acc_from_matrix` — FUNCTION
-
-**Purpose:** Public function related to get gl acc from matrix. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 191; body declaration candidate line(s): 1367
-
-**Signature**
-
-```sql
-function get_gl_acc_from_matrix(p_product_code in number default null,
-                                  p_cust_type    in number default null,
-                                  p_period_id    in number default null,
-                                  p_currency_id  in number default null,
-                                  p_base_type    in varchar2,
-                                  p_loan_doc_no  in varchar2 default null,
-                                  p_customer_no  in varchar2 default null,
-                                  p_acc_type     in varchar2) return varchar2 result_cache;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `Get_Delay_Int_Rate` — FUNCTION
-
-**Purpose:** Public function related to get delay int rate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 200; body declaration candidate line(s): 1602
-
-**Signature**
-
-```sql
--- krd_eod.Get_Delay_Int_Rate
-  Function Get_Delay_Int_Rate(p_Loan_Id    In Varchar2,
-                              p_Delay_Type In Varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_commission_schedule` — FUNCTION
-
-**Purpose:** Public function related to get commission schedule. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 203; body declaration candidate line(s): 1628
-
-**Signature**
-
-```sql
--- kredi_api.Get_Krd_Kom_Plan
-  Function get_commission_schedule(p_begin_date    In Date,
-                                   p_end_date      In Date,
-                                   p_amount        In Number,
-                                   p_int_calc_type in varchar2)
-    Return Krd_Kom_Plan_Tt
-    Pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_months_for_loan` — FUNCTION
-
-**Purpose:** Public function related to add months for loan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 211; body declaration candidate line(s): 1744
-
-**Signature**
-
-```sql
-function add_months_for_loan(p_date   date,
-                               p_months number,
-                               p_day    number default null) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_next_Plan_Pym` — FUNCTION
-
-**Purpose:** Public function related to get next plan pym. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 215; body declaration candidate line(s): 1776
-
-**Signature**
-
-```sql
-Function get_next_Plan_Pym(p_doc_no   In Varchar2,
-                             P_date     In Date,
-                             p_acc_type in varchar2) Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_offer_id` — FUNCTION
-
-**Purpose:** Public function related to get offer id. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 219; body declaration candidate line(s): 1809
-
-**Signature**
-
-```sql
-Function get_offer_id(p_branch_id In Number Default Glbl.Getsube,
-                        P_date      In Date Default Glbl.Getsysdate)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_payment_amount` — FUNCTION
-
-**Purpose:** Public function related to get plan payment amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 223; body declaration candidate line(s): 1832
-
-**Signature**
-
-```sql
--- krd_eod.get_Plan_Pym +
-  function get_plan_payment_amount(p_doc_no   in varchar2,
-                                   p_date     in date default glbl.getsysdate,
-                                   p_acc_type in varchar2 default null)
-    return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_ovd_date` — FUNCTION
-
-**Purpose:** Public function related to get ovd date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 229; body declaration candidate line(s): 2734
-
-**Signature**
-
-```sql
-Function get_ovd_date(p_doc_no   varchar2,
-                        p_acc_type varchar2,
-                        p_date     date default glbl.getsysdate) return date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_amount_for_pen_calc` — FUNCTION
-
-**Purpose:** Public function related to get amount for pen calc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 233; body declaration candidate line(s): 1850
-
-**Signature**
-
-```sql
-Function get_amount_for_pen_calc(p_doc_no        In Varchar2,
-                                   P_date          In Date,
-                                   p_for_spec_days in varchar2 default 'N',
-                                   p_int_calc_type in varchar2 default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Plan_Month_Count` — FUNCTION
-
-**Purpose:** Public function related to get plan month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 239; body declaration candidate line(s): 1944
-
-**Signature**
-
-```sql
--- kredi_api.get_Plan_Month_Count +
-  /*Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ')
-    Return Number;*/
-  Function get_Plan_Month_Count(p_Start_Date    In Date,
-                                p_End_Date      In Date,
-                                p_int_calc_type varchar2 default '30/360 AZ',
-                                p_work_days     varchar2 default 'Y',
-                                p_pymt_day      number default null)
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_paid_month_count` — FUNCTION
-
-**Purpose:** Public function related to get plan paid month count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 251; body declaration candidate line(s): 1987
-
-**Signature**
-
-```sql
--- new
-  function get_plan_paid_month_count(p_doc_no in varchar2,
-                                     p_term   in number,
-                                     p_date   in date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_plan_error` — FUNCTION
-
-**Purpose:** Public function related to get plan error. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 255; body declaration candidate line(s): 2047
-
-**Signature**
-
-```sql
--- kredi_api.get_plan_error +
-  Function get_plan_error(p_doc_no varchar2, p_date date default glbl.getsysdate) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Annuity_Amount` — FUNCTION
-
-**Purpose:** Public function related to get annuity amount. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 258; body declaration candidate line(s): 2604
-
-**Signature**
-
-```sql
--- kredi_api.Get_Annuitet_Amount +
-  Function get_Annuity_Amount(p_Doc_No      In Varchar2,
-                              p_return_type In varchar2 default 'NO_ZERO')
-    Return Number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_Pym_Startdate` — FUNCTION
-
-**Purpose:** Public function related to get pym startdate. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 263; body declaration candidate line(s): 2633
-
-**Signature**
-
-```sql
--- kredi_api.Get_Pym_Startdate +
-  Function get_Pym_Startdate(p_Doc_No          In Varchar2,
-                             p_pymt_date       In Date,
-                             p_pymt_day        In Number,
-                             p_pymt_period     In Number,
-                             p_acc_type        In varchar2,
-                             p_loan_end_Date   in date,
-                             p_check_is_closed in varchar2 default 'Y')
-    Return Date;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_account_feature` — FUNCTION
-
-**Purpose:** Public function related to get account feature. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 273; body declaration candidate line(s): 2799
-
-**Signature**
-
-```sql
-function get_account_feature(p_branch_no   number,
-                               p_account_no  number,
-                               p_account_sub number)
-    return cs_account.account_feature%type;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_acc_exists` — FUNCTION
-
-**Purpose:** Public function related to is acc exists. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 278; body declaration candidate line(s): 2818
-
-**Signature**
-
-```sql
-function is_acc_exists(p_customer_no   number,
-                         p_memorandum_id varchar2 default null,
-                         p_doc_no        varchar2,
-                         p_acc_type      varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_Payment_Date` — FUNCTION
-
-**Purpose:** Public function related to is payment date. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 283; body declaration candidate line(s): 2845
-
-**Signature**
-
-```sql
--- kredi_api.Is_Payment_Date +
-  Function is_Payment_Date(p_Document_No In Varchar2, p_Date Date)
-    Return Varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `is_online_offer` — FUNCTION
-
-**Purpose:** Public function related to is online offer. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 287; body declaration candidate line(s): 2858
-
-**Signature**
-
-```sql
-function is_online_offer(p_memorandum_id varchar2) return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `table_log_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to table log operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 289; body declaration candidate line(s): 3344
-
-**Signature**
-
-```sql
-procedure table_log_operation(p_doc_no     in varchar2,
-                                p_table_name in varchar2,
-                                p_tx_fid     in number,
-                                p_oper_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_entry` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal entry. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 294; body declaration candidate line(s): 2876
-
-**Signature**
-
-```sql
-Procedure do_journal_entry(p_entries_list  g_entries_list_tab,
-                             p_trn_caller_id in number,
-                             p_tx_fid        in out number,
-                             p_trn_type      in varchar2,
-                             p_is_eod        in varchar2 default 'Y');
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_journal_entries` — PROCEDURE
-
-**Purpose:** Public procedure related to create journal entries. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 300; body declaration candidate line(s): 2954
-
-**Signature**
-
-```sql
-procedure create_journal_entries(p_oper_type in varchar2,
-                                   p_tx_fid    in number,
-                                   p_trn_type  in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_account` — PROCEDURE
-
-**Purpose:** Creates/assigns loan-related accounts based on the requested operation and returns the created account list.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 304; body declaration candidate line(s): 3129
-
-**Signature**
-
-```sql
-procedure create_account(p_doc_no        in varchar2,
-                           p_memorandum_id in varchar2 default null,
-                           p_oper_type     in varchar2,
-                           p_acc_type      in varchar2 default null,
-                           p_tx_fid        in number,
-                           p_created_acc   out g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `recalculate_int_payment_plan` — PROCEDURE
-
-**Purpose:** Public procedure related to recalculate int payment plan. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 311; body declaration candidate line(s): 3445
-
-**Signature**
-
-```sql
-procedure recalculate_int_payment_plan(p_doc_no               in varchar2,
-                                         p_acc_type             in varchar2,
-                                         p_main_amount          in number,
-                                         p_INT_RATIO            in number,
-                                         p_int_calc_type        in varchar2,
-                                         p_schedule_update_type in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_new_acc` — FUNCTION
-
-**Purpose:** Public function related to get new acc. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 318; body declaration candidate line(s): 2520
-
-**Signature**
-
-```sql
---kredi_api.open_new_acc +
-  function get_new_acc(p_branch_no       in number,
-                       p_customer_no     in number,
-                       p_balance_acc     in varchar2,
-                       p_detail_code     in varchar2,
-                       p_ccy_id          in number,
-                       p_main_acc        in number default null,
-                       p_cr_int_rate     in number default null,
-                       p_dr_int_rate     in number default null,
-                       p_com_int_rate    in number default null,
-                       p_product_code    in number default null,
-                       p_period_id       in number default null,
-                       p_acc_description in varchar2,
-                       p_memorandum_id   in varchar2 default null,
-                       p_loan_doc_no     in varchar2,
-                       p_loan_acc_type   in varchar2,
-                       p_tx_fid          in number) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_plan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do plan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 336; body declaration candidate line(s): 3506
-
-**Signature**
-
-```sql
--- kredi_api.plan_control +
-  procedure do_plan_control(p_document_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_status_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan status control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 338; body declaration candidate line(s): 3515
-
-**Signature**
-
-```sql
--- kredi_api.loan_status_control +
-  procedure do_loan_status_control(p_branch_no   in number,
-                                   p_customer_no in number,
-                                   p_loan_acc    in number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_loan_history` — PROCEDURE
-
-**Purpose:** Writes a loan-operation history record for a transaction.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 343; body declaration candidate line(s): 3587
-
-**Signature**
-
-```sql
-procedure create_loan_history(p_oper_type VARCHAR2 default null,
-                                p_doc_no    VARCHAR2 default null,
-                                p_trn_date  DATE default glbl.getsysdate,
-                                p_tx_fid    NUMBER,
-                                p_trn_type  varchar2,
-                                p_add_info  add_info_tab default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_collateral_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 350; body declaration candidate line(s): 3942
-
-**Signature**
-
-```sql
---krd_eod.loan_collateral_out +
-  procedure do_loan_collateral_out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_acc_type_by_status` — FUNCTION
-
-**Purpose:** Public function related to get acc type by status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 353; body declaration candidate line(s): 4211
-
-**Signature**
-
-```sql
-function get_acc_type_by_status(p_acc_type         varchar2,
-                                  p_to_loan_status   varchar2,
-                                  p_from_loan_status varchar2 default 'NORM')
-    return varchar2;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `generate_allocated_payment_list` — PROCEDURE
-
-**Purpose:** Computes a payment allocation list for a loan operation.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 358; body declaration candidate line(s): 4239
-
-**Signature**
-
-```sql
-procedure generate_allocated_payment_list(p_doc_no                in varchar2,
-                                            p_oper_type             in varchar2,
-                                            p_pym_amount            in number,
-                                            p_has_schedule_upd_type out varchar2,
-                                            p_payment_list          out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `add_payment_details` — PROCEDURE
-
-**Purpose:** Public procedure related to add payment details. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 364; body declaration candidate line(s): 4389
-
-**Signature**
-
-```sql
-procedure add_payment_details(p_doc_no                in varchar2,
-                                p_has_schedule_upd_type out varchar2,
-                                p_payment_list          in out loan_api.g_loan_accounts_tab);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_delete_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do delete operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 368; body declaration candidate line(s): 4483
-
-**Signature**
-
-```sql
-procedure do_delete_operation(p_tx_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Auto_Payment` — PROCEDURE
-
-**Purpose:** Executes automatic loan payment processing in EOD/SOD context.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 370; body declaration candidate line(s): 4540
-
-**Signature**
-
-```sql
-/** Makes automatic loan payments at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S                           
-  */
-  Procedure do_Auto_Payment(p_min_id     number default null,
-                            p_max_id     number default null,
-                            p_doc_no     in varchar2 default null,
-                            p_eod_sod    in varchar2 default 'E',
-                            p_test_param in number default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation` — PROCEDURE
-
-**Purpose:** Performs batch interest calculation with optional branch range, loan document and EOD/SOD arguments.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 382; body declaration candidate line(s): 5135
-
-**Signature**
-
-```sql
-/** Makes automatic loan int calculation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_doc_no - unique loan document number
-      p_eod_sod  - operation type, may be E or S 
-      p_date - operation date                            
-  */
-  
-  procedure do_int_calculation(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_int_calculation_ex` — PROCEDURE
-
-**Purpose:** Public procedure related to do int calculation ex. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 396; body declaration candidate line(s): 5768
-
-**Signature**
+| Parameter | Direction | Type / default | Meaning |
+|---|---|---|---|
+| `p_oper_type` | IN | `varchar2 default null` | Operation code used for routing or validation |
+| `p_date` | IN | `date default glbl.getsysdate` | Relevant calculation or operation date |
+| `p_min_rowid` | IN | `rowid` | Context-specific parameter; confirm accepted values with the owning developer. |
+| `p_max_rowid` | IN | `rowid` | Context-specific parameter; confirm accepted values with the owning developer. |
 
-```sql
-procedure do_int_calculation_ex(p_min_id  number default 0,
-                               p_max_id  number default 999999999,
-                               p_doc_no  in varchar2 default null,
-                               p_eod_sod in varchar2 default 'E',
-                               p_date    in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_overdue_transit_operation` — PROCEDURE
-
-**Purpose:** Public procedure related to do overdue transit operation. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 402; body declaration candidate line(s): 4832
-
-**Signature**
-
-```sql
-/** Makes automatic loan overdue operation at the EOD & SOD 
-      @params
-      p_min_id, p_max_id - for parallel execute 
-      p_branch_id - loan branch id  
-      p_customer_no - unique customer number 
-      p_loan_acc - loan account sub 
-      p_date - operation date                            
-  */
-
-  Procedure do_overdue_transit_operation(p_min_id number default null,
-                                         p_max_id number default null,
-                                         p_doc_no in varchar2 default null,
-                                         p_date   in date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_commission_recognition` — PROCEDURE
-
-**Purpose:** Public procedure related to do commission recognition. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 416; body declaration candidate line(s): 6338
-
-**Signature**
-
-```sql
-Procedure do_commission_recognition(Pdate In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_guarantee_out` — PROCEDURE
-
-**Purpose:** Public procedure related to do guarantee out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 418; body declaration candidate line(s): 6236
-
-**Signature**
-
-```sql
-Procedure do_guarantee_out(p_branch_id   In Number Default Null,
-                             p_customer_no In Number Default Null,
-                             p_loan_acc    In Number Default Null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Close_With_Collateral_Out` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan close with collateral out. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 422; body declaration candidate line(s): 6594
-
-**Signature**
-
-```sql
-procedure do_Loan_Close_With_Collateral_Out(p_doc_no in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_non_cash_loan_close` — PROCEDURE
-
-**Purpose:** Public procedure related to do non cash loan close. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 424; body declaration candidate line(s): 6756
-
-**Signature**
-
-```sql
-Procedure do_non_cash_loan_close(p_doc_no in varchar2,
-                                   p_Date   In Date Default Glbl.Getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_journal_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do journal control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 427; body declaration candidate line(s): 6861
-
-**Signature**
-
-```sql
--- new
-  procedure do_journal_control(p_branch_id   IN Number,
-                               p_customer_no IN Number,
-                               p_account_sub IN Number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 431; body declaration candidate line(s): 7118
-
-**Signature**
-
-```sql
--- new
-  /*procedure over_to_norm(p_min_id  number default null,
-                              p_max_id  number default null,
-                              p_doc_no  in varchar2 default null);
-  */
-  --kredi_api.Odeme_Plani_Duzenle
-  Procedure do_schedule_allignment(p_doc_no         In Varchar2,
-                                   p_payment_amount In Number,
-                                   p_acc_type       In Varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_com_schedule_allignment` — PROCEDURE
-
-**Purpose:** Public procedure related to do com schedule allignment. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 441; body declaration candidate line(s): 7190
-
-**Signature**
-
-```sql
--- kredi_api.Kom_Odeme_Plani_Duzenle
-  Procedure do_com_schedule_allignment(p_doc_no      In Varchar2,
-                                       p_option_code In Varchar2,
-                                       p_amount      In Number,
-                                       p_plan_type   In Varchar2,
-                                       p_mig_status  In Number Default 0);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_Loan_Delay_Int_Rate_Upd` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan delay int rate upd. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 448; body declaration candidate line(s): 7310
-
-**Signature**
-
-```sql
--- krd_eod.Loan_Delay_Int_Rate_Upd
-  Procedure do_Loan_Delay_Int_Rate_Upd;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `change_account_status` — PROCEDURE
-
-**Purpose:** Public procedure related to change account status. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 451; body declaration candidate line(s): 7351
-
-**Signature**
-
-```sql
--- kredi_api.Kredi_Hesap_Kapat , kredi_api.Kredi_Hesap_Ac
-  procedure change_account_status(p_doc_no in varchar2,
-                                  p_status in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_eod_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop eod task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 455; body declaration candidate line(s): 7389
-
-**Signature**
-
-```sql
-procedure stop_eod_task;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `stop_loan_task` — PROCEDURE
-
-**Purpose:** Public procedure related to stop loan task. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 457; body declaration candidate line(s): 7405
-
-**Signature**
-
-```sql
-procedure stop_loan_task(p_task_code in varchar2 default null,
-                           p_task_type in varchar2 default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `run_loan_task` — PROCEDURE
-
-**Purpose:** Runs a task identified by its task code and task type.
-
-**Description confidence:** Body-reviewed summary.
+**Outputs:** No OUT parameters in the published signature.
 
-**Source:** specification line 460; body declaration candidate line(s): 7442
+**Related Database Objects**
 
-**Signature**
+- Observed reads: `KRD_TEKLIF_DETAY`, `LOAN_OPERATION_HISTORY`.
+- Observed writes: `LOAN_EOD_CONTROL`.
 
-```sql
-/** Parallel execution for loan processes
-      @params
-      p_task_code  - task_code in loan_tasks_list table                  
-  */
+**Error Handling**
 
-  procedure run_loan_task(p_task_code in varchar2, p_task_type in varchar2);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `calculate_xirr` — FUNCTION
-
-**Purpose:** Public function related to calculate xirr. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 467; body declaration candidate line(s): 7786
-
-**Signature**
-
-```sql
-/*procedure norm_to_over(p_min_id  number default null,
-  p_max_id  number default null,
-  p_doc_no  in varchar2 default null);  */
-
-  function calculate_xirr(p_doc_no  varchar2,
-                          p_type    varchar2,
-                          p_calc_as varchar2 default 'XIRR') return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_min_flow_ratio` — FUNCTION
-
-**Purpose:** Public function related to get min flow ratio. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 475; body declaration candidate line(s): 8074
-
-**Signature**
-
-```sql
-/*  function get_mix_operation_acsess(p_fid            varchar2,
-                                      p_oper_type      varchar2,
-                                      p_memo_oper_type varchar2) return number;
-  
-    function get_mix_operation_types(p_fid            varchar2,
-                                     p_memo_oper_type varchar2) return varchar2;
-  
-    procedure validate_mix_memorandum(p_memorandum_id varchar2,
-                                      p_oper_type     varchar2,
-                                      p_state         varchar2);
-  
-    procedure update_mix_memorandum(p_memorandum_id varchar2,
-                                    p_oper_type     varchar2,
-                                    p_tx_fid        number,
-                                    p_state         varchar2);
-  */
-
-  function get_min_flow_ratio(
-    p_doc_no     varchar2,
-    p_type       varchar2,
-    p_begin_date date default null,
-    p_end_date   date default null
-  ) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_flow_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get flow ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 499; body declaration candidate line(s): 8115
-
-**Signature**
-
-```sql
-FUNCTION get_flow_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N')
-    RETURN LOAN_FLOW_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_stop_ratio_info` — FUNCTION
-
-**Purpose:** Public function related to get stop ratio info. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 504; body declaration candidate line(s): 8151
-
-**Signature**
-
-```sql
-FUNCTION get_stop_ratio_info(p_doc_no    VARCHAR2,
-                               p_date      DATE DEFAULT glbl.getsysdate,
-                               p_full_info varchar2 default 'N',
-                               p_info_type varchar2 default 'INT')
-    RETURN LOAN_STOP_RATE_TAB;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 510; body declaration candidate line(s): 8179
-
-**Signature**
-
-```sql
-function get_incorrect_days(p_date date) return NUMBER_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_incorrect_days_count` — FUNCTION
-
-**Purpose:** Public function related to get incorrect days count. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 513; body declaration candidate line(s): 8218
-
-**Signature**
-
-```sql
-function get_incorrect_days_count(p_date date) return number;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
+- Refer to called packages, assertions and database constraints for errors. The exact contract is **not guaranteed** by the public signature alone.
 
----
-
-### `get_schedule_from_memo` — FUNCTION
-
-**Purpose:** Public function related to get schedule from memo. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 515; body declaration candidate line(s): 8225
-
-**Signature**
-
-```sql
-function get_schedule_from_memo(p_memorandum_id varchar2,
-                                  p_int_ratio     number,
-                                  p_int_calc_type varchar2,
-                                  p_int_amount    number) return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_standart_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined standard schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 521; body declaration candidate line(s): 8324
-
-**Signature**
-
-```sql
-function get_standart_schedule(p_begin_date          date default glbl.getsysdate,
-                                 p_main_pymt_date      date,
-                                 p_int_pymt_date       date,
-                                 p_pymt_day            number default null,
-                                 p_end_date            date,
-                                 p_offer_amount        number,
-                                 p_ovd_main_amount     number default 0,
-                                 p_int_calc_type       varchar2,
-                                 p_main_grace_period   varchar2 default null,
-                                 p_int_grace_period    varchar2 default null,
-                                 p_remain_int_amount   number default 0,
-                                 p_min_main_pay_amount number default null,
-                                 p_calc_int_in_grace   varchar2 default 'Y',
-                                 p_work_days           varchar2 default 'Y',
-                                 
-                                 p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                 p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_annuity_schedule` — FUNCTION
-
-**Purpose:** Returns pipelined annuity schedule rows.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 542; body declaration candidate line(s): 8697
-
-**Signature**
-
-```sql
-function get_annuity_schedule(p_begin_date      date,
-                                p_main_pymt_date  date,
-                                p_int_pymt_date   date,
-                                p_pymt_day        number default null,
-                                p_end_date        date,
-                                p_offer_amount    number,
-                                p_ovd_main_amount number default 0,
-                                p_int_calc_type   varchar2,
-                                
-                                p_main_grace_period varchar2 default null,
-                                p_int_grace_period  varchar2 default null,
-                                
-                                p_annuity_amount     number default null,
-                                p_max_annuity_amount number default null,
-                                p_remain_int_amount  number default 0,
-                                
-                                p_work_days         varchar2 default 'Y',
-                                p_own_annuity       varchar2 default 'N',
-                                p_calc_int_in_grace varchar2 default 'Y',
-                                p_is_mortgage       varchar2 default 'N',
-                                
-                                p_max_iteration number default null,
-                                
-                                p_loan_flow_rate_tab LOAN_FLOW_RATE_TAB default null,
-                                p_loan_stop_rate_tab LOAN_STOP_RATE_TAB default null)
-    return SCHEDULE_TT
-    pipelined;
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `get_created_schedule` — PROCEDURE
+**Side Effects & Transaction Notes**
 
-**Purpose:** Public procedure related to get created schedule. Verify precise behavior against implementation before external publication.
+- Performs data modification in its observed body segment. Do not assume automatic rollback or commit; verify transaction ownership.
+- **Operational caution:** Test with non-production data and approved transaction controls. Never execute examples against live financial records without authorization.
 
-**Description confidence:** Name-based description — review required.
+**Source Evidence:** Specification line 607; body declaration approximately line 9929.
 
-**Source:** specification line 570; body declaration candidate line(s): 9306
+[↑ Back to index](#navigation)
 
-**Signature**
-
-```sql
-Procedure get_created_schedule(p_fid number);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `create_schedule` — PROCEDURE
-
-**Purpose:** Builds a payment schedule using the supplied dates, amounts, interest and schedule options.
-
-**Description confidence:** Body-reviewed summary.
-
-**Source:** specification line 572; body declaration candidate line(s): 9392
-
-**Signature**
-
-```sql
--- new
-  procedure create_schedule(p_schedule_no         number,
-                            p_coll_name           varchar2 default null,
-                            p_fk_id               number default null,
-                            p_doc_no              varchar2 default 'XXX',
-                            p_memorandum_id       varchar2 default null,
-                            p_customer_no         number default null,
-                            p_tx_fid              number default null,
-                            p_begin_date          date default glbl.getsysdate,
-                            p_main_pymt_date      date,
-                            p_int_pymt_date       date,
-                            p_pymt_day            number default null,
-                            p_end_date            date,
-                            p_offer_amount        number,
-                            p_ovd_main_amount     number default 0,
-                            p_int_ratio           number,
-                            p_int_calc_type       varchar2,
-                            p_annuity_amount      number default null,
-                            p_max_annuity_amount  number default null,
-                            p_min_main_pay_amount number default null,
-                            p_remain_int_amount   number default 0,
-                            p_main_grace_period   varchar2 default null,
-                            p_int_grace_period    varchar2 default null,
-                            p_main_pymt_period    number default 1,
-                            p_int_pymt_period     number default 1,
-                            p_product_code        number default null,
-                            p_same_annuity        varchar2 default 'N',
-                            p_calc_int_in_grace   varchar2 default 'Y',
-                            p_return_type         varchar2 default 'NO_ZERO',
-                            p_loan_flow_rate_tab  LOAN_FLOW_RATE_TAB default null,
-                            p_loan_stop_rate_tab  LOAN_STOP_RATE_TAB default null);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
-
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 604; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
 ---
 
-### `do_loan_control` — PROCEDURE
-
-**Purpose:** Public procedure related to do loan control. Verify precise behavior against implementation before external publication.
-
-**Description confidence:** Name-based description — review required.
-
-**Source:** specification line 607; body declaration candidate line(s): 9907, 9929
-
-**Signature**
-
-```sql
-procedure do_loan_control(p_oper_type varchar2 default null,
-                            p_date      date default glbl.getsysdate,
-                            p_min_rowid rowid,
-                            p_max_rowid rowid);
-```
-
-**Inputs / outputs:** See the exact signature above. Validation, accepted enum values, transactional side effects and exceptions require implementation review unless covered in the workflow or review notes.
-
----
