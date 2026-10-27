@@ -30,5 +30,3 @@
 ## Source and Review Policy
 
 The PL/SQL package **specification** defines the exposed signatures. The package **body** is used to explain selected behavior and identify dependencies. Unverified business semantics are explicitly marked for review. Do not publish internal implementation details to customers without technical and security approval.
-
-**Scope:** `LOAN_API` only. The earlier Page 2201 documentation is excluded.
